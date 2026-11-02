@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cc_list err="0">
+  <cc_listitem self="kemistry"
+               cc_key="ACBL/N/kemistry/1399129902_4125_aam135/1399129902"
+               stock="N"
+               style="ACBL"
+               owner="kemistry"
+               title="BMW"
+               default="N"
+               partner="aam135"/>
+  <cc_listitem self="kemistry"
+               cc_key="ACBL/y/bbo/SAYC/1"
+               stock="y"
+               style="ACBL"
+               owner="bbo"
+               title="ACBL SAYC"
+               default="N"
+               partner=""/>
+  <cc_listitem self="kemistry"
+               cc_key="V2BASIC/N/kemistry/9999_basic_solo/1"
+               stock="N"
+               style="V2BASIC"
+               owner="kemistry"
+               title="Solo Basic"
+               default="Y"
+               partner=""/>
+</cc_list>
