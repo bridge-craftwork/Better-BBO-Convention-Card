@@ -3,6 +3,7 @@ import {
   decodeXParam,
   readAuthFromLocation,
   buildEditorUrl,
+  cardPageParams,
 } from '../../src/lib/auth.js'
 
 describe('decodeXParam', () => {
@@ -104,5 +105,26 @@ describe('buildEditorUrl', () => {
 
   it('throws on unknown style', () => {
     expect(() => buildEditorUrl({ style: 'NOPE', cc_key: 'k' })).toThrow()
+  })
+})
+
+describe('cardPageParams', () => {
+  const hex = (text) => Buffer.from(text).toString('hex')
+  const key = 'ACBL/N/kemistry/1663877063_3407_geminiman/1663876845'
+
+  it('reads a key hex-encoded in x, as BBO’s list opens a card', () => {
+    const x = hex(`edit=n&key=${encodeURIComponent(key)}&partner=wino%20john&mobile=y`)
+    const params = cardPageParams(`?x=${x}&referer=abc`)
+    expect(params.get('key')).toBe(key)
+    expect(params.get('partner')).toBe('wino john')
+  })
+
+  it('reads a key from the URL itself', () => {
+    expect(cardPageParams(`?key=${encodeURIComponent(key)}`).get('key')).toBe(key)
+    expect(cardPageParams(`?cckey=abc`).get('cckey')).toBe('abc')
+  })
+
+  it('has no key when x holds only the session', () => {
+    expect(cardPageParams(`?x=${hex('kemistry|123|')}`).get('key')).toBeNull()
   })
 })

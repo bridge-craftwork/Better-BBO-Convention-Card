@@ -168,3 +168,29 @@ describe('parseSaveStatus', () => {
     expect(() => parseSaveStatus('<other/>')).toThrow(/Unexpected/)
   })
 })
+
+describe('names BBO stores escaped', () => {
+  const stored = 'A &amp;amp; B &amp;#43; &amp;lt;C&amp;gt;'
+
+  it('decodes a list item’s title and partner once', () => {
+    const [item] = parseCardList(
+      `<cc_list err="0"><cc_listitem self="me" cc_key="k" stock="N" style="ACBL" owner="me" title="${stored}" default="N" partner="${stored}"/></cc_list>`
+    )
+    expect(item.title).toBe('A & B + <C>')
+    expect(item.partner).toBe('A & B + <C>')
+  })
+
+  it('decodes a fetched card’s title', () => {
+    const card = parseCardFetch(
+      `<cc_card err="0" cc_key="k" stock="N" style="ACBL" owner="me" title="${stored}" default="n" cc="&lt;cc/&gt;"/>`
+    )
+    expect(card.title).toBe('A & B + <C>')
+  })
+
+  it('leaves a literal entity the user typed', () => {
+    const card = parseCardFetch(
+      `<cc_card err="0" cc_key="k" stock="N" style="ACBL" owner="me" title="a &amp;amp;amp; b" default="n" cc="&lt;cc/&gt;"/>`
+    )
+    expect(card.title).toBe('a &amp; b')
+  })
+})

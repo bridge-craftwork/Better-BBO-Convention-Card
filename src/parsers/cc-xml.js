@@ -32,8 +32,8 @@ export function parseCardList(xmlString, { parser = DEFAULT_PARSER } = {}) {
   const items = Array.from(root.getElementsByTagName('cc_listitem'))
   return items.map((el) => ({
     cc_key: el.getAttribute('cc_key') ?? '',
-    title: el.getAttribute('title') ?? '',
-    partner: el.getAttribute('partner') ?? '',
+    title: decodeEntities(el.getAttribute('title') ?? ''),
+    partner: decodeEntities(el.getAttribute('partner') ?? ''),
     owner: el.getAttribute('owner') ?? '',
     style: el.getAttribute('style') ?? '',
     stock: parseStockFlag(el.getAttribute('stock')),
@@ -82,7 +82,7 @@ export function parseCardFetch(xmlString, { parser = DEFAULT_PARSER } = {}) {
 
   return {
     cc_key: root.getAttribute('cc_key') ?? '',
-    title: root.getAttribute('title') ?? '',
+    title: decodeEntities(root.getAttribute('title') ?? ''),
     partner: '', // cc_fetch.php response carries no partner; comes from list
     owner: root.getAttribute('owner') ?? '',
     style: root.getAttribute('style') ?? '',
@@ -160,4 +160,15 @@ function throwIfParserError(doc) {
   if (parsererror) {
     throw new Error(`XML parse error: ${parsererror.textContent}`)
   }
+}
+
+// BBO's Save escapes title and partner, and its responses escape them again as
+// attributes, so what the XML parser hands back still has one layer on. BBO's
+// own list decodes it the same way (decodeHTMLEntities in acblCCFM_bs.js).
+const NAMED_ENTITIES = { amp: '&', quot: '"', apos: "'", lt: '<', gt: '>' }
+
+function decodeEntities(text) {
+  return text.replace(/&(amp|quot|apos|lt|gt|#\d+);/g, (_, name) =>
+    name[0] === '#' ? String.fromCodePoint(Number(name.slice(1))) : NAMED_ENTITIES[name]
+  )
 }

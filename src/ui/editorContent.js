@@ -18,7 +18,7 @@ import browser from 'webextension-polyfill'
 import { applyPrintFix } from './print-fix.js'
 import { parseCardFetch } from '../parsers/cc-xml.js'
 import { cardsToJson } from '../parsers/cc-json.js'
-import { ENDPOINTS } from '../lib/auth.js'
+import { ENDPOINTS, cardPageParams } from '../lib/auth.js'
 import {
   TEMPLATES,
   recordFromFetch,
@@ -71,6 +71,9 @@ function installStyles() {
     }
     #${TOOLBAR_ID} button:hover { background: #eef; }
     #${TOOLBAR_ID} button:disabled { opacity: 0.5; cursor: progress; }
+    @media screen {
+      body { padding-top: var(--better-bbo-cc-toolbar-height, 0); }
+    }
     @media print {
       #${TOOLBAR_ID} { display: none !important; }
     }
@@ -132,6 +135,12 @@ function injectToolbar() {
   )
 
   document.body.appendChild(bar)
+
+  // The bar floats, and in the lobby's narrow iframe it wraps: keep the top of
+  // the card clear of it, whatever its height.
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty('--better-bbo-cc-toolbar-height', `${bar.offsetHeight + 14}px`)
+  }).observe(bar)
 }
 
 function addCardButton(bar, label, title, busy, action) {
@@ -162,7 +171,7 @@ async function openLink(url) {
 }
 
 async function fetchThisCard() {
-  const params = new URLSearchParams(window.location.search)
+  const params = cardPageParams(window.location.search)
   const cc_key = params.get('key') ?? params.get('cckey')
   if (!cc_key) throw new Error('Could not find this card’s key in the URL.')
   const xml = await postForm(ENDPOINTS.fetch, {

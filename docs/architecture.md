@@ -91,6 +91,14 @@ This extension fixes all three.
 | V1 BASIC viewer | `https://webutil.bridgebase.com/v2/cs_render_cc.php?cckey=<urlenc-key>` |
 | CC ("flexible") | `https://webutil.bridgebase.com/v2/fdcc/renderFD.html?edit=<y\|n>&key=<urlenc-key>&partner=<partner>` |
 
+BBO's list opens these pages with all their parameters hex-encoded in `x`
+(`?x=<hex of edit=n&key=…&partner=…>`), not in the URL as shown above;
+`cardPageParams` in `src/lib/auth.js` reads both.
+
+Title and partner are stored escaped by BBO's Save and escaped again in its XML
+responses, so `A & B` arrives as `A &amp;amp; B`. Saving escapes once, as BBO
+does, and the parsers decode the extra layer, as BBO's list does.
+
 ### Authentication
 - URL param `x` is hex-encoded. Decoded form: `username|sessiontoken|`.
   Example: `6b656d69737472797c373631363939393833343135393734323233367c` →
@@ -137,7 +145,7 @@ XML with one `<cc_listitem>` per card:
 | Attribute | Meaning |
 |---|---|
 | `self` | The requesting username |
-| `cc_key` | Opaque card identifier; treat as a string, do not parse |
+| `cc_key` | Opaque card identifier; treat as a string, do not parse. Not unique in a list: one key can have a row for each partner |
 | `stock` | `y` for built-in BBO/ACBL templates, `N` for personal |
 | `style` | Card type — `ACBL`, `V2BASIC`, `V1BASIC`, or `CC` |
 | `owner` | Who created/owns the card (`bbo` for stock, username for personal) |
@@ -426,9 +434,11 @@ The natural width must be measured at runtime — `#entireTable.getBoundingClien
 1. **`cc_cud.php` request format.** Read from BBO's Save in `acblCC.js`
    (`cmd`, `user`, `password`, `partner`, `default`, `title`, `style`, `cc`,
    `request_id`, `v3u`, and `cc_key` except on insert), answered by
-   `<status err="0" cc_key="…"/>`. Still to check against a real save: whether
-   a replace changes the `cc_key`, and what `www_notify.php`, which the
-   Save calls afterwards and we don't, does for a partner.
+   `<status err="0" cc_key="…"/>`. Checked against real saves (2026-11-02): a
+   replace keeps the `cc_key`, so its numbers can't tell us when a card last
+   changed; `cmd=delete` with `cc_key` removes a card. Still unknown: what
+   `www_notify.php`, which the Save calls afterwards and we don't, does for a
+   partner.
 2. **V2BASIC and CC field catalogs.** Same approach as ACBL — dump
    `cc_fetch.php` responses and enumerate the element names.
 3. **Whether BBO's session token survives Chrome restarts.** If so, we can

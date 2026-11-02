@@ -110,3 +110,18 @@ export function buildEditorUrl({ style, cc_key, partner = '', edit = false }) {
 }
 
 export { ENDPOINTS, EDITOR_PATHS, WEBUTIL_BASE }
+
+/**
+ * The parameters of a card page's URL. BBO's list opens a card with them all
+ * hex-encoded in `x`, as `edit=n&key=…&partner=…`; other routes put them in the
+ * URL itself. The ones in `x` win.
+ */
+export function cardPageParams(search) {
+  const params = new URLSearchParams(search)
+  const hex = params.get('x')
+  if (hex && /^([0-9a-f]{2})+$/i.test(hex)) {
+    const decoded = hex.replace(/../g, (byte) => String.fromCharCode(parseInt(byte, 16)))
+    for (const [name, value] of new URLSearchParams(decoded)) params.set(name, value)
+  }
+  return params
+}
