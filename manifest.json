@@ -41,6 +41,17 @@
       ],
       "run_at": "document_idle",
       "all_frames": true
+    },
+    {
+      "matches": [
+        "https://webutil.bridgebase.com/v2/acblcc/*"
+      ],
+      "js": [
+        "src/ui/editorPageWorld.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true,
+      "world": "MAIN"
     }
   ],
   "permissions": [

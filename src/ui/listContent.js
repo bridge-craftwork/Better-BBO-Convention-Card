@@ -18,7 +18,7 @@
 
 import { parseCardList, parseCardFetch, parseSaveStatus, exportAllKeys } from '../parsers/cc-xml.js'
 import { cardsToJson, buildCcCudBody } from '../parsers/cc-json.js'
-import { planImport, planWrites } from '../lib/import-plan.js'
+import { planImport, planWrites, savedAt } from '../lib/import-plan.js'
 import { readImportFile } from '../lib/card-output.js'
 import { askAboutCard } from './import-dialog.js'
 import { ENDPOINTS } from '../lib/auth.js'
@@ -291,7 +291,9 @@ async function handleImport(button) {
           v3u: 'BBO1',
         })
       )
-    const plan = await planImport(cards, parseCardList(listXml), auth.user, fetchCard)
+    const plan = await planImport(cards, parseCardList(listXml), auth.user, fetchCard, {
+      exportedAt: envelope.exported_at,
+    })
 
     for (const entry of plan) {
       if (entry.action !== 'ask') continue
@@ -299,6 +301,9 @@ async function handleImport(button) {
         title: entry.target.title,
         importedTitle: entry.card.title,
         exportedAt: envelope.exported_at,
+        fileSaved: savedAt(entry.card),
+        bboSaved: entry.bboSaved,
+        newer: entry.newer,
         differences: entry.differences,
         bothTitle: entry.bothTitle,
       })

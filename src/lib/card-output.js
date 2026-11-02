@@ -3,6 +3,7 @@
 // use: the renderer is a couple of megabytes, and most page views never ask.
 
 import { parseCardFetch } from '../parsers/cc-xml.js'
+import { SAVED_FIELD } from './import-plan.js'
 
 export const TEMPLATES = { classic: 'Classic', new: 'New' }
 
@@ -49,7 +50,10 @@ export async function cardFromPdf(bytes) {
   if (read.report?.skipped?.length) {
     notes.push(`${read.report.skipped.length} box(es) in the PDF couldn't be read, and were left out.`)
   }
-  return { card: exportBboCard(read.card_data, { name: read.name }), notes }
+  const card = exportBboCard(read.card_data, { name: read.name })
+  // A date in the PDF is the date of the card inside it, not of edits to the boxes.
+  if (read.report?.source !== 'card') delete card.fields?.[SAVED_FIELD]
+  return { card, notes }
 }
 
 /** What an import file holds: `{ cards, exported_at?, notes }`, from our JSON or a PDF. */

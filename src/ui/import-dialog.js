@@ -5,7 +5,7 @@
 /**
  * @returns {Promise<'keep'|'replace'|'both'>}
  */
-export function askAboutCard({ title, importedTitle, exportedAt, differences, bothTitle }) {
+export function askAboutCard({ title, importedTitle, exportedAt, differences, bothTitle, fileSaved, bboSaved, newer }) {
   return new Promise((resolve) => {
     const dialog = document.createElement('dialog')
     dialog.style.cssText = 'max-width:32em;font:14px sans-serif;padding:1.2em;border:1px solid #888;border-radius:6px'
@@ -16,11 +16,16 @@ export function askAboutCard({ title, importedTitle, exportedAt, differences, bo
     dialog.appendChild(heading)
 
     const date = new Date(exportedAt)
-    const when = Number.isNaN(date.getTime()) ? '' : `, exported ${date.toLocaleDateString()}`
+    const when = fileSaved
+      ? `, saved ${fileSaved.toLocaleString()}`
+      : Number.isNaN(date.getTime()) ? '' : `, exported ${date.toLocaleDateString()}`
     const called = importedTitle && importedTitle !== title ? `, called “${importedTitle}”` : ''
     const lines = [
       `The file's copy${called}${when}: ${differences === 1 ? '1 setting differs' : `${differences} settings differ`} from the card on BBO.`,
-      "BBO doesn't record when a card was last saved, so we can't tell which is newer.",
+      bboSaved ? `The card on BBO was saved ${bboSaved.toLocaleString()}.` : "The card on BBO has no saved date.",
+      newer
+        ? `The ${newer === 'file' ? "file's copy" : 'card on BBO'} is newer.`
+        : "We can't tell which is newer: a card saved without this extension has no date.",
     ]
     for (const text of lines) {
       const p = document.createElement('p')
@@ -33,8 +38,8 @@ export function askAboutCard({ title, importedTitle, exportedAt, differences, bo
     form.method = 'dialog'
     form.style.cssText = 'display:flex;flex-direction:column;gap:.4em;margin-top:1em'
     const buttons = [
-      ['keep', 'Keep the card on BBO'],
-      ['replace', `Use the file's copy (replaces “${title}”)`],
+      ['keep', `Keep the card on BBO${newer === 'bbo' ? ' (newer)' : ''}`],
+      ['replace', `Use the file's copy${newer === 'file' ? ', the newer one' : ''} (replaces “${title}”)`],
       ['both', `Keep both (adds “${bothTitle}”)`],
     ]
     for (const [value, label] of buttons) {

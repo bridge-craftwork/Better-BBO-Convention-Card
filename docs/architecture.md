@@ -56,8 +56,8 @@ This extension fixes all three.
    file, converts our schema back to BBO's XML form, POSTs to `cc_cud.php`
    for each card (`cmd=insert` or `cmd=replace`). Rules for cards already
    on BBO, in `src/lib/import-plan.js`: the same settings are skipped; a
-   difference from one of your cards asks keep, replace or both (BBO records no
-   dates, so we can't say which is newer); a shared or stock card is never
+   difference from one of your cards asks keep, replace or both, saying which
+   is newer when the dates allow (below); a shared or stock card is never
    overwritten, and becomes a private "<title> (private)". ACBL cards only.
    A PDF goes through the same rules, read by the convention-card library's
    `importCard` and converted with `exportBboCard` (`src/lib/card-output.js`).
@@ -66,6 +66,14 @@ This extension fixes all three.
    `downloadAcblPdf` (`src/lib/card-output.js`, `src/lib/card-pdf.js`). ACBL
    cards only. Beside them, "Edit on Bridge Craftwork" and "Save to Bridge
    Classroom" open the library's hand-off links (`#import=v1.<data>`).
+
+7. **Saved dates** — BBO records no dates, so the extension keeps its own:
+   `<E_bbccSaved t="<seconds>"/>` in the card. `src/ui/editorPageWorld.js` adds it
+   to the request when BBO's editor saves (`insert` or `replace`, so a title-only
+   save counts), and import adds it to a card that has none. A card saved without
+   the extension loses it, as BBO's editor rebuilds the card from its form, and
+   is then of unknown age, never wrongly dated. It isn't a setting: comparisons
+   skip it.
 
 ### Speculative
 - "Compare cards" view — side-by-side diff of two of your saved cards.
