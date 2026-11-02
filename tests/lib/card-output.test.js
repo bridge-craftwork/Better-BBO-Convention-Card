@@ -8,6 +8,7 @@ import { decodeCardFromUrl } from '@bridge-craftwork/convention-card/js/handoff.
 import { PDFDocument, PDFName } from 'pdf-lib'
 import { setAssetLoader, TEMPLATE_FILES, FONT_FILE } from '@bridge-craftwork/convention-card/js/assets.js'
 import { renderAcblPdfBytes } from '@bridge-craftwork/convention-card/js/acblClassicFillPdf.js'
+import { exportBboFile, importBboJson } from '@bridge-craftwork/convention-card/js/bbo.js'
 import {
   recordFromFetch,
   cardEditorUrl,
@@ -15,6 +16,8 @@ import {
   cardFromPdf,
   readImportFile,
 } from '../../src/lib/card-output.js'
+import { countDifferences, planImport, planWrites } from '../../src/lib/import-plan.js'
+import { parseCardFetch } from '../../src/parsers/cc-xml.js'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const xml = readFileSync(resolve(here, '../fixtures/cc_fetch_sample.xml'), 'utf-8')
@@ -89,5 +92,57 @@ describe('import from PDF', () => {
   it('still reads our JSON', async () => {
     const json = new TextEncoder().encode(JSON.stringify({ exported_at: 'x', cards: [{ title: 'A' }] }))
     expect(await readImportFile(pdfFile(json))).toEqual({ exported_at: 'x', cards: [{ title: 'A' }], notes: [] })
+  })
+
+  it.each(['classic', 'new'])('reads an unedited %s PDF back as the card, date and all', async (template) => {
+    const card = parseCardFetch(xml)
+    card.fields.bbccSaved = '1793640000'
+    const { card: back } = await cardFromPdf(await renderAcblPdfBytes(importBboJson({ cards: [card] }), template))
+    expect(countDifferences(back, card)).toBe(0)
+    expect(back.fields.bbccSaved).toBe('1793640000')
+  })
+})
+
+describe('import from the editor\u2019s BBO file', () => {
+  const me = 'kemistry'
+  const onBbo = () => {
+    const card = parseCardFetch(xml)
+    card.fields.bbccSaved = '1793640000'
+    return card
+  }
+  const listItem = () => {
+    const { cc_key, title } = onBbo()
+    return { cc_key, title, owner: me, partner: 'aam135', stock: false, default: true }
+  }
+  const importing = async (record) => {
+    const json = new TextEncoder().encode(JSON.stringify(exportBboFile(record, '2026-11-02T20:00:00Z')))
+    const { cards, exported_at } = await readImportFile(new File([json], 'card.BBO.json'))
+    return planImport(cards, [listItem()], me, async () => onBbo(), { exportedAt: exported_at })
+  }
+
+  it('finds an unedited card already on BBO', async () => {
+    const [entry] = await importing(importBboJson({ cards: [onBbo()] }))
+    expect(entry.action).toBe('same')
+  })
+
+  it('asks about an edited card, and a replace keeps BBO\u2019s partner', async () => {
+    const record = importBboJson({ cards: [onBbo()] })
+    record.card_data.notrump.one_nt.range_min = 12
+    const [entry] = await importing(record)
+    expect(entry).toMatchObject({ action: 'ask', differences: 1 })
+    const [write] = planWrites([{ ...entry, choice: 'replace' }], 1800000000)
+    expect(write.cmd).toBe('replace')
+    expect(write.card).toMatchObject({ cc_key: listItem().cc_key, partner: 'aam135', default: true })
+    expect(write.card.fields.bbccSaved).toBe('1800000000')
+  })
+
+  it('adds a card made in the editor, which has no key, owner or partner', async () => {
+    const [entry] = await importing({ name: 'New', card_data: { notrump: { one_nt: { range_min: 15 } } } })
+    expect(entry.card.cc_key).toBeUndefined()
+    expect(entry.card.owner).toBeUndefined()
+    expect(entry).toMatchObject({ action: 'add', title: 'New' })
+    const [write] = planWrites([entry], 1800000000)
+    expect(write.cmd).toBe('insert')
+    expect(write.card).toMatchObject({ title: 'New', partner: '', default: false })
   })
 })

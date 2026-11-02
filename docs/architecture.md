@@ -61,6 +61,8 @@ This extension fixes all three.
    overwritten, and becomes a private "<title> (private)". ACBL cards only.
    A PDF goes through the same rules, read by the convention-card library's
    `importCard` and converted with `exportBboCard` (`src/lib/card-output.js`).
+   So does the `.BBO.json` file from the bridge-craftwork.com editor's "Export
+   for BBO" (see the schema's notes).
 6. **ACBL PDFs** — "PDF: Classic" and "PDF: New" on the editor toolbar: the
    saved card through the convention-card library's `importBboJson` and
    `downloadAcblPdf` (`src/lib/card-output.js`, `src/lib/card-pdf.js`). ACBL
@@ -288,7 +290,7 @@ A pragmatic shape:
 
 ```json
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "exported_at": "2026-05-06T17:00:00Z",
   "source": "bbo-acbl",
   "cards": [
@@ -316,6 +318,12 @@ A pragmatic shape:
 ```
 
 Notes:
+- The convention-card library's `exportBboFile` writes the same shape for the
+  bridge-craftwork.com editor, one card to a file, with `source` set to
+  `bridge-craftwork-card`. Import doesn't read `source`. A card made in that
+  editor has no `cc_key`, `owner`, `partner`, `stock` or `default`, so it's added
+  unless its title matches one of the user's cards.
+- `conventions` and `leads` sit beside `fields`, holding the `C_` and `L_` elements.
 - `fields` strips the `E_` prefix from BBO's element names for readability.
 - Values stay as strings even when they look numeric (some "min" fields
   contain text like "thru 4!H" or are blank — keep round-trippable).
