@@ -24,7 +24,7 @@
     "vitest": "^4.1.5"
   },
   "dependencies": {
-    "@bridge-craftwork/convention-card": "github:bridge-craftwork/convention-card#v0.41.3",
+    "@bridge-craftwork/convention-card": "github:bridge-craftwork/convention-card#v0.42.2",
     "linkedom": "^0.18.12",
     "webextension-polyfill": "^0.12.0"
   }

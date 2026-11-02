@@ -14,8 +14,9 @@ everything we know about BBO's convention-card API.
   rightmost column) with proper landscape fit-to-page output.
 - **Export to JSON** — any single card, or all your own cards and cards shared
   with you (stock cards one at a time), in a portable schema.
-- **Import from JSON or PDF** — round-trip a card from another tool or backup. A
-  PDF can be one this extension or the bridge-craftwork.com editor made (the card
+- **Import from JSON or PDF** — round-trip a card from another tool or backup.
+  JSON can be this extension's export or the bridge-craftwork.com editor's "Export
+  for BBO" file. A PDF can be one this extension or the bridge-craftwork.com editor made (the card
   travels inside it, with any boxes changed since), or any filled-in ACBL card or
   Bridgodex PDF, whose boxes are read less exactly.
 - **ACBL PDFs** — download a card as the ACBL Classic or New card, rendered in
