@@ -14,9 +14,16 @@ everything we know about BBO's convention-card API.
   rightmost column) with proper landscape fit-to-page output.
 - **Export to JSON** — any single card, or all your own cards and cards shared
   with you (stock cards one at a time), in a portable schema.
-- **Import from JSON** — round-trip a card from another tool or backup.
-- **Better PDF render** (future) — full ACBL-format three-column portrait
-  layout, replacing the broken built-in print.
+- **Import from JSON or PDF** — round-trip a card from another tool or backup. A
+  PDF can be one this extension or the bridge-craftwork.com editor made (the card
+  travels inside it, with any boxes changed since), or any filled-in ACBL card or
+  Bridgodex PDF, whose boxes are read less exactly.
+- **ACBL PDFs** — download a card as the ACBL Classic or New card, rendered in
+  the browser by the [convention-card](https://github.com/bridge-craftwork/convention-card)
+  library.
+- **Open elsewhere** — open a card in the bridge-craftwork.com editor, or save it
+  to Bridge Classroom, without a file. The card travels in the URL's fragment,
+  which never reaches a server, and only when you click.
 
 ## Development
 

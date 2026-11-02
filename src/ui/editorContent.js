@@ -11,11 +11,20 @@
 //     loaded inside BBO's lobby iframe; harmless when already top-level).
 //   - Add an "Export this card as JSON" button that re-fetches the card
 //     via cc_fetch.php and downloads it in our portable schema.
+//   - Add buttons for the ACBL PDFs (Classic and New), and to open the card in
+//     the bridge-craftwork.com editor or save it to Bridge Classroom.
 
+import browser from 'webextension-polyfill'
 import { applyPrintFix } from './print-fix.js'
 import { parseCardFetch } from '../parsers/cc-xml.js'
 import { cardsToJson } from '../parsers/cc-json.js'
 import { ENDPOINTS } from '../lib/auth.js'
+import {
+  TEMPLATES,
+  recordFromFetch,
+  cardEditorUrl,
+  bridgeClassroomUrl,
+} from '../lib/card-output.js'
 
 const LOG_PREFIX = '[better-bbo-cc/editor]'
 
@@ -43,6 +52,7 @@ function installStyles() {
       right: 8px;
       z-index: 99999;
       display: flex;
+      flex-wrap: wrap;
       gap: 6px;
       padding: 6px 8px;
       background: rgba(255,255,255,0.95);
@@ -107,27 +117,69 @@ function injectToolbar() {
   printBtn.addEventListener('click', () => window.print())
   bar.appendChild(printBtn)
 
+  for (const [template, name] of Object.entries(TEMPLATES)) {
+    addCardButton(bar, `PDF: ${name}`, `Download the last saved version as the ACBL ${name} card`, 'Rendering…', async (record) => {
+      const { downloadAcblPdf } = await import('../lib/card-pdf.js')
+      await downloadAcblPdf(record, template)
+    })
+  }
+
+  addCardButton(bar, 'Edit on Bridge Craftwork', 'Open the last saved version in the card editor at bridge-craftwork.com', 'Opening…', (record) =>
+    openLink(cardEditorUrl(record))
+  )
+  addCardButton(bar, 'Save to Bridge Classroom', 'Open the last saved version in Bridge Classroom, which saves it to your account', 'Opening…', (record) =>
+    openLink(bridgeClassroomUrl(record))
+  )
+
   document.body.appendChild(bar)
 }
 
-async function handleExport(button) {
+function addCardButton(bar, label, title, busy, action) {
+  const button = document.createElement('button')
+  button.type = 'button'
+  button.textContent = label
+  button.title = title
+  button.addEventListener('click', async () => {
+    button.disabled = true
+    button.textContent = busy
+    try {
+      const { xml } = await fetchThisCard()
+      await action(await recordFromFetch(xml))
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(LOG_PREFIX, label, err)
+      alert(`${label} failed: ${err.message}`)
+    } finally {
+      button.disabled = false
+      button.textContent = label
+    }
+  })
+  bar.appendChild(button)
+}
+
+async function openLink(url) {
+  await browser.runtime.sendMessage({ type: 'open-card-link', url: await url })
+}
+
+async function fetchThisCard() {
   const params = new URLSearchParams(window.location.search)
   const cc_key = params.get('key') ?? params.get('cckey')
-  if (!cc_key) {
-    alert('Could not find this card’s key in the URL.')
-    return
-  }
+  if (!cc_key) throw new Error('Could not find this card’s key in the URL.')
+  const xml = await postForm(ENDPOINTS.fetch, {
+    key: cc_key,
+    request_id: String(Date.now()),
+    v3u: 'BBO1',
+  })
+  return { xml, params }
+}
 
+async function handleExport(button) {
   button.disabled = true
   const original = button.textContent
   button.textContent = 'Exporting…'
 
   try {
-    const xml = await postForm(ENDPOINTS.fetch, {
-      key: cc_key,
-      request_id: String(Date.now()),
-      v3u: 'BBO1',
-    })
+    const { xml, params } = await fetchThisCard()
     const card = parseCardFetch(xml)
     // partner isn't in the fetch response — pull from URL if present.
     card.partner = params.get('partner') ?? ''

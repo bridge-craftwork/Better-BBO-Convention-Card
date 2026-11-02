@@ -59,11 +59,13 @@ This extension fixes all three.
    difference from one of your cards asks keep, replace or both (BBO records no
    dates, so we can't say which is newer); a shared or stock card is never
    overwritten, and becomes a private "<title> (private)". ACBL cards only.
-6. **Better PDF render** — replace the broken Print with a from-scratch
-   ACBL-format renderer (portrait, three tight columns, matches the
-   official ACBL card layout). Best built as a standalone JSON→PDF
-   library so it can run outside the extension too. Until ready, the v1
-   landscape print CSS is the stopgap.
+   A PDF goes through the same rules, read by the convention-card library's
+   `importCard` and converted with `exportBboCard` (`src/lib/card-output.js`).
+6. **ACBL PDFs** — "PDF: Classic" and "PDF: New" on the editor toolbar: the
+   saved card through the convention-card library's `importBboJson` and
+   `downloadAcblPdf` (`src/lib/card-output.js`, `src/lib/card-pdf.js`). ACBL
+   cards only. Beside them, "Edit on Bridge Craftwork" and "Save to Bridge
+   Classroom" open the library's hand-off links (`#import=v1.<data>`).
 
 ### Speculative
 - "Compare cards" view — side-by-side diff of two of your saved cards.
@@ -351,9 +353,7 @@ better-bbo-cc-extension/
         └── cc-json.test.js
 ```
 
-A separate JSON→PDF library (probably TypeScript, browser+node compatible,
-no extension dependencies) lives in its own repo and is consumed by this
-extension via npm dependency once it exists.
+The JSON→PDF code is the convention-card library, a dependency pinned to a tag.
 
 ---
 

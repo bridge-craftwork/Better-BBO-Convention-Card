@@ -4,7 +4,7 @@
 //
 // Adds:
 //   - "↗" open-in-tab button on each card row
-//   - Top toolbar with "Export my cards as JSON" and "Import from JSON"
+//   - Top toolbar with "Export my cards as JSON" and "Import from JSON or PDF"
 //     (the rules for cards already on BBO are in ../lib/import-plan.js)
 //
 // Per-row card metadata lives in jQuery `$(row).data('cc_data')` in the
@@ -19,6 +19,7 @@
 import { parseCardList, parseCardFetch, parseSaveStatus, exportAllKeys } from '../parsers/cc-xml.js'
 import { cardsToJson, buildCcCudBody } from '../parsers/cc-json.js'
 import { planImport, planWrites } from '../lib/import-plan.js'
+import { readImportFile } from '../lib/card-output.js'
 import { askAboutCard } from './import-dialog.js'
 import { ENDPOINTS } from '../lib/auth.js'
 import { readAuthFromLocation } from '../lib/auth.js'
@@ -147,9 +148,9 @@ function ensureToolbar() {
 
   const importBtn = document.createElement('button')
   importBtn.type = 'button'
-  importBtn.textContent = 'Import from JSON'
+  importBtn.textContent = 'Import from JSON or PDF'
   importBtn.title =
-    'Add cards from a previously-exported JSON file. You are asked before a card of yours is replaced; a card you don\'t own becomes a private copy.'
+    'Add cards from a previously-exported JSON file or an ACBL card PDF. You are asked before a card of yours is replaced; a card you don\'t own becomes a private copy.'
   importBtn.addEventListener('click', () => handleImport(importBtn))
   toolbar.appendChild(importBtn)
 
@@ -255,20 +256,20 @@ async function handleImport(button) {
     return
   }
 
-  const file = await pickJsonFile()
+  const file = await pickImportFile()
   if (!file) return
 
   let envelope
   try {
-    envelope = JSON.parse(await file.text())
+    envelope = await readImportFile(file)
   } catch (err) {
-    alert(`Could not parse JSON: ${err.message}`)
+    alert(`Could not read ${file.name}: ${err.message}`)
     return
   }
 
   const cards = Array.isArray(envelope?.cards) ? envelope.cards : null
   if (!cards || cards.length === 0) {
-    alert('JSON does not contain a cards array, or it is empty.')
+    alert('This file holds no cards.')
     return
   }
 
@@ -304,7 +305,7 @@ async function handleImport(button) {
     }
 
     const writes = planWrites(plan)
-    if (writes.length > 0 && !window.confirm(`${describePlan(plan, writes)}\n\nSave these to your BBO account?`)) {
+    if (writes.length > 0 && !window.confirm(`${[describePlan(plan, writes), ...envelope.notes].join('\n\n')}\n\nSave these to your BBO account?`)) {
       return
     }
 
@@ -353,11 +354,11 @@ function describePlan(plan, writes) {
   return lines.join('\n')
 }
 
-function pickJsonFile() {
+function pickImportFile() {
   return new Promise((resolve) => {
     const input = document.createElement('input')
     input.type = 'file'
-    input.accept = 'application/json,.json'
+    input.accept = 'application/json,.json,application/pdf,.pdf'
     input.addEventListener('change', () => {
       resolve(input.files?.[0] ?? null)
     })

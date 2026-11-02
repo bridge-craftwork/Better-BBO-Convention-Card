@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Better BBO Convention Card",
   "version": "0.1.0",
-  "description": "Better printing, JSON import/export, and open-in-tab for BBO convention cards.",
+  "description": "Better printing, ACBL PDFs, JSON import/export, and open-in-tab for BBO convention cards.",
   "background": {
     "service_worker": "src/background.js",
     "type": "module"
@@ -12,7 +12,9 @@
       "matches": [
         "https://webutil.bridgebase.com/v2/acblCCFM/*"
       ],
-      "js": ["src/ui/listContent.js"],
+      "js": [
+        "src/ui/listContent.js"
+      ],
       "run_at": "document_idle",
       "all_frames": true
     },
@@ -20,7 +22,9 @@
       "matches": [
         "https://webutil.bridgebase.com/v2/acblCCFM/*"
       ],
-      "js": ["src/ui/listPageWorld.js"],
+      "js": [
+        "src/ui/listPageWorld.js"
+      ],
       "run_at": "document_idle",
       "all_frames": true,
       "world": "MAIN"
@@ -32,12 +36,17 @@
         "https://webutil.bridgebase.com/v2/cs_render_cc.php*",
         "https://webutil.bridgebase.com/v2/fdcc/*"
       ],
-      "js": ["src/ui/editorContent.js"],
+      "js": [
+        "src/ui/editorContent.js"
+      ],
       "run_at": "document_idle",
       "all_frames": true
     }
   ],
-  "permissions": ["storage", "downloads"],
+  "permissions": [
+    "storage",
+    "downloads"
+  ],
   "host_permissions": [
     "https://webutil.bridgebase.com/*",
     "https://www.bridgebase.com/*"
