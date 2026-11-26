@@ -238,8 +238,8 @@ First release. Print that fits the whole card, the ACBL Classic and New PDFs, op
 
 Things only Rick can do, in the order they block:
 
-1. **Approve the icon** (`icons/icon.svg`: the Fetch and DD mortarboard with a
-   green CC badge).
+1. ~~**Approve the icon**~~: approved 2026-11-26 (`icons/icon.svg`: the Fetch
+   and DD mortarboard with a green CC badge).
 2. **Publish the privacy page and homepage**: merge
    [bridge-craftwork-site#23](https://github.com/bridge-craftwork/bridge-craftwork-site/pull/23)
    (`/bbo-cc/` and `/bbo-cc/privacy/`). Every store checks the privacy URL.
