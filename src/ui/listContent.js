@@ -24,6 +24,7 @@ import { askAboutCard } from './import-dialog.js'
 import { ENDPOINTS } from '../lib/auth.js'
 import { readAuthFromLocation } from '../lib/auth.js'
 import { openCardInTab } from './open-in-tab.js'
+import { notifyUrl, buildSavedNoticeBody, partnersToNotify } from '../lib/notify.js'
 
 const LOG_PREFIX = '[better-bbo-cc/list]'
 
@@ -291,7 +292,8 @@ async function handleImport(button) {
           v3u: 'BBO1',
         })
       )
-    const plan = await planImport(cards, parseCardList(listXml), auth.user, fetchCard, {
+    const listItems = parseCardList(listXml)
+    const plan = await planImport(cards, listItems, auth.user, fetchCard, {
       exportedAt: envelope.exported_at,
     })
 
@@ -318,8 +320,9 @@ async function handleImport(button) {
     for (const [index, { cmd, card }] of writes.entries()) {
       button.textContent = `Importing… (${index + 1}/${writes.length})`
       try {
-        parseSaveStatus(await postBody(ENDPOINTS.cud, buildCcCudBody(cmd, card, auth).toString()))
+        const savedKey = parseSaveStatus(await postBody(ENDPOINTS.cud, buildCcCudBody(cmd, card, auth).toString()))
         changed += 1
+        await notifySaved({ ...card, cc_key: savedKey || card.cc_key }, listItems, auth)
       } catch (err) {
         failures.push(`${card.title || card.cc_key}: ${err.message}`)
       }
@@ -370,6 +373,23 @@ function pickImportFile() {
     input.addEventListener('cancel', () => resolve(null))
     input.click()
   })
+}
+
+/**
+ * Tell BBO about a save, as its editor does after each one, so the lobby picks
+ * up the new card for the user and each partner it is used with. BBO's own
+ * pages don't wait on the answer or report a failure, and nor do we: the card
+ * is saved either way.
+ */
+async function notifySaved(card, listItems, auth) {
+  for (const partner of partnersToNotify(card.cc_key, listItems, card.partner)) {
+    try {
+      await postBody(notifyUrl(), buildSavedNoticeBody({ ...card, partner }, auth).toString())
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.warn(LOG_PREFIX, 'could not tell BBO about the save of', card.cc_key, err)
+    }
+  }
 }
 
 async function postForm(url, fields) {
