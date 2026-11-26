@@ -258,8 +258,11 @@ Things only Rick can do, in the order they block:
    carry no date. Everything else works. Check ↗ in Safari; if it's dead, the
    list's ↗ needs a fallback that matches rows to `cc_list.php` by title and
    partner.
-5. **Screenshots**: need a signed-in BBO session; see
-   `store/screenshots/README.md`.
+5. ~~**Screenshots**~~: done 2026-11-25 (`store/screenshots/`). Taking them
+   found Print (fixed) put the lower half of an ACBL card on a second page
+   (it scaled with a transform, which doesn't shrink the layout); it now
+   zooms, and fits the whole card on one page. Check a real Print in Chrome,
+   Firefox and Safari as part of 3.
 6. **Store records**: Chrome (new item in the developer dashboard), Edge
    (Partner Center, then copy the product id into
    `scripts/upload-browsers.mjs`), Firefox (Developer Hub, with the source

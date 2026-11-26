@@ -5,8 +5,8 @@
 // page and clips the rightmost column. We fix this by:
 //   1. Installing a static @media print stylesheet that hides chrome, switches
 //      @page to landscape letter, and prevents row-splitting at page breaks.
-//   2. On `beforeprint`, measuring the actual card width and injecting a
-//      transform: scale so the card fits across the landscape page exactly.
+//   2. On `beforeprint`, measuring the card and injecting a zoom so the whole
+//      card fits on one landscape page.
 //
 // Card-format-aware: the ACBL editor uses #entireTable inside #ccDiv inside
 // #mainDiv. V2BASIC/V1BASIC/CC have different DOMs — apply() inspects the
@@ -72,18 +72,23 @@ function injectRuntimeScale() {
   const target = findScaleTarget()
   if (!target) return
 
-  const naturalWidth = target.getBoundingClientRect().width
+  const { width: naturalWidth, height: naturalHeight } = target.getBoundingClientRect()
   if (!Number.isFinite(naturalWidth) || naturalWidth <= 0) return
 
-  // Landscape letter with 0.3in margins → ~10.4in printable width → ~998px
-  // at 96dpi.
+  // Landscape letter with 0.3in margins: 10.4in x 7.9in printable, ~998 x
+  // 758px at 96dpi. Fit both ways, so the whole card is on one page, with a
+  // little room for the title row above it.
   const printableWidthPx = (11 - 0.3 * 2) * 96
-  const scale = printableWidthPx / naturalWidth
+  const printableHeightPx = (8.5 - 0.3 * 2) * 96 * 0.94
+  const scale = Math.min(printableWidthPx / naturalWidth, naturalHeight > 0 ? printableHeightPx / naturalHeight : 1)
 
-  // We avoid scaling up; if the card is already narrower than the page
+  // We avoid scaling up; if the card is already smaller than the page
   // we just print at 1:1 and let the static stylesheet handle the rest.
   const effectiveScale = scale < 1 ? scale : 1
 
+  // zoom, not transform: a transform shrinks only the drawing, so the browser
+  // still paginates the card at full height and pushes its lower half onto a
+  // second page. zoom shrinks the layout too.
   const css = `
 @media print {
   #mainDiv {
@@ -91,8 +96,7 @@ function injectRuntimeScale() {
     width: ${naturalWidth}px !important;
     height: auto !important;
     overflow: visible !important;
-    transform: scale(${effectiveScale.toFixed(4)});
-    transform-origin: top left;
+    zoom: ${effectiveScale.toFixed(4)};
   }
   #ccDiv {
     position: static !important;
