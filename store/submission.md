@@ -240,7 +240,8 @@ Things only Rick can do, in the order they block:
 
 1. **Approve the icon** (`icons/icon.svg`: the Fetch and DD mortarboard with a
    green CC badge).
-2. **Publish the privacy page and homepage** on bridge-craftwork-site
+2. **Publish the privacy page and homepage**: merge
+   [bridge-craftwork-site#23](https://github.com/bridge-craftwork/bridge-craftwork-site/pull/23)
    (`/bbo-cc/` and `/bbo-cc/privacy/`). Every store checks the privacy URL.
 3. **Test on real BBO** with the store build, in Chrome, Firefox and Safari:
    the list toolbar and ↗, a card's toolbar, Print, both PDFs, export, import
