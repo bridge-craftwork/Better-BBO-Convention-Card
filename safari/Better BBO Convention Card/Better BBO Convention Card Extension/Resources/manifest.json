@@ -1,0 +1,132 @@
+{
+  "manifest_version": 3,
+  "name": "Better BBO Convention Card",
+  "version": "1.0.0",
+  "description": "Print, back up and share your Bridge Base Online convention cards: ACBL PDFs, JSON and PDF import and export.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "action": {
+    "default_title": "Better BBO Convention Card",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "24": "icons/icon-24.png",
+      "32": "icons/icon-32.png"
+    }
+  },
+  "background": {
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "assets/listContent.js-loader-Cya3dSHe.js"
+      ],
+      "matches": [
+        "https://webutil.bridgebase.com/v2/acblCCFM/*"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "js": [
+        "assets/listPageWorld.js-56-zsnoR.js"
+      ],
+      "matches": [
+        "https://webutil.bridgebase.com/v2/acblCCFM/*"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "js": [
+        "assets/editorContent.js-loader-BIZJoaeh.js"
+      ],
+      "matches": [
+        "https://webutil.bridgebase.com/v2/acblcc/*",
+        "https://webutil.bridgebase.com/v2/v2cc/*",
+        "https://webutil.bridgebase.com/v2/cs_render_cc.php*",
+        "https://webutil.bridgebase.com/v2/fdcc/*"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "js": [
+        "assets/editorPageWorld.js-C1hVLvtI.js"
+      ],
+      "matches": [
+        "https://webutil.bridgebase.com/v2/acblcc/*"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true,
+      "world": "MAIN"
+    }
+  ],
+  "host_permissions": [
+    "https://webutil.bridgebase.com/v2/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "https://webutil.bridgebase.com/*"
+      ],
+      "resources": [
+        "assets/auth-DNeVZU1L.js",
+        "assets/bbo-sIKZMQEK.js",
+        "assets/handoff-Dhy27oUL.js",
+        "assets/handoffToBridgeClassroom-hc4BnJ9U.js",
+        "assets/importCard-Dp8QObt4.js",
+        "assets/migrate-ChgRBFc9.js",
+        "assets/ntDefenses-DbzLMdjK.js",
+        "assets/checkCard-CactabMx.js",
+        "assets/bbsa-BrqkHDSJ.js",
+        "assets/bridgodexPdf--6IKYOh9.js",
+        "assets/acblPdfImport-DxqLwR_b.js",
+        "assets/PDFButton-jJkX7uAS.js",
+        "assets/_commonjsHelpers-CqkleIqs.js",
+        "assets/acblClassicFillPdf-BAvCT5sV.js",
+        "assets/listContent.js-aKv8OePd.js",
+        "assets/listPageWorld.js-56-zsnoR.js",
+        "assets/editorPageWorld.js-C1hVLvtI.js"
+      ],
+      "use_dynamic_url": false
+    },
+    {
+      "matches": [
+        "https://webutil.bridgebase.com/*",
+        "https://webutil.bridgebase.com/*",
+        "https://webutil.bridgebase.com/*",
+        "https://webutil.bridgebase.com/*"
+      ],
+      "resources": [
+        "assets/acbl-classic-2023-CVgakCVl.pdf",
+        "assets/acbl-new-BUR8nEhL.pdf",
+        "assets/BarlowCondensed-Regular-u9oSiJc6.ttf",
+        "assets/auth-DNeVZU1L.js",
+        "assets/browser-polyfill-DffEbQem.js",
+        "assets/_commonjsHelpers-CqkleIqs.js",
+        "assets/card-pdf-Cj71s0jm.js",
+        "assets/bbo-sIKZMQEK.js",
+        "assets/handoff-Dhy27oUL.js",
+        "assets/handoffToBridgeClassroom-hc4BnJ9U.js",
+        "assets/importCard-Dp8QObt4.js",
+        "assets/migrate-ChgRBFc9.js",
+        "assets/ntDefenses-DbzLMdjK.js",
+        "assets/checkCard-CactabMx.js",
+        "assets/bbsa-BrqkHDSJ.js",
+        "assets/bridgodexPdf--6IKYOh9.js",
+        "assets/acblPdfImport-DxqLwR_b.js",
+        "assets/PDFButton-jJkX7uAS.js",
+        "assets/acblClassicFillPdf-BAvCT5sV.js",
+        "assets/editorContent.js-CGyzDI-h.js"
+      ],
+      "use_dynamic_url": false
+    }
+  ]
+}

@@ -1,9 +1,13 @@
 {
   "name": "better-bbo-convention-card",
-  "version": "0.1.0",
-  "description": "Browser extension that improves BBO's convention-card experience: better printing, JSON import/export, open-in-tab.",
+  "version": "1.0.0",
+  "description": "Browser extension for Bridge Base Online's convention cards: printing that fits, ACBL PDFs, JSON and PDF import and export, open in a tab.",
   "type": "module",
   "license": "Unlicense",
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10"
+  },
   "scripts": {
     "build": "vite build",
     "build:chrome": "BROWSER=chrome vite build",
@@ -14,18 +18,20 @@
     "dev": "vite",
     "test": "vitest run",
     "test:watch": "vitest",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "package": "scripts/package-stores.sh",
+    "icons": "node scripts/render-icons.mjs"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.4.0",
     "jsdom": "^25.0.1",
+    "playwright": "^1.65.1",
     "prettier": "^3.8.3",
     "vite": "^6.4.2",
     "vitest": "^4.1.5"
   },
   "dependencies": {
     "@bridge-craftwork/convention-card": "github:bridge-craftwork/convention-card#v0.45.2",
-    "linkedom": "^0.18.12",
     "webextension-polyfill": "^0.12.0"
   }
 }

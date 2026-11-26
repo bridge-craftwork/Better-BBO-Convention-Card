@@ -1,0 +1,2 @@
+(function(){const c="data-bbcc-card";function n(){if(typeof window.jQuery!="function")return;const t=window.jQuery;t("a.card-item").each(function(){try{const e=t(this).data("cc_data");e&&this.setAttribute(c,JSON.stringify(e))}catch{}})}function o(){n(),new MutationObserver(n).observe(document.body,{childList:!0,subtree:!0})}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",o,{once:!0}):o();
+})()

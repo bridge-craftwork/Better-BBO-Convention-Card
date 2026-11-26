@@ -1,0 +1,267 @@
+# Better BBO Convention Card — submission answers, paste-ready
+
+Version **1.0.0**, a first listing everywhere: Chrome, Edge, Firefox
+(addons.mozilla.org) and the Mac App Store. Built with
+`scripts/package-stores.sh`, which writes
+`dist/packages/better-bbo-convention-card-1.0.0-{chrome,edge,firefox,source}.zip`
+and refreshes the Xcode project in `safari/`.
+
+Modelled on Bridge Craftwork DD's submission (bridge-classroom-fetch,
+`store/dd/submission.md`), which has been through all four stores; where this
+differs, it says why.
+
+**Before submitting, see [Blockers](#blockers) at the end.**
+
+| Store | Status |
+|---|---|
+| Chrome Web Store | not submitted |
+| Edge | not submitted; a first listing is made in Partner Center (the API refuses a first submission) |
+| Firefox | not submitted; a first listing is made in the Developer Hub, with the source archive |
+| Mac App Store | not submitted; the app record is made in App Store Connect first |
+
+---
+
+## Store listing
+
+**Name**
+
+```
+Better BBO Convention Card
+```
+
+The name keeps "BBO", Rick's call (25 Nov 2026): the extension works only on
+Bridge Base Online, and other extensions name it the same way. If a store
+objects to the trademark, the fallback is a name without it, and only the
+listing changes. The Firefox id and Apple bundle id say
+`better-bbo-convention-card` either way.
+
+**Short summary / subtitle**: 125 characters, inside Chrome's 132. The same
+text is the manifest description; `package-stores.sh` refuses a longer one.
+Safari's is 109, inside Apple's 112 (`vite.config.js`).
+
+```
+Print, back up and share your Bridge Base Online convention cards: ACBL PDFs, JSON and PDF import and export, full-size tabs.
+```
+
+**Description**
+
+```
+Better BBO Convention Card adds the things Bridge Base Online's convention card manager is missing, right inside it: Account, then Convention cards, in BBO's web lobby.
+
+On any card:
+• Print that fits. BBO's Print clips the right-hand column; this prints the whole card across a landscape page.
+• ACBL PDFs. Download the card as the ACBL Classic or the ACBL New convention card, filled in and ready to print or email.
+• Open in a tab. See and edit the card at full size instead of in BBO's narrow panel.
+• Export JSON. Save a copy of the card in a portable format.
+• Edit on Bridge Craftwork, or Save to Bridge Classroom. Open the card in the bridge-craftwork.com card editor, or in Bridge Classroom, which saves it to your account there. No file to download and upload again.
+
+On your list of cards:
+• Export all your cards, and the cards partners have shared with you, in one JSON file.
+• Import cards from a JSON file, from the bridge-craftwork.com editor's "Export for BBO" file, or from a PDF: one this extension or the bridge-craftwork.com editor made (the card travels inside it), or any filled-in ACBL convention card or Bridgodex PDF. A card that differs from one already on BBO is never replaced without asking, and the question says which copy is newer when it can tell. A card you don't own becomes a private copy. After an import, BBO is told the cards changed, as its own editor does, so your partners see the new version.
+
+The extension only runs on BBO's convention card pages, and only does anything when you click. It talks to BBO with the session BBO's page already has; it never sees your password. A card goes to Bridge Craftwork or Bridge Classroom only when you click that button, in the link's fragment, which never reaches a server.
+
+No analytics, no tracking, no accounts. Open source.
+```
+
+**Category**: Productivity (Chrome, Edge) · Other (Firefox) · Utilities (Mac
+App Store), as Fetch and DD.
+
+**Privacy policy URL**
+
+```
+https://bridge-craftwork.com/bbo-cc/privacy/
+```
+
+**Homepage URL**
+
+```
+https://bridge-craftwork.com/bbo-cc/
+```
+
+**Support URL**
+
+```
+https://github.com/bridge-craftwork/Better-BBO-Convention-Card/issues
+```
+
+**Official URL** (Chrome): leave as None, as Fetch and DD do. It only offers
+verified domains.
+
+**Firefox: Android.** Leave Firefox for Android unticked. BBO's phone and
+tablet lobby is a different page, which this doesn't run on, and the manifest
+declares no `gecko_android`.
+
+---
+
+## Single purpose
+
+```
+Adds printing, PDF downloads, import and export, and full-size viewing to the convention cards in Bridge Base Online's convention card manager.
+```
+
+---
+
+## Permission justifications
+
+The manifest asks for **no API permissions** at all: no `storage`, `tabs`,
+`downloads` or `scripting`. (1.0.0 dropped `storage` and `downloads`, which
+earlier builds declared and never used, and the `www.bridgebase.com` host.)
+Files are saved with an ordinary download link, and the hand-off links are
+opened with `tabs.create`, which needs no permission.
+
+**Host permissions**: one host, one path.
+
+```
+webutil.bridgebase.com/v2/ — Bridge Base Online's convention card manager and card pages, where the extension's buttons are added. Its requests go to the same BBO pages the card manager itself uses, with the session the page already has: to list, read and save the user's cards, and to tell BBO a card has changed after an import, as BBO's own editor does. No other host is requested.
+```
+
+**Content scripts in the page's world** (two, declared in the manifest with
+`world: "MAIN"`). Chrome has no field for these; if a reviewer asks:
+
+```
+Two short scripts run in the page's own context on BBO's card pages, because BBO's pages forbid inline scripts (CSP script-src 'self') and the data they need is only there. On the card list, one copies each row's card details (BBO's own jQuery data: the card's key, type and partner) onto an attribute the extension's content script can read, so the "open in tab" button knows which card a row is. On a card page, the other adds the date to the card BBO's own Save sends, so a later import can say which copy is newer. Neither makes a request of its own.
+```
+
+**Remote code**: answer **No**.
+
+```
+No remote code. Everything the extension runs is in the package, including the PDF renderer and the two blank ACBL card PDFs it fills in.
+```
+
+---
+
+## Data use
+
+**Collected**: tick **Website content** and **Personally identifiable
+information**, as Fetch and DD do, and for the same reason: "collect" in every
+store's sense means *leaves the device*. One path does. **Edit on Bridge
+Craftwork** and **Save to Bridge Classroom** put the card in a link to those
+sites, and a card holds whatever the user typed into it, which can include the
+partnership's names. That link's fragment never reaches a server, but the page
+it opens reads it in the browser, and Bridge Classroom saves the card to the
+user's account if they are signed in. Nothing else leaves the device except to
+BBO itself.
+
+Firefox's manifest declares `personallyIdentifyingInfo` and `websiteContent`
+(`vite.config.js`), so the stores agree.
+
+**Not ticked: Authentication information**, and this is the one answer that
+needs thought, so here is why. The extension reads BBO's session token from
+the URL BBO gives its own card manager, and sends it back to BBO with each
+request, exactly as BBO's card manager does. It never leaves the browser for
+anywhere but the BBO server that issued it, is never stored, and is not the
+user's password. That is using the site's session, not collecting a
+credential. If a reviewer disagrees, ticking it changes nothing else.
+
+Not ticked either: Health, Financial, Personal communications, Location, Web
+history, User activity.
+
+**Certifications**: all three can be affirmed: not sold; not used for
+unrelated purposes; not used for creditworthiness or lending.
+
+**If a free-text field is offered**
+
+```
+The extension works on Bridge Base Online's convention card pages. It reads and saves the user's own cards through BBO's own card pages, with the session BBO's page already has, as BBO's card manager does; the session token is sent only back to BBO, and nothing is stored. Exports and PDFs are made in the browser and saved as ordinary downloads. Nothing leaves the device for us or a third party unless the user clicks "Edit on Bridge Craftwork" or "Save to Bridge Classroom", which opens that one card, in the link's fragment, on bridge-craftwork.com or bridge-classroom.com. No analytics, no telemetry, no third-party endpoint.
+```
+
+---
+
+## Notes for reviewers
+
+Unlike DD, **a reviewer can test everything with a free BBO account** made on
+the spot: every account has BBO's stock cards, which open, print, export and
+render as PDFs, and a new account can create and import cards of its own. We
+still can't hand over ours (BBO allows one session per account, so reviewers
+would sign each other out), and needn't.
+
+Paste for Firefox and Apple. Chrome's test instructions field takes 500
+characters, so use the short version there:
+
+```
+Needs a Bridge Base Online account; a free one works (bridgebase.com, Sign up). In BBO's web lobby open Account (right) > Convention cards. A toolbar appears above the list (Export my cards, Import). Open any card, a stock card is fine: its toolbar has Open in tab, Export JSON, Print (fixed), PDF: Classic, PDF: New, Edit on Bridge Craftwork, Save to Bridge Classroom. Import the exported JSON to see the replace/keep question.
+```
+
+The full version:
+
+```
+This extension works inside Bridge Base Online's convention card manager, which needs a BBO account. A free account works and takes a minute to make at https://www.bridgebase.com (Sign up). We don't supply ours: BBO allows only one session per account, so a shared login would sign reviewers out of one another.
+
+1. Sign in at https://www.bridgebase.com/v3/ (the web lobby). On the right, open Account, then Convention cards. Above the list of cards a toolbar appears: "Export my cards as JSON" and "Import from JSON or PDF". Each card row has a ↗ button that opens it in a new tab.
+2. Click any card, then View (one of BBO's stock cards is fine). The card page gets a toolbar at the top right:
+   - Print (fixed): the print preview fits the whole card across a landscape page. BBO's own print cuts off the right-hand column.
+   - PDF: Classic and PDF: New download the card filled into the ACBL Classic or New convention card.
+   - Export JSON downloads the card.
+   - Edit on Bridge Craftwork opens the card in the editor at bridge-craftwork.com; Save to Bridge Classroom opens it in Bridge Classroom. The card travels in the link's fragment.
+3. Back on the list, "Import from JSON or PDF" with the file from step 2 (or a PDF from PDF: Classic) adds the card to the account. Importing a file whose card already exists on the account, with different settings, asks whether to keep, replace or keep both. A new account starts with no cards of its own, so the first import adds one.
+
+The extension asks for no API permissions. Its requests go only to BBO's own card pages on webutil.bridgebase.com, with the session the page already has.
+```
+
+**Apple: add this.** As with Fetch and DD, a reviewer who skips it sees
+nothing.
+
+```
+In Safari, after enabling the extension in Safari > Settings > Extensions, also allow it on webutil.bridgebase.com, using the extension's button in the toolbar while the convention cards are open (BBO shows them in a frame from that site). Safari asks per website; until it is allowed there, nothing appears, with no error.
+```
+
+**For addons.mozilla.org, add**: after the full version, in the same field.
+
+```
+Build: ./build.sh (runs npm ci, then BROWSER=firefox npx vite build); output in dist/firefox. We have verified that this reproduces the uploaded package byte for byte from the attached source archive. BUILD.md has the details, including the two linter warnings: both DANGEROUS_EVAL, both inside @pdf-lib/fontkit's published prebuilt bundle (the function-bind polyfill and get-intrinsic's reference to eval), neither reached by the extension. No first-party code uses eval.
+```
+
+---
+
+## Release notes — 1.0.0
+
+```
+First release. Print that fits the whole card, the ACBL Classic and New PDFs, open in a full-size tab, export and import as JSON or PDF, and hand-off to the Bridge Craftwork card editor and Bridge Classroom, all inside Bridge Base Online's convention card manager.
+```
+
+---
+
+## Assets
+
+| | |
+|---|---|
+| Icon | `icons/icon-128.png`; Edge's 300×300 store logo is `icons/icon-300.png`; Firefox's listing takes `icon-128.png` (`scripts/upload-browsers.mjs firefox --images`) |
+| Mac app icon | rendered into the Xcode project's asset catalog by `node scripts/render-icons.mjs` |
+| Screenshots | `store/screenshots/listing-1280/`, 1280×800 (Chrome, Edge, Firefox); `store/screenshots/`, 2560×1600 (Mac App Store); see that folder's README |
+| Privacy page | to publish at https://bridge-craftwork.com/bbo-cc/privacy/, from `bridge-craftwork-site/site/bbo-cc/privacy/index.html` (copy of `store/privacy-page.html`) |
+| Homepage | to publish at https://bridge-craftwork.com/bbo-cc/ |
+
+---
+
+## Blockers
+
+Things only Rick can do, in the order they block:
+
+1. **Approve the icon** (`icons/icon.svg`: the Fetch and DD mortarboard with a
+   green CC badge).
+2. **Publish the privacy page and homepage** on bridge-craftwork-site
+   (`/bbo-cc/` and `/bbo-cc/privacy/`). Every store checks the privacy URL.
+3. **Test on real BBO** with the store build, in Chrome, Firefox and Safari:
+   the list toolbar and ↗, a card's toolbar, Print, both PDFs, export, import
+   (adding, and the keep/replace question), and the hand-off buttons. New in
+   1.0.0 and untested live: the **partner notice** after an import (does a
+   partner see the replaced card, or BBO's lobby pick it up without a reload),
+   and running with **no `storage`, `downloads` or `www.bridgebase.com`**
+   permissions.
+4. **Safari: the two `world: "MAIN"` scripts.** The Xcode converter warned that
+   Safari doesn't support `world`. It warned the same about the background's
+   `type: module`, which Fetch and DD use in Safari without trouble, so the
+   warning may be stale; but if `world` is ignored, those scripts run isolated
+   and fail quietly: ↗ on the list does nothing, and saves made in BBO's editor
+   carry no date. Everything else works. Check ↗ in Safari; if it's dead, the
+   list's ↗ needs a fallback that matches rows to `cc_list.php` by title and
+   partner.
+5. **Screenshots**: need a signed-in BBO session; see
+   `store/screenshots/README.md`.
+6. **Store records**: Chrome (new item in the developer dashboard), Edge
+   (Partner Center, then copy the product id into
+   `scripts/upload-browsers.mjs`), Firefox (Developer Hub, with the source
+   archive), App Store Connect (new macOS app for
+   `org.bridge-classroom.better-bbo-convention-card`, then
+   `scripts/upload-apple.sh` and `scripts/app-store-listing.mjs`).

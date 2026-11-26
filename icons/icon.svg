@@ -1,0 +1,34 @@
+<!--
+  Better BBO Convention Card — toolbar and store icon.
+
+  The mortarboard of Bridge Classroom Fetch and Bridge Craftwork DD
+  (bridge-classroom-fetch, icons/fetch/icon.svg), so the three read as one
+  family, with a green CC badge to tell it from DD's red one.
+
+  Rendered by scripts/render-icons.mjs.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="13" fill="#1a73e8"/>
+
+  <!-- The mark, in one group with this id so scripts/render-icons.mjs can lift
+       it out and re-mount it on the macOS canvas, where Apple wants the artwork
+       inset rather than full-bleed. Edit it here and both icons follow. -->
+  <g id="glyph">
+  <g fill="#fff">
+    <!-- Cap body, narrow so it reads as a bump under the board at 16px. -->
+    <path d="M23 30 L23 40 C23 45 41 45 41 40 L41 30 Z"/>
+    <!-- Board: carries the silhouette, which is all that survives at 16px. -->
+    <path d="M32 16 L58 26 L32 36 L6 26 Z"/>
+  </g>
+  <!-- Tassel, chunky enough to be a pixel at 16px. -->
+  <path d="M58 26 L58 37" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <circle cx="58" cy="41" r="4" fill="#fff"/>
+
+  <!-- The CC badge, where DD has its red DD: green, with a white ring to part
+       it from the tile. At 16px it is a green dot, which is enough. -->
+  <circle cx="14" cy="49" r="11.5" fill="#fff"/>
+  <circle cx="14" cy="49" r="9.5" fill="#2e7d32"/>
+  <text x="14" y="52.6" text-anchor="middle" font-family="Helvetica, Arial, sans-serif"
+        font-weight="700" font-size="10" letter-spacing="-0.6" fill="#fff">CC</text>
+  </g>
+</svg>

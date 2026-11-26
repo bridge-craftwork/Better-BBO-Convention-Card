@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Better BBO Convention Card — privacy &#183; Bridge Craftwork</title>
+<link rel="canonical" href="https://bridge-craftwork.com/bbo-cc/privacy/">
+<meta name="description" content="Privacy policy for Better BBO Convention Card, the browser extension for Bridge Base Online's convention cards.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="/styles.css">
+<!--
+  Better BBO Convention Card's privacy policy, the URL its store listings point at.
+  Source of truth: store/privacy.md in bridge-craftwork/Better-BBO-Convention-Card.
+  Keep the two in step. Copy this file to site/bbo-cc/privacy/index.html.
+-->
+<style>
+body{background:var(--color-background-tertiary)}
+.page{max-width:760px;margin:0 auto;padding:36px 20px 56px}
+.doc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:28px 32px 32px}
+h1{font-size:26px;font-weight:500;margin-bottom:8px}
+.lede{font-size:17px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:18px}
+h2{font-size:19px;font-weight:500;margin:30px 0 10px;padding-top:18px;border-top:0.5px solid var(--color-border-tertiary)}
+p,li{font-size:15.5px;line-height:1.65;color:var(--color-text-primary)}
+p{margin:0 0 12px}
+ul{margin:0 0 12px 22px}
+li{margin-bottom:4px}
+table{border-collapse:collapse;width:100%;margin:0 0 14px;font-size:14.5px}
+th,td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:0.5px solid var(--color-border-tertiary)}
+th{font-weight:600}
+code{font-family:var(--font-mono);font-size:13.5px;background:var(--color-background-secondary);padding:1px 5px;border-radius:4px}
+.updated{font-size:14px;color:var(--color-text-tertiary)}
+</style>
+</head>
+<body>
+<main class="page">
+<article class="doc">
+<h1>Better BBO Convention Card — privacy policy</h1>
+<p class="updated">Last updated 25 November 2026</p>
+<p class="lede">Better BBO Convention Card works on your convention cards in Bridge Base Online's
+card manager. It keeps nothing, and nothing leaves your browser except to Bridge Base itself,
+unless you click <strong>Edit on Bridge Craftwork</strong> or <strong>Save to Bridge
+Classroom</strong>.</p>
+
+<h2>What it does</h2>
+<p>It adds buttons to Bridge Base Online's convention card pages: printing that fits, the ACBL
+Classic and New PDFs, open in a tab, export and import, and links that open a card in the
+Bridge Craftwork card editor or in Bridge Classroom.</p>
+
+<h2>What it reads</h2>
+<ul>
+<li><strong>Your cards</strong>, from Bridge Base's own card pages: their titles, partners and
+contents, the way Bridge Base's card manager reads them.</li>
+<li><strong>Bridge Base's session for the card manager</strong>, which Bridge Base puts in the
+address of its card pages. The extension uses it only to ask Bridge Base for your cards and to
+save them back, as the card manager does. It is not your password, which the extension never
+sees.</li>
+<li><strong>A file you choose to import</strong>, in your browser.</li>
+</ul>
+<p>It does not read anything else on the page or in your browser.</p>
+
+<h2>What it keeps</h2>
+<p>Nothing. The extension stores no data at all. Exports and PDFs are made in your browser and
+saved where your browser saves downloads. A save date is kept inside each card you save in
+Bridge Base's editor, on Bridge Base, so that an import can tell which copy is newer.</p>
+
+<h2>When anything leaves your browser</h2>
+<ul>
+<li><strong>To Bridge Base</strong>, when you export, import or open a card: requests to Bridge
+Base's own card pages, with its session, as its card manager makes. After an import saves a
+card, the extension tells Bridge Base the card changed, as Bridge Base's editor does after a
+save, so your partners see the new version.</li>
+<li><strong>Edit on Bridge Craftwork</strong>, when you click it, opens that one card in the card
+editor at bridge-craftwork.com. <strong>Save to Bridge Classroom</strong> opens it in Bridge
+Classroom (bridge-classroom.com), which saves it to your account there if you are signed in;
+the <a href="https://bridge-classroom.org/privacy#extension">Bridge Classroom privacy policy</a>
+covers it from there. Either way the card travels in the part of the link after the
+<code>#</code>, which your browser does not send to any server. A card holds what you typed
+into it, which can include your partnership's names.</li>
+</ul>
+<p>Nothing else. No analytics, no telemetry, no advertising, no tracking, and nothing is sold or
+shared.</p>
+
+<h2>Permissions</h2>
+<table>
+<tr><th>Permission</th><th>Why</th></tr>
+<tr><td>Access to <code>webutil.bridgebase.com/v2/</code></td><td>Bridge Base Online's convention card pages, the only pages it works on</td></tr>
+</table>
+<p>It asks for no other permissions.</p>
+
+<h2>Source code</h2>
+<p>Open source, released under The Unlicense:
+<a href="https://github.com/bridge-craftwork/Better-BBO-Convention-Card">github.com/bridge-craftwork/Better-BBO-Convention-Card</a>.
+Questions or problems:
+<a href="https://github.com/bridge-craftwork/Better-BBO-Convention-Card/issues">open an issue</a>.</p>
+</article>
+</main>
+</body>
+</html>

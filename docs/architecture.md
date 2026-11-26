@@ -1,11 +1,11 @@
 # Better BBO Convention Card — design notes
 
-A planning document for a future Chrome extension that improves the BBO
-convention-card experience: better printing, import/export with a portable
-JSON schema, and quality-of-life UI tweaks. This doc captures everything we
-deduced about BBO's existing convention-card interface during a Chrome
-DevTools exploration in May 2026 so the next developer (or future-us) can
-start implementing without re-discovering the same facts.
+Design notes for the extension, and everything we know about BBO's
+convention-card interface. It began in May 2026 as the plan, written from a
+Chrome DevTools exploration so the work could start without re-discovering the
+same facts; 1.0.0 implements it. The sections headed *Proposed* and
+*Implementation order* are kept as the plan was, and the code is the record of
+what was built. The facts about BBO's API are kept current.
 
 ---
 
@@ -126,13 +126,34 @@ does, and the parsers decode the extra layer, as BBO's list does.
 |---|---|---|---|
 | `cc_list.php?v3u=BBO1` | POST | `user=&password=` | XML list of all cards |
 | `cc_fetch.php` | POST | `key=&request_id=&v3u=` | XML of one card |
-| `cc_cud.php?v3u=BBO1` | POST | (TBD — create/update/delete) | XML status |
+| `cc_cud.php?v3u=BBO1` | POST | `cmd=&user=&password=&…` — insert, replace, delete, copy, link, unlink (see Open questions 1) | `<status err="0" cc_key="…"/>` |
 | `cs_render_cc.php?cckey=` | GET | — | HTML render (V1BASIC only) |
-| `www_notify.php?v3u=` | POST | `u=&p=&c=…` | Notifies partner of card changes |
+| `www_notify.php?v3u=` | POST | `u=&p=&c=&d=` | Tells BBO a card changed (below) |
 
 All endpoints are on `webutil.bridgebase.com/v2/`. The CC manager's JS
 refers to them via `webutil_dir + "<name>.php"` where `webutil_dir = "../"`
 (i.e., one level up from `/v2/acblCCFM/`).
+
+### `www_notify.php`
+
+Read from BBO's own pages (25 Nov 2026): the card editor (`acblcc/acblCC.js`)
+and the list (`acblCCFM/acblCCFM_bs.js`). Fire and forget: neither page reads
+the answer or reports a failure. The form body is `u` and `p` (the session
+pair, as everywhere), `c` the event, and `d` = `cc_key|partner|style`, the
+partner empty for a card used alone. The universe is `v3u`, from the page's
+URL, default `bbo1`.
+
+| `c` | Sent by | When |
+|---|---|---|
+| `wc_convcard_saved` | the editor | after every successful `cc_cud.php` save, with the card's (possibly new) key and the partner it was opened with |
+| `wc_convcard_used` | the list | after "Use with partner" (`cmd=copy`, or `link` for a stock card) |
+| `wc_convcard_deleted` | the old list (`acblCCFM.js`) only | after a delete; the current list sends nothing |
+
+What BBO does with it isn't visible from the page. The names suggest it tells
+the lobby, which pushes the change to the user's session and to the partner's,
+so a card in use at the table updates. The extension's import sends
+`wc_convcard_saved` after each card it saves (`src/lib/notify.js`), once for
+each partner the card is listed with, since one card can be used with several.
 
 ### `cc_list.php` response
 
@@ -263,7 +284,7 @@ name across a corpus of personal cards. (Stock cards skip many fields.)
   print-specific CSS. This is the source of every print complaint.
 - The Edit-mode flag (`edit=y` in the URL) toggles `setEditMode(true)`,
   which enables form inputs and shows a Save button. Save serializes the
-  form back to inner-XML and POSTs to `cc_cud.php` (still TBD format).
+  form back to inner-XML and POSTs to `cc_cud.php` (format in Open questions 1).
 
 ### Card types
 
@@ -452,19 +473,21 @@ The natural width must be measured at runtime — `#entireTable.getBoundingClien
    `request_id`, `v3u`, and `cc_key` except on insert), answered by
    `<status err="0" cc_key="…"/>`. Checked against real saves (2026-11-02): a
    replace keeps the `cc_key`, so its numbers can't tell us when a card last
-   changed; `cmd=delete` with `cc_key` removes a card. Still unknown: what
-   `www_notify.php`, which the Save calls afterwards and we don't, does for a
-   partner.
+   changed; `cmd=delete` with `cc_key` removes a card. The list also sends
+   `copy` and `link` (Use with partner) and `unlink`. *Settled.*
 2. **V2BASIC and CC field catalogs.** Same approach as ACBL — dump
    `cc_fetch.php` responses and enumerate the element names.
 3. **Whether BBO's session token survives Chrome restarts.** If so, we can
    cache it once the lobby is opened and use it from a popup later without
    the user having to keep the lobby tab open.
-4. **Sharing.** `www_notify.php` is used to tell a partner about a card
-   change; understand its parameters if we want "send this card to your
-   partner" UX in the extension.
-5. **iOS / Safari.** All endpoints are HTTP, but Safari's extension model
-   is different. Defer until v1 is stable on Chrome/Edge.
+4. **Sharing.** `www_notify.php` is now read (above) and the import sends
+   it. Still unknown: exactly what a partner sees, which needs two accounts
+   to watch. A "send this card to your partner" button would be BBO's Use
+   with partner (`cmd=copy` + `wc_convcard_used`), which the list already has.
+5. **iOS / Safari.** Safari on the Mac ships in 1.0.0. iPhone and iPad are
+   out: BBO's phone and tablet lobby is a different page with a different
+   DOM. Unverified: whether Safari honours `world: "MAIN"` in the manifest's
+   content scripts (store/submission.md, Blockers).
 
 ---
 
