@@ -143,9 +143,16 @@ const [cardPage] = await Promise.all([ctx.waitForEvent('page'), row.locator('tex
 await cardPage.waitForLoadState('load')
 await cardPage.waitForTimeout(5000)
 await cardPage.locator('text=Better CC:').waitFor()
+// 2. The card page, with the Export PDF dialog open over it.
+const dialog = cardPage.locator('dialog[open]')
+await cardPage.locator('button', { hasText: 'Export PDF…' }).click()
+await dialog.waitFor()
+await cardPage.waitForTimeout(1500)
 await shot(cardPage, '2-card-page')
+await dialog.locator('button', { hasText: 'Cancel' }).click()
 
-// 3. What Print (fixed) prints: the extension scales the card on beforeprint.
+// 3. What Print prints for "This page, as BBO shows it": the extension
+//    scales the card on beforeprint.
 await cardPage.evaluate(() => window.dispatchEvent(new Event('beforeprint')))
 await cardPage.emulateMedia({ media: 'print' })
 const printed = path.join(WORK, 'print.pdf')
@@ -154,10 +161,13 @@ await cardPage.emulateMedia({ media: 'screen' })
 await cardPage.evaluate(() => window.dispatchEvent(new Event('afterprint')))
 await showPdf(printed, '3-print')
 
-// 4. The ACBL Classic card the extension renders.
+// 4. The ACBL Classic card the extension renders, with the dialog's defaults
+//    (green, flat).
+await cardPage.locator('button', { hasText: 'Export PDF…' }).click()
+await dialog.waitFor()
 const [download] = await Promise.all([
   cardPage.waitForEvent('download'),
-  cardPage.locator('button', { hasText: /^PDF: .*Classic/ }).click(),
+  dialog.locator('button', { hasText: 'Download' }).click(),
 ])
 const acbl = path.join(WORK, 'acbl.pdf')
 await download.saveAs(acbl)

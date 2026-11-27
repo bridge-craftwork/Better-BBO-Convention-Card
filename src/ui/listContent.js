@@ -355,11 +355,13 @@ function describePlan(plan, writes) {
     [writes.filter((w) => w.cmd === 'replace').length, 'replaced with the file\'s copy'],
     [count('add') + plan.filter((e) => e.choice === 'both').length, 'added as new cards'],
     [count('copy'), 'added as private copies of cards you don\'t own'],
-    [count('same'), 'already the same on BBO'],
     [kept, 'kept as they are on BBO'],
   ]
     .filter(([n]) => n > 0)
     .map(([n, what]) => `${n} ${what}`)
+  for (const e of plan.filter((e) => e.action === 'same')) {
+    lines.push(`Identical card “${e.target?.title || e.card.title || 'Untitled'}” exists - not importing`)
+  }
   const skipped = plan.filter((e) => e.action === 'skip')
   if (skipped.length > 0) {
     lines.push(`${skipped.length} skipped: ${[...new Set(skipped.map((e) => e.reason))].join('; ')}`)
