@@ -24,7 +24,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/listContent.js-loader-CAgibM7-.js"
+        "assets/listContent.js-loader-BaV8gj4K.js"
       ],
       "matches": [
         "https://webutil.bridgebase.com/v2/acblCCFM/*"
@@ -45,7 +45,7 @@
     },
     {
       "js": [
-        "assets/editorContent.js-loader-AVMSMMEq.js"
+        "assets/editorContent.js-loader-B4CqNnmB.js"
       ],
       "matches": [
         "https://webutil.bridgebase.com/v2/acblcc/*",
@@ -66,6 +66,16 @@
       "run_at": "document_idle",
       "all_frames": true,
       "world": "MAIN"
+    },
+    {
+      "js": [
+        "assets/classroomContent.js-loader-OnFcoHee.js"
+      ],
+      "matches": [
+        "https://bridge-classroom.org/*",
+        "https://bridge-classroom.com/*"
+      ],
+      "run_at": "document_idle"
     }
   ],
   "permissions": [
@@ -81,10 +91,11 @@
         "https://webutil.bridgebase.com/*"
       ],
       "resources": [
-        "assets/auth-CvWm4pny.js",
+        "assets/auth-DE45MJKV.js",
+        "assets/classroom-BFFu9rzf.js",
         "assets/bbo-B2LMvuIO.js",
         "assets/handoff-BMgaJZhX.js",
-        "assets/importCard-fOh376S2.js",
+        "assets/importCard-CDy85-CC.js",
         "assets/migrate-0bHlNDBH.js",
         "assets/ntDefenses-CN4mM3GI.js",
         "assets/checkCard-_bislIg2.js",
@@ -94,7 +105,7 @@
         "assets/PDFButton-CGW04nAw.js",
         "assets/_commonjsHelpers-CqkleIqs.js",
         "assets/acblClassicFillPdf-CoiaoADJ.js",
-        "assets/listContent.js-Bi-bx3Tk.js",
+        "assets/listContent.js-DqHQlvnX.js",
         "assets/listPageWorld.js-56-zsnoR.js",
         "assets/editorPageWorld.js-C1hVLvtI.js"
       ],
@@ -112,13 +123,14 @@
         "assets/acbl-new-BUR8nEhL.pdf",
         "assets/BarlowCondensed-Regular-u9oSiJc6.ttf",
         "assets/BarlowCondensed-SemiBold-B7YG4rBL.ttf",
-        "assets/auth-CvWm4pny.js",
+        "assets/auth-DE45MJKV.js",
         "assets/browser-polyfill-DffEbQem.js",
+        "assets/classroom-BFFu9rzf.js",
         "assets/_commonjsHelpers-CqkleIqs.js",
-        "assets/card-pdf-DT1cV8cX.js",
+        "assets/card-pdf-qESXEiFD.js",
         "assets/bbo-B2LMvuIO.js",
         "assets/handoff-BMgaJZhX.js",
-        "assets/importCard-fOh376S2.js",
+        "assets/importCard-CDy85-CC.js",
         "assets/migrate-0bHlNDBH.js",
         "assets/ntDefenses-CN4mM3GI.js",
         "assets/checkCard-_bislIg2.js",
@@ -127,7 +139,20 @@
         "assets/acblPdfImport-DHv-bL7f.js",
         "assets/PDFButton-CGW04nAw.js",
         "assets/acblClassicFillPdf-CoiaoADJ.js",
-        "assets/editorContent.js-N3Z9bjbg.js"
+        "assets/editorContent.js-B46lOW6b.js"
+      ],
+      "use_dynamic_url": false
+    },
+    {
+      "matches": [
+        "https://bridge-classroom.com/*",
+        "https://bridge-classroom.org/*"
+      ],
+      "resources": [
+        "assets/browser-polyfill-DffEbQem.js",
+        "assets/classroom-BFFu9rzf.js",
+        "assets/_commonjsHelpers-CqkleIqs.js",
+        "assets/classroomContent.js-D97nxdgU.js"
       ],
       "use_dynamic_url": false
     }
