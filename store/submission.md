@@ -255,7 +255,9 @@ Things only Rick can do, in the order they block:
    (no save); BBO's own editor Save dated by the MAIN-world script, and the
    date kept. Writes went only to a throwaway card, deleted afterwards;
    `www_notify.php` was blocked. The one failure: **V2BASIC cards export
-   empty** (title and key, no settings), see below.
+   empty** (title and key, no settings): the parser reads only ACBL cards'
+   elements. Import already skips them, but the listing says "Export all your
+   cards"; decide before submitting.
    *Still to do:* Firefox and Safari by hand (Edge runs the Chrome build).
    The **partner notice** after an import ships untested and isn't in the
    listing's features (Rick, 2026-11-27: testing it needs more people). It
