@@ -178,7 +178,11 @@ function addDialogButton(bar, label, title, action) {
     try {
       const { downloadAcblPdf, renderAcblPdfBytes } = await pdf
       const settings = { secondPage: options.secondPage, ink: options.green ? 'green' : 'black', flatten: !options.fillable }
-      if (action === 'print') printBytes(await renderAcblPdfBytes(await record, options.template, settings), tab)
+      if (action === 'print') {
+        const card = await record
+        const name = `${card.card_data?.metadata?.partner_names?.trim() || card.name || 'Convention card'} ${options.template === 'new' ? 'ACBL New' : 'ACBL Classic'}`
+        printBytes(await renderAcblPdfBytes(card, options.template, settings), tab, name)
+      }
       else await downloadAcblPdf(await record, options.template, settings)
     } catch (err) {
       tab?.close()

@@ -20,12 +20,18 @@ export function openPrintTab() {
   return tab
 }
 
-export function printBytes(bytes, tab = null) {
+/**
+ * Print the PDF. In a tab, `name` goes on the end of its address: a blob's
+ * address is the browser's own (a random id), and a fragment is the one part a
+ * page can add, so the address bar says whose card it is.
+ */
+export function printBytes(bytes, tab = null, name = '') {
   const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }))
   // Long enough to print, or to save it from the tab
   setTimeout(() => URL.revokeObjectURL(url), 10 * 60_000)
   if (tab) {
-    tab.location.href = url
+    const slug = name.replace(/[^\w\s.-]+/g, '').trim().replace(/\s+/g, '-')
+    tab.location.href = slug ? `${url}#${slug}` : url
     return
   }
   const frame = document.createElement('iframe')
