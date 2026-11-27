@@ -19,8 +19,7 @@ import { applyPrintFix } from './print-fix.js'
 import { parseCardFetch } from '../parsers/cc-xml.js'
 import { cardsToJson } from '../parsers/cc-json.js'
 import { ENDPOINTS, cardPageParams } from '../lib/auth.js'
-import { askPdfOptions } from './pdf-dialog.js'
-import { openPrintTab, printBytes } from './print-pdf.js'
+import { runPdfAction } from './pdf-flow.js'
 import {
   recordFromFetch,
   cardEditorUrl,
@@ -156,48 +155,27 @@ function injectToolbar() {
   }).observe(bar)
 }
 
-// A button that asks how to make the PDF, then prints or downloads it. The
-// card is fetched while the question is open, for the notes hint.
+// A button that asks how to make the PDF, then prints or downloads it.
 function addDialogButton(bar, label, title, action) {
   const button = document.createElement('button')
   button.type = 'button'
   button.textContent = label
   button.title = title
   button.addEventListener('click', async () => {
-    const record = fetchThisCard().then(({ xml }) => recordFromFetch(xml))
-    record.catch(() => {})
-    const pdf = import('../lib/card-pdf.js')
-    const options = await askPdfOptions({
-      action,
-      cardName: record.then((r) => r.name),
-      hasNotes: Promise.all([pdf, record]).then(([lib, r]) => lib.cardHasNotes(r)),
-    })
-    if (!options) return
-    if (options.template === 'page') {
-      window.print()
-      return
-    }
-    // In the click still: Safari prints from a tab, which must open now.
-    const tab = action === 'print' ? openPrintTab() : null
-    button.disabled = true
-    button.textContent = action === 'print' ? 'Preparing…' : 'Rendering…'
     try {
-      const { downloadAcblPdf, renderAcblPdfBytes } = await pdf
-      const settings = { secondPage: options.secondPage, ink: options.green ? 'green' : 'black', flatten: !options.fillable }
-      if (action === 'print') {
-        const card = await record
-        const name = `${card.card_data?.metadata?.partner_names?.trim() || card.name || 'Convention card'} ${options.template === 'new' ? 'ACBL New' : 'ACBL Classic'}`
-        printBytes(await renderAcblPdfBytes(card, options.template, settings), tab, name)
-      }
-      else await downloadAcblPdf(await record, options.template, settings)
+      await runPdfAction({
+        action,
+        allowPage: true,
+        record: fetchThisCard().then(({ xml }) => recordFromFetch(xml)),
+        onBusy: (busy) => {
+          button.disabled = busy
+          button.textContent = busy ? (action === 'print' ? 'Preparing…' : 'Rendering…') : label
+        },
+      })
     } catch (err) {
-      tab?.close()
       // eslint-disable-next-line no-console
       console.error(LOG_PREFIX, label, err)
       alert(`${label.replace('…', '')} failed: ${err.message}`)
-    } finally {
-      button.disabled = false
-      button.textContent = label
     }
   })
   bar.appendChild(button)

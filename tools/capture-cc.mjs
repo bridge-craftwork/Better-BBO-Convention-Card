@@ -43,7 +43,6 @@ const SAFE = new Set([
   'BMW',
   'Title',
   'Partner',
-  '↗',
 ])
 // The card pages and PDFs show BBO's stock ACBL SAYC, which names nobody (the
 // ACBL template has a box for the players' names). The import uses a card of
@@ -133,13 +132,13 @@ async function showPdf(pdf, name) {
   await viewer.close()
 }
 
-// 1. The list, with the extension's toolbar and a ↗ on each row.
+// 1. The list, with the extension's toolbar and its icons on each row.
 await blurList()
 await shot(page, '1-card-list')
 
-// 2. The card in a tab of its own, from its ↗.
+// 2. The card in a tab of its own, from its View icon.
 const row = list.locator('a.card-item', { hasText: CARD }).first()
-const [cardPage] = await Promise.all([ctx.waitForEvent('page'), row.locator('text=↗').click()])
+const [cardPage] = await Promise.all([ctx.waitForEvent('page'), row.locator('[data-action="view"]').click()])
 await cardPage.waitForLoadState('load')
 await cardPage.waitForTimeout(5000)
 await cardPage.locator('text=Better CC:').waitFor()

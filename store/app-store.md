@@ -26,6 +26,7 @@ On a card (Print works on every card; the rest on ACBL cards, BBO's usual kind):
 • Edit on Bridge Craftwork, or Save to Bridge Classroom. Open the card in the bridge-craftwork.com card editor, or in Bridge Classroom, which saves it to your account there.
 
 On your list of cards:
+• Print, save as a PDF, or view any card from its row, without opening it first.
 • Export all your ACBL cards, and the ACBL cards partners have shared with you, in one JSON file.
 • Import cards from a JSON file, from the bridge-craftwork.com editor's "Export for BBO" file, or from a PDF: one this extension or the bridge-craftwork.com editor made, or any filled-in ACBL convention card or Bridgodex PDF. A card that differs from one already on BBO is never replaced without asking.
 
@@ -62,7 +63,7 @@ needs a BBO account. A free account works and takes a minute to make at
 https://www.bridgebase.com (Sign up). We don't supply ours: BBO allows only one
 session per account, so a shared login would sign reviewers out of one another.
 
-1. Sign in at https://www.bridgebase.com/v3/ (the web lobby). On the right, open Account, then Convention cards. Above the list of cards a toolbar appears: "Export my cards as JSON" and "Import from JSON or PDF". Each card row has a ↗ button that opens it in a new tab.
+1. Sign in at https://www.bridgebase.com/v3/ (the web lobby). On the right, open Account, then Convention cards. Above the list of cards a toolbar appears: "Export my cards as JSON" and "Import from JSON or PDF". Each card row has three icons: Print and Save PDF (on ACBL cards) ask the same questions as the card page's Print… and Export PDF…; View opens the card in a new tab.
 2. Click any card, then View (one of BBO's stock cards is fine). The card page gets a toolbar at the top right: Print… prints the card as an ACBL card, or this page fitted to one landscape page; Export PDF… downloads it as the ACBL Classic or New card; Export JSON downloads it; Edit on Bridge Craftwork and Save to Bridge Classroom open it on those sites.
 3. Back on the list, "Import from JSON or PDF" with the file from step 2 adds the card to the account. Importing a card that already exists with different settings asks whether to keep, replace or keep both.
 

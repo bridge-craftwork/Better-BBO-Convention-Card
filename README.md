@@ -43,7 +43,9 @@ On the list of cards:
   says which copy is newer (the extension dates each save BBO's editor makes).
   After each card it saves, the import tells BBO, as BBO's editor does
   (`www_notify.php`), so partners pick up the change.
-- **↗** on each row opens that card in a new tab.
+- **Print**, **Save PDF** and **View** icons on each row: the first two ask what
+  the card page's Print… and Export PDF… ask (ACBL cards only); View opens the
+  card in a new tab.
 
 It asks for access to `webutil.bridgebase.com/v2/`, where BBO's card pages
 live, and for `storage`, to remember the PDF dialog's answers on your device.

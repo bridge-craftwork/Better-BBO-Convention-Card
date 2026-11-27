@@ -71,14 +71,17 @@ function el(tag, props = {}, ...children) {
 }
 
 /**
- * Ask how to make the PDF. `cardName` may be a promise, and `hasNotes` is a promise of whether the card has
+ * Ask how to make the PDF. `allowPage` adds Print's "this page" choice. `cardName` may be a promise, and `hasNotes` is a promise of whether the card has
  * anything for a notes page (or null to say nothing). Resolves with
  * { template, secondPage, green, fillable }, or null when cancelled.
  */
-export async function askPdfOptions({ action = 'export', cardName = '', hasNotes = null } = {}) {
+export async function askPdfOptions({ action = 'export', allowPage = false, cardName = '', hasNotes = null } = {}) {
   const saved = await loadPdfOptions()
-  const templates = action === 'print' ? [...TEMPLATES, PAGE_TEMPLATE] : TEMPLATES
-  const chosenTemplate = action === 'print' ? saved.printTemplate : saved.template
+  const withPage = action === 'print' && allowPage
+  const templates = withPage ? [...TEMPLATES, PAGE_TEMPLATE] : TEMPLATES
+  // "This page" is remembered from the card page; where there is no page, Classic.
+  const remembered = action === 'print' ? saved.printTemplate : saved.template
+  const chosenTemplate = templates.some((t) => t.id === remembered) ? remembered : TEMPLATES[0].id
 
   const host = el('div')
   const root = host.attachShadow({ mode: 'open' })

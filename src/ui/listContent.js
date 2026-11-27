@@ -3,7 +3,8 @@
 // lobby embeds in Account → Convention cards.
 //
 // Adds:
-//   - "↗" open-in-tab button on each card row
+//   - Print, Save PDF and View icons on each card row (as Bridge Classroom's
+//     card table has); View opens the card in a new tab
 //   - Top toolbar with "Export my cards as JSON" and "Import from JSON or PDF"
 //     (the rules for cards already on BBO are in ../lib/import-plan.js)
 //
@@ -19,7 +20,8 @@
 import { parseCardList, parseCardFetch, parseSaveStatus, exportAllKeys, nonAcblTitles } from '../parsers/cc-xml.js'
 import { cardsToJson, buildCcCudBody } from '../parsers/cc-json.js'
 import { planImport, planWrites, savedAt } from '../lib/import-plan.js'
-import { readImportFile } from '../lib/card-output.js'
+import { readImportFile, recordFromFetch } from '../lib/card-output.js'
+import { runPdfAction } from './pdf-flow.js'
 import { askAboutCard } from './import-dialog.js'
 import { ENDPOINTS } from '../lib/auth.js'
 import { readAuthFromLocation } from '../lib/auth.js'
@@ -29,7 +31,29 @@ import { notifyUrl, buildSavedNoticeBody, partnersToNotify } from '../lib/notify
 const LOG_PREFIX = '[better-bbo-cc/list]'
 
 const TOOLBAR_ID = 'better-bbo-cc-list-toolbar'
-const OPEN_BUTTON_CLASS = 'better-bbo-cc-open-btn'
+const ROW_ACTIONS_CLASS = 'better-bbo-cc-row-actions'
+const ROW_BUTTON_CLASS = 'better-bbo-cc-row-btn'
+
+// Lucide's shapes, as the convention-card library's card table draws them
+const ROW_ACTIONS = [
+  {
+    id: 'print',
+    pdf: true,
+    title: (name) => `Print ${name}`,
+    icon: '<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+  },
+  {
+    id: 'export',
+    pdf: true,
+    title: (name) => `Save ${name} as a PDF`,
+    icon: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
+  },
+  {
+    id: 'view',
+    title: (name) => `View ${name} in a new tab`,
+    icon: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  },
+]
 const ROW_DATA_ATTR = 'data-bbcc-card'
 const STYLE_ID = 'better-bbo-cc-list-styles'
 
@@ -46,7 +70,7 @@ function main() {
 }
 
 /**
- * Intercept clicks on our ↗ button in capture phase, before any
+ * Intercept clicks on our row icons in capture phase, before any
  * bubble-phase handler can fire. The row anchor (`a.card-item`) has
  * Bootstrap's `data-toggle="modal"` attribute, which triggers a
  * delegated bubble-phase click handler on `document` that opens the
@@ -58,7 +82,7 @@ function installOpenButtonCaptureGuard() {
   document.addEventListener(
     'click',
     (ev) => {
-      const btn = ev.target.closest?.(`.${OPEN_BUTTON_CLASS}`)
+      const btn = ev.target.closest?.(`.${ROW_BUTTON_CLASS}`)
       if (!btn) return
       ev.preventDefault()
       ev.stopPropagation()
@@ -71,15 +95,32 @@ function installOpenButtonCaptureGuard() {
         console.warn(LOG_PREFIX, 'no cc_data yet on row', row)
         return
       }
-      openCardInTab({
-        style: card.type,
-        cc_key: card.cc_key,
-        partner: card.partner ?? '',
-        edit: false,
-      })
+      const action = btn.dataset.action
+      if (action === 'view') {
+        openCardInTab({ style: card.type, cc_key: card.cc_key, partner: card.partner ?? '', edit: false })
+        return
+      }
+      rowPdf(btn, card, action)
     },
     true // capture
   )
+}
+
+// Print or Save PDF from a row, as the card page's Print… and Export PDF… do.
+async function rowPdf(btn, card, action) {
+  if (btn.getAttribute('aria-busy') === 'true') return
+  const label = action === 'print' ? 'Print' : 'Save PDF'
+  try {
+    await runPdfAction({
+      action,
+      record: postForm(ENDPOINTS.fetch, { key: card.cc_key, request_id: String(Date.now()), v3u: 'BBO1' }).then(recordFromFetch),
+      onBusy: (busy) => btn.setAttribute('aria-busy', String(busy)),
+    })
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(LOG_PREFIX, label, err)
+    alert(`${label} failed: ${err.message}`)
+  }
 }
 
 function installStyles() {
@@ -107,22 +148,30 @@ function installStyles() {
       cursor: progress;
     }
     a.card-item { position: relative; }
-    .${OPEN_BUTTON_CLASS} {
+    .${ROW_ACTIONS_CLASS} {
       position: absolute;
       top: 50%;
       right: 12px;
       transform: translateY(-50%);
-      padding: 2px 8px;
-      border: 1px solid #888;
-      background: #fff;
-      color: #333;
-      text-decoration: none;
-      border-radius: 3px;
-      font: 14px/1.4 system-ui, sans-serif;
-      cursor: pointer;
+      display: inline-flex;
+      gap: 4px;
       z-index: 2;
     }
-    .${OPEN_BUTTON_CLASS}:hover { background: #eef; }
+    .${ROW_BUTTON_CLASS} {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 6px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #fff;
+      color: #6b7280;
+      cursor: pointer;
+      line-height: 0;
+    }
+    .${ROW_BUTTON_CLASS}:hover { color: #2d6a4f; border-color: #40916c; }
+    .${ROW_BUTTON_CLASS}[aria-busy="true"] { opacity: .5; cursor: progress; }
+    /* PDFs are ACBL cards only; until the row's details arrive, View alone. */
+    a.card-item:not([${ROW_DATA_ATTR}*='"type":"ACBL"']) .${ROW_BUTTON_CLASS}[data-pdf] { display: none; }
   `
   document.head.appendChild(style)
 }
@@ -176,18 +225,27 @@ function observeListMutations() {
 }
 
 function decorateRow(row) {
-  if (row.querySelector(`.${OPEN_BUTTON_CLASS}`)) return
+  if (row.querySelector(`.${ROW_ACTIONS_CLASS}`)) return
+  const name = 'this card'
 
-  // <span> instead of <a>: nesting an <a> inside `a.card-item` is invalid
-  // HTML and triggers some browsers' parser-correction. A span styled like
-  // a button avoids the issue. The click is handled centrally by
-  // installOpenButtonCaptureGuard() to dodge Bootstrap's modal trigger.
-  const btn = document.createElement('span')
-  btn.className = OPEN_BUTTON_CLASS
-  btn.textContent = '↗'
-  btn.title = 'Open this card in a new tab'
-  btn.setAttribute('role', 'button')
-  row.appendChild(btn)
+  // <span>s instead of <button>s or <a>s: nesting interactive content inside
+  // `a.card-item` is invalid HTML and triggers some browsers' parser
+  // correction. Clicks are handled centrally by installOpenButtonCaptureGuard()
+  // to dodge Bootstrap's modal trigger.
+  const group = document.createElement('span')
+  group.className = ROW_ACTIONS_CLASS
+  for (const a of ROW_ACTIONS) {
+    const btn = document.createElement('span')
+    btn.className = ROW_BUTTON_CLASS
+    btn.dataset.action = a.id
+    if (a.pdf) btn.dataset.pdf = ''
+    btn.title = a.title(name)
+    btn.setAttribute('role', 'button')
+    btn.setAttribute('aria-label', a.title(name))
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${a.icon}</svg>`
+    group.appendChild(btn)
+  }
+  row.appendChild(group)
 }
 
 function readRowCardData(row) {

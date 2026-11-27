@@ -56,6 +56,7 @@ On a card (Print works on every card; the rest on ACBL cards, BBO's usual kind):
 • Edit on Bridge Craftwork, or Save to Bridge Classroom. Open the card in the bridge-craftwork.com card editor, or in Bridge Classroom, which saves it to your account there. No file to download and upload again.
 
 On your list of cards:
+• Print, save as a PDF, or view any card from its row, without opening it first.
 • Export all your ACBL cards, and the ACBL cards partners have shared with you, in one JSON file.
 • Import cards from a JSON file, from the bridge-craftwork.com editor's "Export for BBO" file, or from a PDF: one this extension or the bridge-craftwork.com editor made (the card travels inside it), or any filled-in ACBL convention card or Bridgodex PDF. A card that differs from one already on BBO is never replaced without asking, and the question says which copy is newer when it can tell. A card you don't own becomes a private copy.
 
@@ -196,7 +197,7 @@ The full version:
 ```
 This extension works inside Bridge Base Online's convention card manager, which needs a BBO account. A free account works and takes a minute to make at https://www.bridgebase.com (Sign up). We don't supply ours: BBO allows only one session per account, so a shared login would sign reviewers out of one another.
 
-1. Sign in at https://www.bridgebase.com/v3/ (the web lobby). On the right, open Account, then Convention cards. Above the list of cards a toolbar appears: "Export my cards as JSON" and "Import from JSON or PDF". Each card row has a ↗ button that opens it in a new tab.
+1. Sign in at https://www.bridgebase.com/v3/ (the web lobby). On the right, open Account, then Convention cards. Above the list of cards a toolbar appears: "Export my cards as JSON" and "Import from JSON or PDF". Each card row has three icons: Print and Save PDF (on ACBL cards) ask the same questions as the card page's Print… and Export PDF…; View opens the card in a new tab.
 2. Click any card, then View (one of BBO's stock cards is fine). The card page gets a toolbar at the top right:
    - Print…: asks which card to print (ACBL Classic, ACBL New, or this page as BBO shows it, fitted to one landscape page; BBO's own print cuts off the right-hand column), the second page, and green or black entries.
    - Export PDF…: asks the same, plus fillable or flat, then downloads the card filled into the ACBL Classic or New convention card. The answers are remembered for next time.
@@ -278,7 +279,10 @@ Things only Rick can do, in the order they block:
    sends the same request BBO's own editor sends and ignores the reply, so at
    worst a partner doesn't see the change until they reopen the card; the
    privacy policy still describes it, because the request is made.
-4. **Safari: the two `world: "MAIN"` scripts.** The Xcode converter warned that
+4. ~~**Safari: the two `world: "MAIN"` scripts.**~~ They work: Rick opened a
+   card from the list in Safari, 2026-11-27. (The row icons now: Print, Save
+   PDF, View; Print and Save PDF show once the row's details arrive.)
+   Was: The Xcode converter warned that
    Safari doesn't support `world`. It warned the same about the background's
    `type: module`, which Fetch and DD use in Safari without trouble, so the
    warning may be stale; but if `world` is ignored, those scripts run isolated
