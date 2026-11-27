@@ -51,7 +51,7 @@ import can tell which copy is newer.
   as Bridge Base's editor does after a save, so your partners see the new version.
 - **Edit on Bridge Craftwork**, when you click it, opens that one card in the
   card editor at bridge-craftwork.com. **Save to Bridge Classroom** opens it in
-  Bridge Classroom (bridge-classroom.com), which saves it to your account there
+  Bridge Classroom (bridge-classroom.org), which saves it to your account there
   if you are signed in; the
   [Bridge Classroom privacy policy](https://bridge-classroom.org/privacy#extension)
   covers it from there. Either way the card travels in the part of the link

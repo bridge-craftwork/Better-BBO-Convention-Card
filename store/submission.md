@@ -169,7 +169,7 @@ unrelated purposes; not used for creditworthiness or lending.
 **If a free-text field is offered**
 
 ```
-The extension works on Bridge Base Online's convention card pages. It reads and saves the user's own cards through BBO's own card pages, with the session BBO's page already has, as BBO's card manager does; the session token is sent only back to BBO, and nothing is stored. Exports and PDFs are made in the browser and saved as ordinary downloads. Nothing leaves the device for us or a third party unless the user clicks "Edit on Bridge Craftwork" or "Save to Bridge Classroom", which opens that one card, in the link's fragment, on bridge-craftwork.com or bridge-classroom.com. No analytics, no telemetry, no third-party endpoint.
+The extension works on Bridge Base Online's convention card pages. It reads and saves the user's own cards through BBO's own card pages, with the session BBO's page already has, as BBO's card manager does; the session token is sent only back to BBO, and nothing is stored. Exports and PDFs are made in the browser and saved as ordinary downloads. Nothing leaves the device for us or a third party unless the user clicks "Edit on Bridge Craftwork" or "Save to Bridge Classroom", which opens that one card, in the link's fragment, on bridge-craftwork.com or bridge-classroom.org. No analytics, no telemetry, no third-party endpoint.
 ```
 
 ---

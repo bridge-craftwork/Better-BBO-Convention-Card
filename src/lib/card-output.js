@@ -26,12 +26,14 @@ export async function cardEditorUrl(record) {
 }
 
 /** The URL that hands `record` to Bridge Classroom, which saves it once signed in. */
+// Bridge Classroom's app on bridge-classroom.org, the address its users sign in
+// at (Fetch uses it too). The same app is on .com, but a sign-in there is a
+// separate one, so a card sent there would ask to sign in again.
+export const BRIDGE_CLASSROOM = 'https://bridge-classroom.org/solo-practice-app/'
+
 // As convention-card's web/src/handoffToBridgeClassroom.js builds it, with our encoder.
 export async function bridgeClassroomUrl(record) {
-  const [{ encodeCardForUrl }, { BRIDGE_CLASSROOM }] = await Promise.all([
-    import('./handoff.js'),
-    import('@bridge-craftwork/convention-card/web/src/handoffToBridgeClassroom.js'),
-  ])
+  const { encodeCardForUrl } = await import('./handoff.js')
   const payload = encodeCardForUrl({
     name: record.name || null,
     description: record.description || null,

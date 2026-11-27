@@ -56,7 +56,7 @@ describe('links', () => {
     const record = await recordFromFetch(xml)
     const url = await bridgeClassroomUrl(record)
     const [base, data] = url.split('#/convention-card?import=')
-    expect(base).toBe('https://bridge-classroom.com/solo-practice-app/')
+    expect(base).toBe('https://bridge-classroom.org/solo-practice-app/')
     expect((await decodeCardFromUrl(data)).card_data.metadata.partner_names).toBe('Rick and Art')
   })
 })
