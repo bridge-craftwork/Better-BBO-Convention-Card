@@ -57,7 +57,7 @@ On any card:
 
 On your list of cards:
 • Export all your cards, and the cards partners have shared with you, in one JSON file.
-• Import cards from a JSON file, from the bridge-craftwork.com editor's "Export for BBO" file, or from a PDF: one this extension or the bridge-craftwork.com editor made (the card travels inside it), or any filled-in ACBL convention card or Bridgodex PDF. A card that differs from one already on BBO is never replaced without asking, and the question says which copy is newer when it can tell. A card you don't own becomes a private copy. After an import, BBO is told the cards changed, as its own editor does, so your partners see the new version.
+• Import cards from a JSON file, from the bridge-craftwork.com editor's "Export for BBO" file, or from a PDF: one this extension or the bridge-craftwork.com editor made (the card travels inside it), or any filled-in ACBL convention card or Bridgodex PDF. A card that differs from one already on BBO is never replaced without asking, and the question says which copy is newer when it can tell. A card you don't own becomes a private copy.
 
 The extension only runs on BBO's convention card pages, and only does anything when you click. It talks to BBO with the session BBO's page already has; it never sees your password. A card goes to Bridge Craftwork or Bridge Classroom only when you click that button, in the link's fragment, which never reaches a server.
 
@@ -246,10 +246,13 @@ Things only Rick can do, in the order they block:
 3. **Test on real BBO** with the store build, in Chrome, Firefox and Safari:
    the list toolbar and ↗, a card's toolbar, Print, both PDFs, export, import
    (adding, and the keep/replace question), and the hand-off buttons. New in
-   1.0.0 and untested live: the **partner notice** after an import (does a
-   partner see the replaced card, or BBO's lobby pick it up without a reload),
-   and running with **no `storage`, `downloads` or `www.bridgebase.com`**
-   permissions.
+   1.0.0 and untested live: running with **no `storage`, `downloads` or
+   `www.bridgebase.com`** permissions. The **partner notice** after an import
+   ships untested and isn't in the listing's features (Rick, 2026-11-27:
+   testing it needs more people). It sends the same request BBO's own editor
+   sends and ignores the reply, so at worst a partner doesn't see the change
+   until they reopen the card; the privacy policy still describes it, because
+   the request is made.
 4. **Safari: the two `world: "MAIN"` scripts.** The Xcode converter warned that
    Safari doesn't support `world`. It warned the same about the background's
    `type: module`, which Fetch and DD use in Safari without trouble, so the

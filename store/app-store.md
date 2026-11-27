@@ -27,7 +27,7 @@ On any card:
 
 On your list of cards:
 • Export all your cards, and the cards partners have shared with you, in one JSON file.
-• Import cards from a JSON file, from the bridge-craftwork.com editor's "Export for BBO" file, or from a PDF: one this extension or the bridge-craftwork.com editor made, or any filled-in ACBL convention card or Bridgodex PDF. A card that differs from one already on BBO is never replaced without asking. After an import, BBO is told the cards changed, so your partners see the new version.
+• Import cards from a JSON file, from the bridge-craftwork.com editor's "Export for BBO" file, or from a PDF: one this extension or the bridge-craftwork.com editor made, or any filled-in ACBL convention card or Bridgodex PDF. A card that differs from one already on BBO is never replaced without asking.
 
 The extension only runs on BBO's convention card pages, and only does anything
 when you click. It talks to BBO with the session BBO's page already has; it
