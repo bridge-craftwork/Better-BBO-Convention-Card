@@ -251,6 +251,9 @@ Things only Rick can do, in the order they block:
    live 2026-11-27. First version merged
    [bridge-craftwork-site#23](https://github.com/bridge-craftwork/bridge-craftwork-site/pull/23)
    (`/bbo-cc/` and `/bbo-cc/privacy/`). Every store checks the privacy URL.
+   **Open:** the Safari lobby permission row,
+   [bridge-craftwork-site#25](https://github.com/bridge-craftwork/bridge-craftwork-site/pull/25),
+   to merge before the App Store submission.
 3. **Test on real BBO.** *Chrome: done 2026-11-27*, by a Playwright run of the
    store build (no `storage`, `downloads` or `www.bridgebase.com`
    permissions) on Rick's account, 25 of 26 checks passing: the list toolbar
