@@ -367,15 +367,22 @@ function describePlan(plan, writes) {
   return lines.join('\n')
 }
 
+// The input goes into the page, hidden, while it's in use: Firefox under
+// automation doesn't report a choice made in a detached file input, so the
+// live tests couldn't reach the import otherwise. Browsers don't mind either way.
 function pickImportFile() {
   return new Promise((resolve) => {
     const input = document.createElement('input')
     input.type = 'file'
     input.accept = 'application/json,.json,application/pdf,.pdf'
-    input.addEventListener('change', () => {
-      resolve(input.files?.[0] ?? null)
-    })
-    input.addEventListener('cancel', () => resolve(null))
+    input.style.display = 'none'
+    const finish = (file) => {
+      input.remove()
+      resolve(file)
+    }
+    input.addEventListener('change', () => finish(input.files?.[0] ?? null))
+    input.addEventListener('cancel', () => finish(null))
+    document.body.appendChild(input)
     input.click()
   })
 }

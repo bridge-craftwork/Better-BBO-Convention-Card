@@ -4,6 +4,7 @@
 
 import { parseCardFetch } from '../parsers/cc-xml.js'
 import { SAVED_FIELD } from './import-plan.js'
+import { ownBytes } from './bytes.js'
 
 export const TEMPLATES = { classic: 'Classic', new: 'New' }
 
@@ -58,7 +59,7 @@ export async function cardFromPdf(bytes) {
 
 /** What an import file holds: `{ cards, exported_at?, notes }`, from our JSON or a PDF. */
 export async function readImportFile(file) {
-  const bytes = new Uint8Array(await file.arrayBuffer())
+  const bytes = ownBytes(await file.arrayBuffer())
   if (isPdf(bytes)) {
     const { card, notes } = await cardFromPdf(bytes)
     return { cards: [card], notes }
