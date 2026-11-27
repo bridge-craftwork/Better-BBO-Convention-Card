@@ -24,7 +24,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/listContent.js-loader-BaV8gj4K.js"
+        "assets/listContent.js-loader-DSDKZrLN.js"
       ],
       "matches": [
         "https://webutil.bridgebase.com/v2/acblCCFM/*"
@@ -45,7 +45,7 @@
     },
     {
       "js": [
-        "assets/editorContent.js-loader-B4CqNnmB.js"
+        "assets/editorContent.js-loader-DrQsdm3J.js"
       ],
       "matches": [
         "https://webutil.bridgebase.com/v2/acblcc/*",
@@ -69,7 +69,7 @@
     },
     {
       "js": [
-        "assets/classroomContent.js-loader-OnFcoHee.js"
+        "assets/classroomContent.js-loader-BgIZiszM.js"
       ],
       "matches": [
         "https://bridge-classroom.org/*",
@@ -91,21 +91,26 @@
         "https://webutil.bridgebase.com/*"
       ],
       "resources": [
-        "assets/auth-DE45MJKV.js",
+        "assets/acbl-classic-2023-CVgakCVl.pdf",
+        "assets/acbl-new-BUR8nEhL.pdf",
+        "assets/BarlowCondensed-Regular-u9oSiJc6.ttf",
+        "assets/BarlowCondensed-SemiBold-B7YG4rBL.ttf",
+        "assets/auth-DamYbgfF.js",
         "assets/classroom-BFFu9rzf.js",
-        "assets/bbo-B2LMvuIO.js",
+        "assets/browser-polyfill-CZ_dLIqp.js",
+        "assets/bbo-DHHu8kPQ.js",
         "assets/handoff-BMgaJZhX.js",
-        "assets/importCard-CDy85-CC.js",
+        "assets/importCard-7x_M0XVo.js",
+        "assets/card-pdf-Bp7al2fw.js",
         "assets/migrate-0bHlNDBH.js",
         "assets/ntDefenses-CN4mM3GI.js",
-        "assets/checkCard-_bislIg2.js",
+        "assets/checkCard-Ctz5cqfj.js",
         "assets/bbsa-D5zurKPA.js",
-        "assets/bridgodexPdf-D_UTBqK9.js",
-        "assets/acblPdfImport-DHv-bL7f.js",
-        "assets/PDFButton-CGW04nAw.js",
-        "assets/_commonjsHelpers-CqkleIqs.js",
-        "assets/acblClassicFillPdf-CoiaoADJ.js",
-        "assets/listContent.js-DqHQlvnX.js",
+        "assets/bridgodexPdf-o5hfnuem.js",
+        "assets/acblPdfImport-C0pNfjgI.js",
+        "assets/PDFButton-BFAvT4C-.js",
+        "assets/acblClassicFillPdf-D0ljg6o4.js",
+        "assets/listContent.js-CodmyWYS.js",
         "assets/listPageWorld.js-56-zsnoR.js",
         "assets/editorPageWorld.js-C1hVLvtI.js"
       ],
@@ -123,23 +128,22 @@
         "assets/acbl-new-BUR8nEhL.pdf",
         "assets/BarlowCondensed-Regular-u9oSiJc6.ttf",
         "assets/BarlowCondensed-SemiBold-B7YG4rBL.ttf",
-        "assets/auth-DE45MJKV.js",
-        "assets/browser-polyfill-DffEbQem.js",
+        "assets/browser-polyfill-CZ_dLIqp.js",
+        "assets/auth-DamYbgfF.js",
         "assets/classroom-BFFu9rzf.js",
-        "assets/_commonjsHelpers-CqkleIqs.js",
-        "assets/card-pdf-qESXEiFD.js",
-        "assets/bbo-B2LMvuIO.js",
+        "assets/bbo-DHHu8kPQ.js",
         "assets/handoff-BMgaJZhX.js",
-        "assets/importCard-CDy85-CC.js",
+        "assets/importCard-7x_M0XVo.js",
+        "assets/card-pdf-Bp7al2fw.js",
         "assets/migrate-0bHlNDBH.js",
         "assets/ntDefenses-CN4mM3GI.js",
-        "assets/checkCard-_bislIg2.js",
+        "assets/checkCard-Ctz5cqfj.js",
         "assets/bbsa-D5zurKPA.js",
-        "assets/bridgodexPdf-D_UTBqK9.js",
-        "assets/acblPdfImport-DHv-bL7f.js",
-        "assets/PDFButton-CGW04nAw.js",
-        "assets/acblClassicFillPdf-CoiaoADJ.js",
-        "assets/editorContent.js-B46lOW6b.js"
+        "assets/bridgodexPdf-o5hfnuem.js",
+        "assets/acblPdfImport-C0pNfjgI.js",
+        "assets/PDFButton-BFAvT4C-.js",
+        "assets/acblClassicFillPdf-D0ljg6o4.js",
+        "assets/editorContent.js-Crs8BSSI.js"
       ],
       "use_dynamic_url": false
     },
@@ -149,10 +153,9 @@
         "https://bridge-classroom.org/*"
       ],
       "resources": [
-        "assets/browser-polyfill-DffEbQem.js",
+        "assets/browser-polyfill-CZ_dLIqp.js",
         "assets/classroom-BFFu9rzf.js",
-        "assets/_commonjsHelpers-CqkleIqs.js",
-        "assets/classroomContent.js-D97nxdgU.js"
+        "assets/classroomContent.js-CYYb6Zrc.js"
       ],
       "use_dynamic_url": false
     }

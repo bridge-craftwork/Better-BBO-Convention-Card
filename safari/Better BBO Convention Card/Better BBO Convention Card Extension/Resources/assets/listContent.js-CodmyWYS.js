@@ -1,0 +1,59 @@
+import{c as P,h as N,W as D,s as R,E as b,q as F,r as A,i as L,g as U,n as j,p as _,f as M,m as W,k as q,t as J,l as K,j as V,a as Y}from"./auth-DamYbgfF.js";import"./classroom-BFFu9rzf.js";import"./browser-polyfill-CZ_dLIqp.js";function z({title:e,importedTitle:t,exportedAt:o,differences:n,bothTitle:r,fileSaved:c,bboSaved:i,newer:a}){return new Promise(l=>{const s=document.createElement("dialog");s.style.cssText="max-width:32em;font:14px sans-serif;padding:1.2em;border:1px solid #888;border-radius:6px";const u=document.createElement("h3");u.textContent=`The file holds a different copy of “${e}”`,u.style.cssText="margin:0 0 .6em;font-size:16px",s.appendChild(u);const f=new Date(o),h=c?`, saved ${c.toLocaleString()}`:Number.isNaN(f.getTime())?"":`, exported ${f.toLocaleDateString()}`,w=[`The file's copy${t&&t!==e?`, called “${t}”`:""}${h}: ${n===1?"1 setting differs":`${n} settings differ`} from the card on BBO.`,i?`The card on BBO was saved ${i.toLocaleString()}.`:"The card on BBO has no saved date.",a?`The ${a==="file"?"file's copy":"card on BBO"} is newer.`:"We can't tell which is newer: a card saved without this extension has no date."];for(const m of w){const $=document.createElement("p");$.textContent=m,$.style.margin="0 0 .6em",s.appendChild($)}const p=document.createElement("form");p.method="dialog",p.style.cssText="display:flex;flex-direction:column;gap:.4em;margin-top:1em";const x=[["keep",`Keep the card on BBO${a==="bbo"?" (newer)":""}`],["replace",`Use the file's copy${a==="file"?", the newer one":""} (replaces “${e}”)`],["both",`Keep both (adds “${r}”)`]];for(const[m,$]of x){const B=document.createElement("button");B.value=m,B.textContent=$,B.style.cssText="padding:.4em .8em;cursor:pointer;text-align:left",p.appendChild(B)}s.appendChild(p),s.addEventListener("close",()=>{const m=s.returnValue;s.remove(),l(m==="replace"||m==="both"?m:"keep")}),document.body.appendChild(s),s.showModal()})}function H({style:e,cc_key:t,partner:o,edit:n},r=window.location.href){const c=P({style:e,cc_key:t,partner:o,edit:n}),i=N(r);return i?`${c}&${i}`:c}function X(e,t=window.location.href){const o=H(e,t);return window.open(o,"_blank","noopener")}function G(e=(t=>(t=globalThis.location)==null?void 0:t.href)()){let o="";try{o=new URL(e).searchParams.get("v3u")??""}catch{o=""}return`${D}/www_notify.php?v3u=${encodeURIComponent(o||"bbo1")}`}function Q({cc_key:e,partner:t="",style:o="ACBL"},n){return new URLSearchParams({u:n.user,p:n.token,c:"wc_convcard_saved",d:`${e}|${t??""}|${o??"ACBL"}`})}function Z(e,t,o=""){const n=t.filter(r=>r.cc_key===e).map(r=>r.partner??"");return[...new Set(n.length>0?n:[o??""])]}const g="[better-bbo-cc/list]",C="better-bbo-cc-list-toolbar",S="better-bbo-cc-row-actions",y="better-bbo-cc-row-btn",ee=[{id:"print",pdf:!0,title:e=>`Print ${e}`,icon:'<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>'},{id:"export",pdf:!0,title:e=>`Save ${e} as a PDF`,icon:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>'},{id:"view",title:e=>`View ${e} in a new tab`,icon:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'}],I="data-bbcc-card",E="better-bbo-cc-list-styles";te();function te(){re(),ae(),ce(),ie(),ne(),console.log(g,"initialized")}function ne(){document.addEventListener("click",e=>{var c,i;const t=(i=(c=e.target).closest)==null?void 0:i.call(c,`.${y}`);if(!t)return;e.preventDefault(),e.stopPropagation(),e.stopImmediatePropagation();const o=t.closest("a.card-item");if(!o)return;const n=se(o);if(!n){console.warn(g,"no cc_data yet on row",o);return}const r=t.dataset.action;if(r==="view"){X({style:n.type,cc_key:n.cc_key,partner:n.partner??"",edit:!1});return}oe(t,n,r)},!0)}async function oe(e,t,o){if(e.getAttribute("aria-busy")==="true")return;const n=o==="print"?"Print":"Save PDF";try{await R({action:o,record:v(b.fetch,{key:t.cc_key,request_id:String(Date.now()),v3u:"BBO1"}).then(F),onBusy:r=>e.setAttribute("aria-busy",String(r))})}catch(r){console.error(g,n,r),alert(`${n} failed: ${r.message}`)}}function re(){if(document.getElementById(E))return;const e=document.createElement("style");e.id=E,e.textContent=`
+    #${C} {
+      display: flex;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #f4f4f4;
+      border-bottom: 1px solid #ccc;
+      font: 13px/1.4 system-ui, sans-serif;
+    }
+    #${C} button {
+      cursor: pointer;
+      padding: 4px 10px;
+      border: 1px solid #888;
+      background: #fff;
+      border-radius: 3px;
+    }
+    #${C} button:disabled {
+      opacity: 0.5;
+      cursor: progress;
+    }
+    a.card-item { position: relative; }
+    .${S} {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      display: inline-flex;
+      gap: 4px;
+      z-index: 2;
+    }
+    .${y} {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 6px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #fff;
+      color: #6b7280;
+      cursor: pointer;
+      line-height: 0;
+    }
+    .${y}:hover { color: #2d6a4f; border-color: #40916c; }
+    .${y}[aria-busy="true"] { opacity: .5; cursor: progress; }
+    /* PDFs are ACBL cards only; until the row's details arrive, View alone. */
+    a.card-item:not([${I}*='"type":"ACBL"']) .${y}[data-pdf] { display: none; }
+  `,document.head.appendChild(e)}function ae(){if(document.getElementById(C))return;const e=document.createElement("div");e.id=C;const t=document.createElement("span");t.textContent="Better BBO CC:",t.style.alignSelf="center",t.style.fontWeight="bold",e.appendChild(t);const o=document.createElement("button");o.type="button",o.textContent="Export my cards as JSON",o.title="Download your own cards and cards shared with you. Stock cards are left out: export one from its own page.",o.addEventListener("click",()=>de(o)),e.appendChild(o);const n=document.createElement("button");n.type="button",n.textContent="Import from JSON or PDF",n.title="Add cards from a previously-exported JSON file or an ACBL card PDF. You are asked before a card of yours is replaced; a card you don't own becomes a private copy.",n.addEventListener("click",()=>le(n)),e.appendChild(n),document.body.insertBefore(e,document.body.firstChild)}function ce(){document.querySelectorAll("a.card-item").forEach(k)}function ie(){new MutationObserver(t=>{var o,n;for(const r of t)for(const c of r.addedNodes)c instanceof Element&&((o=c.matches)!=null&&o.call(c,"a.card-item")&&k(c),(n=c.querySelectorAll)==null||n.call(c,"a.card-item").forEach(k))}).observe(document.body,{childList:!0,subtree:!0})}function k(e){if(e.querySelector(`.${S}`))return;const t="this card",o=document.createElement("span");o.className=S;for(const n of ee){const r=document.createElement("span");r.className=y,r.dataset.action=n.id,n.pdf&&(r.dataset.pdf=""),r.title=n.title(t),r.setAttribute("role","button"),r.setAttribute("aria-label",n.title(t)),r.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${n.icon}</svg>`,o.appendChild(r)}e.appendChild(o)}function se(e){const t=e.getAttribute(I);if(!t)return null;try{return JSON.parse(t)}catch{return null}}async function de(e){var n;const t=A();if(!t){alert("Could not read BBO auth from this page. Try reopening Account → Convention cards in the BBO lobby.");return}e.disabled=!0;const o=e.textContent;e.textContent="Exporting…";try{const r=await v(b.list,{user:t.user,password:t.token}),c=L(r),i=U(c),a=j(c),l=a.length?`Only ACBL cards can be exported. Left out: ${a.map(h=>`“${h}”`).join(", ")}.`:"";if(i.length===0){alert(l||"You have no cards of your own to export. To export a stock card, open it and use Export JSON.");return}const s=[];let u=0;for(const h of i){const d=await v(b.fetch,{key:h,request_id:String(Date.now()),v3u:"BBO1"}),w=(n=c.find(p=>p.cc_key===h&&p.partner))==null?void 0:n.partner;s.push({..._(d),partner:w??""}),u+=1,e.textContent=`Exporting… (${u}/${i.length})`}const f=M(s);fe(f,`bbo-cards-${t.user}-${he()}.json`),l&&alert(`Exported ${s.length} card${s.length===1?"":"s"}.
+
+${l}`)}catch(r){console.error(g,"export failed",r),alert(`Export failed: ${r.message}`)}finally{e.disabled=!1,e.textContent=o}}async function le(e){const t=A();if(!t){alert("Could not read BBO auth from this page. Try reopening Account → Convention cards in the BBO lobby.");return}const o=await pe();if(!o)return;let n;try{n=await W(o)}catch(a){alert(`Could not read ${o.name}: ${a.message}`);return}const r=Array.isArray(n==null?void 0:n.cards)?n.cards:null;if(!r||r.length===0){alert("This file holds no cards.");return}e.disabled=!0;const c=e.textContent;e.textContent="Checking…";let i=0;try{const a=await v(b.list,{user:t.user,password:t.token}),l=async d=>_(await v(b.fetch,{key:d,request_id:String(Date.now()),v3u:"BBO1"})),s=L(a),u=await q(r,s,t.user,l,{exportedAt:n.exported_at});for(const d of u)d.action==="ask"&&(d.choice=await z({title:d.target.title,importedTitle:d.card.title,exportedAt:n.exported_at,fileSaved:J(d.card),bboSaved:d.bboSaved,newer:d.newer,differences:d.differences,bothTitle:d.bothTitle}));const f=K(u);if(f.length>0&&!window.confirm(`${[T(u,f),...n.notes].join(`
+
+`)}
+
+Save these to your BBO account?`))return;const h=[];for(const[d,{cmd:w,card:p}]of f.entries()){e.textContent=`Importing… (${d+1}/${f.length})`;try{const x=V(await O(b.cud,Y(w,p,t).toString()));i+=1,await ue({...p,cc_key:x||p.cc_key},s,t)}catch(x){h.push(`${p.title||p.cc_key}: ${x.message}`)}}alert(`Import complete.
+
+${T(u,f)}`+(h.length>0?`
+
+Failed:
+- ${h.join(`
+- `)}`:""))}catch(a){console.error(g,"import failed",a),alert(`Import failed: ${a.message}`)}finally{e.disabled=!1,e.textContent=c}i>0&&window.location.reload()}function T(e,t){var i;const o=a=>e.filter(l=>l.action===a).length,n=e.filter(a=>a.choice==="keep").length,r=[[t.filter(a=>a.cmd==="replace").length,"replaced with the file's copy"],[o("add")+e.filter(a=>a.choice==="both").length,"added as new cards"],[o("copy"),"added as private copies of cards you don't own"],[n,"kept as they are on BBO"]].filter(([a])=>a>0).map(([a,l])=>`${a} ${l}`);for(const a of e.filter(l=>l.action==="same"))r.push(`Identical card “${((i=a.target)==null?void 0:i.title)||a.card.title||"Untitled"}” exists - not importing`);const c=e.filter(a=>a.action==="skip");return c.length>0&&r.push(`${c.length} skipped: ${[...new Set(c.map(a=>a.reason))].join("; ")}`),r.join(`
+`)}function pe(){return new Promise(e=>{const t=document.createElement("input");t.type="file",t.accept="application/json,.json,application/pdf,.pdf",t.style.display="none";const o=n=>{t.remove(),e(n)};t.addEventListener("change",()=>{var n;return o(((n=t.files)==null?void 0:n[0])??null)}),t.addEventListener("cancel",()=>o(null)),document.body.appendChild(t),t.click()})}async function ue(e,t,o){for(const n of Z(e.cc_key,t,e.partner))try{await O(G(),Q({...e,partner:n},o).toString())}catch(r){console.warn(g,"could not tell BBO about the save of",e.cc_key,r)}}async function v(e,t){return O(e,new URLSearchParams(t).toString())}async function O(e,t){const o=await fetch(e,{method:"POST",credentials:"include",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:t});if(!o.ok)throw new Error(`POST ${e} → HTTP ${o.status}`);return o.text()}function fe(e,t){const o=new Blob([JSON.stringify(e,null,2)],{type:"application/json"}),n=URL.createObjectURL(o),r=document.createElement("a");r.href=n,r.download=t,document.body.appendChild(r),r.click(),r.remove(),setTimeout(()=>URL.revokeObjectURL(n),5e3)}function he(){const e=new Date,t=e.getFullYear(),o=String(e.getMonth()+1).padStart(2,"0"),n=String(e.getDate()).padStart(2,"0");return`${t}${o}${n}`}
