@@ -21,14 +21,23 @@ export async function recordFromFetch(xml) {
 
 /** The URL that opens `record` in the card editor at bridge-craftwork.com. */
 export async function cardEditorUrl(record) {
-  const { encodeCardForUrl } = await import('@bridge-craftwork/convention-card/js/handoff.js')
-  return `${CARD_EDITOR}#import=${await encodeCardForUrl(record)}`
+  const { encodeCardForUrl } = await import('./handoff.js')
+  return `${CARD_EDITOR}#import=${encodeCardForUrl(record)}`
 }
 
 /** The URL that hands `record` to Bridge Classroom, which saves it once signed in. */
+// As convention-card's web/src/handoffToBridgeClassroom.js builds it, with our encoder.
 export async function bridgeClassroomUrl(record) {
-  const lib = await import('@bridge-craftwork/convention-card/web/src/handoffToBridgeClassroom.js')
-  return lib.bridgeClassroomUrl(record)
+  const [{ encodeCardForUrl }, { BRIDGE_CLASSROOM }] = await Promise.all([
+    import('./handoff.js'),
+    import('@bridge-craftwork/convention-card/web/src/handoffToBridgeClassroom.js'),
+  ])
+  const payload = encodeCardForUrl({
+    name: record.name || null,
+    description: record.description || null,
+    card_data: record.card_data || {},
+  })
+  return `${BRIDGE_CLASSROOM}#/convention-card?import=${payload}`
 }
 
 const isPdf = (bytes) => String.fromCharCode(...bytes.subarray(0, 4)) === '%PDF'
