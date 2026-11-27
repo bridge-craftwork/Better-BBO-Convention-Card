@@ -43,7 +43,7 @@ BROWSER=firefox npx vite build  # output in dist/firefox/
 directory and you have the submitted file.
 
 One dependency, `@bridge-craftwork/convention-card`, is installed from a
-tagged GitHub release (`github:bridge-craftwork/convention-card#v0.45.2` in
+tagged GitHub release (`github:bridge-craftwork/convention-card#v0.55.0` in
 `package.json`, pinned to a commit in `package-lock.json`). It is our own
 open-source library (MIT OR Apache-2.0), from the same organisation, and npm
 fetches it like any other package. Nothing else is fetched at build time.
@@ -56,7 +56,8 @@ fetches it like any other package. Nothing else is fetched at build time.
   `browser_specific_settings.gecko` and the event-page `background.scripts`
   form in place of `background.service_worker`. The whole per-browser
   difference is one small object in that file.
-- The two blank ACBL card PDFs and the Barlow Condensed font come from the
+- The two blank ACBL card PDFs and the Barlow Condensed fonts (regular and
+  semibold) come from the
   convention-card package and are copied into `assets/`, where the extension
   reads them with `runtime.getURL` to fill in a card. They are data, not code.
 

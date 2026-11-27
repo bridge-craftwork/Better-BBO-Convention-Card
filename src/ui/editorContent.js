@@ -126,10 +126,21 @@ function injectToolbar() {
   bar.appendChild(printBtn)
 
   if (acbl) {
+    // The PDFs print what the card says in green, as BBO's card shows it,
+    // unless this is unticked.
+    const ink = document.createElement('label')
+    ink.title = 'Print what the card says in green, as BBO shows it; untick for black'
+    ink.style.cssText = 'display:inline-flex;align-items:center;gap:3px;cursor:pointer'
+    const inkBox = document.createElement('input')
+    inkBox.type = 'checkbox'
+    inkBox.checked = true
+    ink.append(inkBox, 'Green ink')
+    bar.appendChild(ink)
+
     for (const [template, name] of Object.entries(TEMPLATES)) {
       addCardButton(bar, `PDF: ${name}`, `Download the last saved version as the ACBL ${name} card`, 'Rendering…', async (record) => {
         const { downloadAcblPdf } = await import('../lib/card-pdf.js')
-        await downloadAcblPdf(record, template)
+        await downloadAcblPdf(record, template, { ink: inkBox.checked ? 'green' : 'black' })
       })
     }
 

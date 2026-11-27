@@ -16,6 +16,7 @@ cards, BBO's usual kind):
 - **Print (fixed)**: BBO's Print is a bare `window.print()` that clips the
   right-hand column. This prints the whole card across a landscape page.
 - **ACBL PDFs**: download the card as the ACBL Classic or New convention card,
+  what it says in green as BBO shows it (untick **Green ink** for black),
   rendered in the browser by the
   [convention-card](https://github.com/bridge-craftwork/convention-card) library.
 - **Open in tab**: view or edit the card at full size instead of in BBO's

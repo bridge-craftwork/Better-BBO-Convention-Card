@@ -8,6 +8,7 @@ import { downloadAcblPdf } from '@bridge-craftwork/convention-card/js/acblClassi
 import classicUrl from '@bridge-craftwork/convention-card/assets/templates/acbl-classic-2023.pdf?url'
 import newUrl from '@bridge-craftwork/convention-card/assets/templates/acbl-new.pdf?url'
 import fontUrl from '@bridge-craftwork/convention-card/assets/fonts/BarlowCondensed-Regular.ttf?url'
+import boldFontUrl from '@bridge-craftwork/convention-card/assets/fonts/BarlowCondensed-SemiBold.ttf?url'
 
 async function load(url) {
   const res = await fetch(browser.runtime.getURL(url.replace(/^\//, '')))
@@ -18,6 +19,7 @@ async function load(url) {
 setAssetLoader({
   template: (name) => load(name === 'new' ? newUrl : classicUrl),
   font: () => load(fontUrl),
+  boldFont: () => load(boldFontUrl),
 })
 
 export { downloadAcblPdf }

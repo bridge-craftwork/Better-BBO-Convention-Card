@@ -20,7 +20,7 @@ web lobby in Safari.
 
 On a card (Print works on every card; the rest on ACBL cards, BBO's usual kind):
 • Print that fits. BBO's Print clips the right-hand column; this prints the whole card across a landscape page.
-• ACBL PDFs. Download the card as the ACBL Classic or the ACBL New convention card, filled in and ready to print or email.
+• ACBL PDFs. Download the card as the ACBL Classic or the ACBL New convention card, filled in and ready to print or email, with what the card says in green as BBO shows it (or in black).
 • Open in a tab. See and edit the card at full size instead of in BBO's narrow panel.
 • Export JSON. Save a copy of the card in a portable format.
 • Edit on Bridge Craftwork, or Save to Bridge Classroom. Open the card in the bridge-craftwork.com card editor, or in Bridge Classroom, which saves it to your account there.

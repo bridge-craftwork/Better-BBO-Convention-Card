@@ -10,7 +10,7 @@ by Vite, so their licence terms travel with every store submission.
 
 The convention-card library: BBO conversion, the ACBL PDF renderer, PDF import and the hand-off links. Ours, from the same organisation.
 
-- Version: 0.45.2
+- Version: 0.55.0
 - Source: https://github.com/bridge-craftwork/convention-card
 - Licence: MIT OR Apache-2.0
 
@@ -214,7 +214,8 @@ The full Mozilla Public License 2.0 is at https://mozilla.org/MPL/2.0/.
 ## Barlow Condensed — SIL Open Font License 1.1
 
 The font the ACBL PDFs are filled in with. Shipped as
-`BarlowCondensed-Regular.ttf`; its licence ships beside it in the package as
+`BarlowCondensed-Regular.ttf` and `BarlowCondensed-SemiBold.ttf` (the card's
+names and general approach); its licence ships beside it in the package as
 `licenses/BarlowCondensed-OFL.txt`.
 
 - Source: https://github.com/jpt/barlow
