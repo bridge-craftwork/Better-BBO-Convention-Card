@@ -35,7 +35,7 @@ never sees your password. A card goes to Bridge Craftwork or Bridge Classroom
 only when you click that button.
 
 To start, open the app and turn on the extension in Safari, then allow it on
-webutil.bridgebase.com when Safari asks.
+www.bridgebase.com and webutil.bridgebase.com when Safari asks.
 
 No analytics, no tracking, no accounts. Open source.
 
@@ -54,7 +54,8 @@ In Safari, after enabling the extension in Safari > Settings > Extensions, also
 allow it on webutil.bridgebase.com, using the extension's button in the toolbar
 while the convention cards are open (BBO shows them in a frame from that site).
 Safari asks per website; until it is allowed there, nothing appears, with no
-error.
+error. It also asks for www.bridgebase.com, BBO's lobby, only so that its
+toolbar button isn't greyed out there: no script runs on the lobby.
 
 This extension works inside Bridge Base Online's convention card manager, which
 needs a BBO account. A free account works and takes a minute to make at
@@ -65,6 +66,8 @@ session per account, so a shared login would sign reviewers out of one another.
 2. Click any card, then View (one of BBO's stock cards is fine). The card page gets a toolbar at the top right: Print… prints the card as an ACBL card, or this page fitted to one landscape page; Export PDF… downloads it as the ACBL Classic or New card; Export JSON downloads it; Edit on Bridge Craftwork and Save to Bridge Classroom open it on those sites.
 3. Back on the list, "Import from JSON or PDF" with the file from step 2 adds the card to the account. Importing a card that already exists with different settings asks whether to keep, replace or keep both.
 
-The extension asks for no permissions beyond access to webutil.bridgebase.com.
+The extension asks for no permissions beyond access to webutil.bridgebase.com
+and, so its toolbar button shows as active in BBO's lobby, www.bridgebase.com/v3/
+(nothing runs there).
 Its requests go only to BBO's own card pages, with the session the page already
 has.

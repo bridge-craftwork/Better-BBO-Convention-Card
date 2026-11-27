@@ -47,6 +47,8 @@ On the list of cards:
 
 It asks for access to `webutil.bridgebase.com/v2/`, where BBO's card pages
 live, and for `storage`, to remember the PDF dialog's answers on your device.
+In Safari it also asks for `www.bridgebase.com/v3/`, BBO's lobby, where nothing
+runs: Safari greys out the toolbar button on any site the extension can't reach.
 No analytics, no servers of its own.
 See the [privacy policy](store/privacy.md).
 

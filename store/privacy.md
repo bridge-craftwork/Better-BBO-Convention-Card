@@ -66,6 +66,7 @@ nothing is sold or shared.
 | Permission | Why |
 |---|---|
 | Site access to `webutil.bridgebase.com/v2/*` | Bridge Base Online's convention card pages, the only pages it works on |
+| Safari only: site access to `www.bridgebase.com/v3/*` | BBO's lobby, which holds the card pages. Nothing runs there; Safari greys out the extension's toolbar button on any site it can't reach |
 | Storage | Remembers your Print and Export PDF choices on this device |
 
 It asks for no other permissions.

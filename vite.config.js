@@ -44,7 +44,14 @@ const PER_BROWSER_OVERRIDES = {
   // Safari takes the Chromium manifest at build time. dist/safari/ is copied
   // into the Xcode project in safari/ by scripts/package-stores.sh, and the
   // app is archived and uploaded by scripts/upload-apple.sh.
-  safari: {},
+  //
+  // Safari greys a toolbar button on any page its extension can't reach, and
+  // the address bar shows BBO's lobby, not the frame the cards load in. Asking
+  // for the lobby too (no script runs there) lets the button show in colour
+  // once bridgebase.com is allowed, so it doesn't look switched off.
+  safari: {
+    host_permissions: [...baseManifest.host_permissions, 'https://www.bridgebase.com/v3/*'],
+  },
 }
 
 if (!Object.hasOwn(PER_BROWSER_OVERRIDES, BROWSER)) {

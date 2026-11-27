@@ -209,7 +209,7 @@ The extension's one API permission, storage, remembers the PDF dialog's answers 
 nothing.
 
 ```
-In Safari, after enabling the extension in Safari > Settings > Extensions, also allow it on webutil.bridgebase.com, using the extension's button in the toolbar while the convention cards are open (BBO shows them in a frame from that site). Safari asks per website; until it is allowed there, nothing appears, with no error.
+In Safari, after enabling the extension in Safari > Settings > Extensions, also allow it on webutil.bridgebase.com, using the extension's button in the toolbar while the convention cards are open (BBO shows them in a frame from that site). Safari asks per website; until it is allowed there, nothing appears, with no error. It also asks for www.bridgebase.com, BBO's lobby, only so that its toolbar button isn't greyed out there: no script runs on the lobby.
 ```
 
 **For addons.mozilla.org, add**: after the full version, in the same field.
