@@ -31,18 +31,18 @@ cards, BBO's usual kind):
 
 On the list of cards:
 
-- **Export my cards as JSON**: all your own ACBL cards and those shared with
-  you (stock cards one at a time, from their pages). BBO's other card types
-  (basic, V2BASIC) are left out, and the export names them: only the ACBL
-  card's elements are read.
-- **Import from JSON or PDF**: this extension's export, the bridge-craftwork.com
-  editor's "Export for BBO" file, or a PDF. A PDF this extension or the editor
+- **Import from PDF or JSON**: a PDF, this extension's export, or the
+  bridge-craftwork.com editor's "Export for BBO" file. A PDF this extension or the editor
   made carries the card inside it, with any boxes changed since; any other
   filled-in ACBL card or Bridgodex PDF is read from its boxes, less exactly. A
   card that differs from one on BBO is never replaced unasked, and the question
   says which copy is newer (the extension dates each save BBO's editor makes).
   After each card it saves, the import tells BBO, as BBO's editor does
   (`www_notify.php`), so partners pick up the change.
+- **Export my cards as JSON**: all your own ACBL cards and those shared with
+  you (stock cards one at a time, from their pages). BBO's other card types
+  (basic, V2BASIC) are left out, and the export names them: only the ACBL
+  card's elements are read.
 - **Print**, **Save PDF** and **View** icons on each row: the first two ask what
   the card page's Print… and Export PDF… ask (ACBL cards only); View opens the
   card in a new tab.

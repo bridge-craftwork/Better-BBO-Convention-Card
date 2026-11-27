@@ -5,7 +5,8 @@
 // Adds:
 //   - Print, Save PDF and View icons on each card row (as Bridge Classroom's
 //     card table has); View opens the card in a new tab
-//   - Top toolbar with "Export my cards as JSON" and "Import from JSON or PDF"
+//   - "Import from PDF or JSON" and "Export my cards as JSON", next to BBO's
+//     New ACBL Convention Card button
 //     (the rules for cards already on BBO are in ../lib/import-plan.js)
 //
 // Per-row card metadata lives in jQuery `$(row).data('cc_data')` in the
@@ -31,6 +32,8 @@ import { notifyUrl, buildSavedNoticeBody, partnersToNotify } from '../lib/notify
 const LOG_PREFIX = '[better-bbo-cc/list]'
 
 const TOOLBAR_ID = 'better-bbo-cc-list-toolbar'
+const BUTTON_COLUMN_CLASS = 'better-bbo-cc-button-column'
+const STANDALONE_CLASS = 'better-bbo-cc-standalone'
 const ROW_ACTIONS_CLASS = 'better-bbo-cc-row-actions'
 const ROW_BUTTON_CLASS = 'better-bbo-cc-row-btn'
 
@@ -128,24 +131,22 @@ function installStyles() {
   const style = document.createElement('style')
   style.id = STYLE_ID
   style.textContent = `
-    #${TOOLBAR_ID} {
+    /* BBO's New card column, widened to the row, with our group after it */
+    .${BUTTON_COLUMN_CLASS} {
+      flex: 1 1 auto;
+      max-width: none;
       display: flex;
+      flex-wrap: wrap;
+      align-items: center;
       gap: 8px;
+    }
+    #${TOOLBAR_ID} { display: inline-flex; flex-wrap: wrap; gap: 8px; }
+    #${TOOLBAR_ID} button:disabled { opacity: 0.5; cursor: progress; }
+    #${TOOLBAR_ID}.${STANDALONE_CLASS} {
+      display: flex;
       padding: 8px 12px;
       background: #f4f4f4;
       border-bottom: 1px solid #ccc;
-      font: 13px/1.4 system-ui, sans-serif;
-    }
-    #${TOOLBAR_ID} button {
-      cursor: pointer;
-      padding: 4px 10px;
-      border: 1px solid #888;
-      background: #fff;
-      border-radius: 3px;
-    }
-    #${TOOLBAR_ID} button:disabled {
-      opacity: 0.5;
-      cursor: progress;
     }
     a.card-item { position: relative; }
     .${ROW_ACTIONS_CLASS} {
@@ -176,35 +177,42 @@ function installStyles() {
   document.head.appendChild(style)
 }
 
+// Our buttons go on BBO's own button row, after New ACBL Convention Card, as
+// a group that wraps onto its own line when the panel is too narrow. Without
+// that row (BBO changed its page), a bar of their own at the top.
 function ensureToolbar() {
   if (document.getElementById(TOOLBAR_ID)) return
 
-  const toolbar = document.createElement('div')
+  const toolbar = document.createElement('span')
   toolbar.id = TOOLBAR_ID
-
-  const label = document.createElement('span')
-  label.textContent = 'Better BBO CC:'
-  label.style.alignSelf = 'center'
-  label.style.fontWeight = 'bold'
-  toolbar.appendChild(label)
-
-  const exportAll = document.createElement('button')
-  exportAll.type = 'button'
-  exportAll.textContent = 'Export my cards as JSON'
-  exportAll.title =
-    'Download your own cards and cards shared with you. Stock cards are left out: export one from its own page.'
-  exportAll.addEventListener('click', () => handleExportAll(exportAll))
-  toolbar.appendChild(exportAll)
 
   const importBtn = document.createElement('button')
   importBtn.type = 'button'
-  importBtn.textContent = 'Import from JSON or PDF'
+  importBtn.className = 'btn btn-secondary'
+  importBtn.textContent = 'Import from PDF or JSON'
   importBtn.title =
-    'Add cards from a previously-exported JSON file or an ACBL card PDF. You are asked before a card of yours is replaced; a card you don\'t own becomes a private copy.'
+    'Better BBO CC: add cards from an ACBL card PDF or an exported JSON file. You are asked before a card of yours is replaced; a card you don\'t own becomes a private copy.'
   importBtn.addEventListener('click', () => handleImport(importBtn))
   toolbar.appendChild(importBtn)
 
-  document.body.insertBefore(toolbar, document.body.firstChild)
+  const exportAll = document.createElement('button')
+  exportAll.type = 'button'
+  exportAll.className = 'btn btn-secondary'
+  exportAll.textContent = 'Export my cards as JSON'
+  exportAll.title =
+    'Better BBO CC: download your own cards and cards shared with you. Stock cards are left out: export one from its own page.'
+  exportAll.addEventListener('click', () => handleExportAll(exportAll))
+  toolbar.appendChild(exportAll)
+
+  const newCard = document.getElementById('NewCard')
+  const column = newCard?.parentElement
+  if (column) {
+    column.classList.add(BUTTON_COLUMN_CLASS)
+    column.appendChild(toolbar)
+  } else {
+    toolbar.classList.add(STANDALONE_CLASS)
+    document.body.insertBefore(toolbar, document.body.firstChild)
+  }
 }
 
 function decorateExistingRows() {

@@ -97,7 +97,7 @@ await page.getByText('Convention cards', { exact: true }).filter({ visible: true
 await page.waitForTimeout(5000)
 const list = page.frames().find((f) => f.url().includes('acblCCFM'))
 if (!list) throw new Error('the convention card list did not open')
-await list.locator('text=Better BBO CC:').waitFor()
+await list.locator('button', { hasText: 'Import from PDF or JSON' }).waitFor()
 
 async function blurList() {
   await list.evaluate((safe) => {
@@ -189,7 +189,7 @@ const file = path.join(WORK, 'import.json')
 fs.writeFileSync(file, JSON.stringify({ ...envelope, cards: [changed] }))
 const [chooser] = await Promise.all([
   page.waitForEvent('filechooser'),
-  list.locator('button', { hasText: 'Import from JSON or PDF' }).click(),
+  list.locator('button', { hasText: 'Import from PDF or JSON' }).click(),
 ])
 await chooser.setFiles(file)
 await list.locator('dialog[open], form button[value="keep"]').first().waitFor({ timeout: 30000 })

@@ -189,7 +189,7 @@ Paste for Firefox and Apple. Chrome's test instructions field takes 500
 characters, so use the short version there:
 
 ```
-Needs a Bridge Base Online account; a free one works (bridgebase.com, Sign up). In BBO's web lobby open Account (right) > Convention cards. A toolbar appears above the list (Export my cards, Import). Open any card, a stock card is fine: its toolbar has Open in tab, Export JSON, Print…, Export PDF…, Edit on Bridge Craftwork, Save to Bridge Classroom. Import the exported JSON to see the replace/keep question.
+Needs a Bridge Base Online account; a free one works (bridgebase.com, Sign up). In BBO's web lobby open Account (right) > Convention cards. Next to BBO's New ACBL Convention Card button: Import from PDF or JSON, and Export my cards as JSON. Open any card, a stock card is fine: its toolbar has Open in tab, Export JSON, Print…, Export PDF…, Edit on Bridge Craftwork, Save to Bridge Classroom. Import the exported JSON to see the replace/keep question.
 ```
 
 The full version:
@@ -197,13 +197,13 @@ The full version:
 ```
 This extension works inside Bridge Base Online's convention card manager, which needs a BBO account. A free account works and takes a minute to make at https://www.bridgebase.com (Sign up). We don't supply ours: BBO allows only one session per account, so a shared login would sign reviewers out of one another.
 
-1. Sign in at https://www.bridgebase.com/v3/ (the web lobby). On the right, open Account, then Convention cards. Above the list of cards a toolbar appears: "Export my cards as JSON" and "Import from JSON or PDF". Each card row has three icons: Print and Save PDF (on ACBL cards) ask the same questions as the card page's Print… and Export PDF…; View opens the card in a new tab.
+1. Sign in at https://www.bridgebase.com/v3/ (the web lobby). On the right, open Account, then Convention cards. Next to BBO's own "New ACBL Convention Card" button, two more appear: "Import from PDF or JSON" and "Export my cards as JSON". Each card row has three icons: Print and Save PDF (on ACBL cards) ask the same questions as the card page's Print… and Export PDF…; View opens the card in a new tab.
 2. Click any card, then View (one of BBO's stock cards is fine). The card page gets a toolbar at the top right:
    - Print…: asks which card to print (ACBL Classic, ACBL New, or this page as BBO shows it, fitted to one landscape page; BBO's own print cuts off the right-hand column), the second page, and green or black entries.
    - Export PDF…: asks the same, plus fillable or flat, then downloads the card filled into the ACBL Classic or New convention card. The answers are remembered for next time.
    - Export JSON downloads the card.
    - Edit on Bridge Craftwork opens the card in the editor at bridge-craftwork.com; Save to Bridge Classroom opens it in Bridge Classroom. The card travels in the link's fragment.
-3. Back on the list, "Import from JSON or PDF" with the file from step 2 (or a PDF from Export PDF…) adds the card to the account. Importing a file whose card already exists on the account, with different settings, asks whether to keep, replace or keep both. A new account starts with no cards of its own, so the first import adds one.
+3. Back on the list, "Import from PDF or JSON" with the file from step 2 (or a PDF from Export PDF…) adds the card to the account. Importing a file whose card already exists on the account, with different settings, asks whether to keep, replace or keep both. A new account starts with no cards of its own, so the first import adds one.
 
 The extension's one API permission, storage, remembers the PDF dialog's answers on the device. Its requests go only to BBO's own card pages on webutil.bridgebase.com, with the session the page already has.
 ```
