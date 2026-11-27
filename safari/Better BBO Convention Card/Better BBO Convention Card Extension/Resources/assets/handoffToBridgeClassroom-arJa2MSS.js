@@ -1,0 +1,1 @@
+import{encodeCardForUrl as t}from"./handoff-CMJZ0J30.js";import"./migrate-0bHlNDBH.js";const n="https://bridge-classroom.com/solo-practice-app/";async function e(o,r=n){const a=await t({name:o.name||null,description:o.description||null,card_data:o.card_data||{}});return`${r}#/convention-card?import=${a}`}export{n as BRIDGE_CLASSROOM,e as bridgeClassroomUrl};
