@@ -24,7 +24,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/listContent.js-loader-C7sFjZ81.js"
+        "assets/listContent.js-loader-D8WVqAxr.js"
       ],
       "matches": [
         "https://webutil.bridgebase.com/v2/acblCCFM/*"
@@ -45,7 +45,7 @@
     },
     {
       "js": [
-        "assets/editorContent.js-loader-C7Rl-YkE.js"
+        "assets/editorContent.js-loader-DxdfhwZ_.js"
       ],
       "matches": [
         "https://webutil.bridgebase.com/v2/acblcc/*",
@@ -81,13 +81,14 @@
         "https://webutil.bridgebase.com/*"
       ],
       "resources": [
-        "assets/auth-ButrP_N_.js",
+        "assets/auth-Rmh_jA1d.js",
         "assets/bbo-B2LMvuIO.js",
-        "assets/handoff-CMJZ0J30.js",
-        "assets/handoffToBridgeClassroom-arJa2MSS.js",
-        "assets/importCard-BZyTr-6G.js",
+        "assets/handoff-BMgaJZhX.js",
+        "assets/handoffToBridgeClassroom-Cn_JCusF.js",
+        "assets/importCard-DmLb0QIh.js",
         "assets/migrate-0bHlNDBH.js",
         "assets/ntDefenses-CN4mM3GI.js",
+        "assets/handoff-Cpeq1yFS.js",
         "assets/checkCard-_bislIg2.js",
         "assets/bbsa-D5zurKPA.js",
         "assets/bridgodexPdf-D_UTBqK9.js",
@@ -95,7 +96,7 @@
         "assets/PDFButton-CGW04nAw.js",
         "assets/_commonjsHelpers-CqkleIqs.js",
         "assets/acblClassicFillPdf-CoiaoADJ.js",
-        "assets/listContent.js-id-D0Dn3.js",
+        "assets/listContent.js-XvyomNIC.js",
         "assets/listPageWorld.js-56-zsnoR.js",
         "assets/editorPageWorld.js-C1hVLvtI.js"
       ],
@@ -113,23 +114,24 @@
         "assets/acbl-new-BUR8nEhL.pdf",
         "assets/BarlowCondensed-Regular-u9oSiJc6.ttf",
         "assets/BarlowCondensed-SemiBold-B7YG4rBL.ttf",
-        "assets/auth-ButrP_N_.js",
+        "assets/auth-Rmh_jA1d.js",
         "assets/browser-polyfill-DffEbQem.js",
         "assets/_commonjsHelpers-CqkleIqs.js",
-        "assets/card-pdf-BvnrJaOr.js",
+        "assets/card-pdf-BpOItuV2.js",
         "assets/bbo-B2LMvuIO.js",
-        "assets/handoff-CMJZ0J30.js",
-        "assets/handoffToBridgeClassroom-arJa2MSS.js",
-        "assets/importCard-BZyTr-6G.js",
+        "assets/handoff-BMgaJZhX.js",
+        "assets/handoffToBridgeClassroom-Cn_JCusF.js",
+        "assets/importCard-DmLb0QIh.js",
         "assets/migrate-0bHlNDBH.js",
         "assets/ntDefenses-CN4mM3GI.js",
+        "assets/handoff-Cpeq1yFS.js",
         "assets/checkCard-_bislIg2.js",
         "assets/bbsa-D5zurKPA.js",
         "assets/bridgodexPdf-D_UTBqK9.js",
         "assets/acblPdfImport-DHv-bL7f.js",
         "assets/PDFButton-CGW04nAw.js",
         "assets/acblClassicFillPdf-CoiaoADJ.js",
-        "assets/editorContent.js-DGwhDjdu.js"
+        "assets/editorContent.js-BGQf2CMC.js"
       ],
       "use_dynamic_url": false
     }
