@@ -243,16 +243,25 @@ Things only Rick can do, in the order they block:
 2. ~~**Publish the privacy page and homepage**~~: live 2026-11-26, merged
    [bridge-craftwork-site#23](https://github.com/bridge-craftwork/bridge-craftwork-site/pull/23)
    (`/bbo-cc/` and `/bbo-cc/privacy/`). Every store checks the privacy URL.
-3. **Test on real BBO** with the store build, in Chrome, Firefox and Safari:
-   the list toolbar and ↗, a card's toolbar, Print, both PDFs, export, import
-   (adding, and the keep/replace question), and the hand-off buttons. New in
-   1.0.0 and untested live: running with **no `storage`, `downloads` or
-   `www.bridgebase.com`** permissions. The **partner notice** after an import
-   ships untested and isn't in the listing's features (Rick, 2026-11-27:
-   testing it needs more people). It sends the same request BBO's own editor
-   sends and ignores the reply, so at worst a partner doesn't see the change
-   until they reopen the card; the privacy policy still describes it, because
-   the request is made.
+3. **Test on real BBO.** *Chrome: done 2026-11-27*, by a Playwright run of the
+   store build (no `storage`, `downloads` or `www.bridgebase.com`
+   permissions) on Rick's account, 25 of 26 checks passing: the list toolbar
+   and ↗ on every row; row data from the MAIN-world script; Export my cards
+   (all 18 own and shared cards); the card tab's Export JSON, both PDFs,
+   Print (one landscape page, ACBL and V2BASIC) and both hand-offs; BBO's View
+   in the lobby panel and its ↗ Open in tab; import of an unchanged card (no
+   save), of a file with no cards, of a new card (added, settings intact), of
+   a changed card (asked, replaced, dated), and of the extension's own PDF
+   (no save); BBO's own editor Save dated by the MAIN-world script, and the
+   date kept. Writes went only to a throwaway card, deleted afterwards;
+   `www_notify.php` was blocked. The one failure: **V2BASIC cards export
+   empty** (title and key, no settings), see below.
+   *Still to do:* Firefox and Safari by hand (Edge runs the Chrome build).
+   The **partner notice** after an import ships untested and isn't in the
+   listing's features (Rick, 2026-11-27: testing it needs more people). It
+   sends the same request BBO's own editor sends and ignores the reply, so at
+   worst a partner doesn't see the change until they reopen the card; the
+   privacy policy still describes it, because the request is made.
 4. **Safari: the two `world: "MAIN"` scripts.** The Xcode converter warned that
    Safari doesn't support `world`. It warned the same about the background's
    `type: module`, which Fetch and DD use in Safari without trouble, so the
