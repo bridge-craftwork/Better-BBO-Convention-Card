@@ -18,7 +18,7 @@ Better BBO Convention Card adds the things Bridge Base Online's convention card
 manager is missing, right inside it: Account, then Convention cards, in BBO's
 web lobby in Safari.
 
-On any card:
+On a card (Print works on every card; the rest on ACBL cards, BBO's usual kind):
 • Print that fits. BBO's Print clips the right-hand column; this prints the whole card across a landscape page.
 • ACBL PDFs. Download the card as the ACBL Classic or the ACBL New convention card, filled in and ready to print or email.
 • Open in a tab. See and edit the card at full size instead of in BBO's narrow panel.
@@ -26,7 +26,7 @@ On any card:
 • Edit on Bridge Craftwork, or Save to Bridge Classroom. Open the card in the bridge-craftwork.com card editor, or in Bridge Classroom, which saves it to your account there.
 
 On your list of cards:
-• Export all your cards, and the cards partners have shared with you, in one JSON file.
+• Export all your ACBL cards, and the ACBL cards partners have shared with you, in one JSON file.
 • Import cards from a JSON file, from the bridge-craftwork.com editor's "Export for BBO" file, or from a PDF: one this extension or the bridge-craftwork.com editor made, or any filled-in ACBL convention card or Bridgodex PDF. A card that differs from one already on BBO is never replaced without asking.
 
 The extension only runs on BBO's convention card pages, and only does anything

@@ -10,7 +10,8 @@ tracks each store and what still blocks it.
 
 ## Features
 
-On a card's page:
+On a card's page (Print and Open in tab on every card type; the rest on ACBL
+cards, BBO's usual kind):
 
 - **Print (fixed)**: BBO's Print is a bare `window.print()` that clips the
   right-hand column. This prints the whole card across a landscape page.
@@ -27,8 +28,10 @@ On a card's page:
 
 On the list of cards:
 
-- **Export my cards as JSON**: all your own cards and those shared with you
-  (stock cards one at a time, from their pages).
+- **Export my cards as JSON**: all your own ACBL cards and those shared with
+  you (stock cards one at a time, from their pages). BBO's other card types
+  (basic, V2BASIC) are left out, and the export names them: only the ACBL
+  card's elements are read.
 - **Import from JSON or PDF**: this extension's export, the bridge-craftwork.com
   editor's "Export for BBO" file, or a PDF. A PDF this extension or the editor
   made carries the card inside it, with any boxes changed since; any other

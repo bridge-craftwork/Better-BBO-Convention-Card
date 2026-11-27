@@ -7,6 +7,7 @@ import {
   parseCardFetch,
   parseInnerCcXml,
   exportAllKeys,
+  nonAcblTitles,
   parseSaveStatus,
 } from '../../src/parsers/cc-xml.js'
 
@@ -15,11 +16,16 @@ const fixture = (name) =>
   readFileSync(resolve(here, '../fixtures', name), 'utf-8')
 
 describe('exportAllKeys', () => {
-  it('leaves out stock cards', () => {
+  it('leaves out stock cards, and cards that are not ACBL', () => {
     expect(exportAllKeys(parseCardList(fixture('cc_list_sample.xml')))).toEqual([
       'ACBL/N/kemistry/1399129902_4125_aam135/1399129902',
-      'V2BASIC/N/kemistry/9999_basic_solo/1',
     ])
+  })
+
+  it('names the cards it leaves out for their style, once each', () => {
+    const items = parseCardList(fixture('cc_list_sample.xml'))
+    const basic = items.find((i) => i.style === 'V2BASIC')
+    expect(nonAcblTitles([...items, { ...basic, partner: 'other' }])).toEqual([basic.title])
   })
 
   it('keeps cards shared by someone else, once per card', () => {

@@ -16,7 +16,7 @@
 // because BBO's iframe has a CSP `script-src 'self'` that forbids us
 // from inlining a <script> tag into the document ourselves.
 
-import { parseCardList, parseCardFetch, parseSaveStatus, exportAllKeys } from '../parsers/cc-xml.js'
+import { parseCardList, parseCardFetch, parseSaveStatus, exportAllKeys, nonAcblTitles } from '../parsers/cc-xml.js'
 import { cardsToJson, buildCcCudBody } from '../parsers/cc-json.js'
 import { planImport, planWrites, savedAt } from '../lib/import-plan.js'
 import { readImportFile } from '../lib/card-output.js'
@@ -218,8 +218,12 @@ async function handleExportAll(button) {
     const listItems = parseCardList(listXml)
 
     const uniqueKeys = exportAllKeys(listItems)
+    const leftOut = nonAcblTitles(listItems)
+    const leftOutNote = leftOut.length
+      ? `Only ACBL cards can be exported. Left out: ${leftOut.map((t) => `“${t}”`).join(', ')}.`
+      : ''
     if (uniqueKeys.length === 0) {
-      alert('You have no cards of your own to export. To export a stock card, open it and use Export JSON.')
+      alert(leftOutNote || 'You have no cards of your own to export. To export a stock card, open it and use Export JSON.')
       return
     }
 
@@ -240,6 +244,7 @@ async function handleExportAll(button) {
 
     const envelope = cardsToJson(cards)
     downloadJson(envelope, `bbo-cards-${auth.user}-${todayString()}.json`)
+    if (leftOutNote) alert(`Exported ${cards.length} card${cards.length === 1 ? '' : 's'}.\n\n${leftOutNote}`)
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(LOG_PREFIX, 'export failed', err)

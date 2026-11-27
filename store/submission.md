@@ -48,7 +48,7 @@ Print, back up and share your Bridge Base Online convention cards: ACBL PDFs, JS
 ```
 Better BBO Convention Card adds the things Bridge Base Online's convention card manager is missing, right inside it: Account, then Convention cards, in BBO's web lobby.
 
-On any card:
+On a card (Print works on every card; the rest on ACBL cards, BBO's usual kind):
 • Print that fits. BBO's Print clips the right-hand column; this prints the whole card across a landscape page.
 • ACBL PDFs. Download the card as the ACBL Classic or the ACBL New convention card, filled in and ready to print or email.
 • Open in a tab. See and edit the card at full size instead of in BBO's narrow panel.
@@ -56,7 +56,7 @@ On any card:
 • Edit on Bridge Craftwork, or Save to Bridge Classroom. Open the card in the bridge-craftwork.com card editor, or in Bridge Classroom, which saves it to your account there. No file to download and upload again.
 
 On your list of cards:
-• Export all your cards, and the cards partners have shared with you, in one JSON file.
+• Export all your ACBL cards, and the ACBL cards partners have shared with you, in one JSON file.
 • Import cards from a JSON file, from the bridge-craftwork.com editor's "Export for BBO" file, or from a PDF: one this extension or the bridge-craftwork.com editor made (the card travels inside it), or any filled-in ACBL convention card or Bridgodex PDF. A card that differs from one already on BBO is never replaced without asking, and the question says which copy is newer when it can tell. A card you don't own becomes a private copy.
 
 The extension only runs on BBO's convention card pages, and only does anything when you click. It talks to BBO with the session BBO's page already has; it never sees your password. A card goes to Bridge Craftwork or Bridge Classroom only when you click that button, in the link's fragment, which never reaches a server.
@@ -254,10 +254,11 @@ Things only Rick can do, in the order they block:
    a changed card (asked, replaced, dated), and of the extension's own PDF
    (no save); BBO's own editor Save dated by the MAIN-world script, and the
    date kept. Writes went only to a throwaway card, deleted afterwards;
-   `www_notify.php` was blocked. The one failure: **V2BASIC cards export
-   empty** (title and key, no settings): the parser reads only ACBL cards'
-   elements. Import already skips them, but the listing says "Export all your
-   cards"; decide before submitting.
+   `www_notify.php` was blocked. The one failure: **V2BASIC cards exported
+   empty** (title and key, no settings). Rick, 2026-11-27: no basic-card
+   support. Fixed the same day: Export my cards leaves them out and names
+   them, a basic card's page offers only Print and Open in tab, and the
+   listing says ACBL cards (rechecked live, 15/15).
    *Still to do:* Firefox and Safari by hand (Edge runs the Chrome build).
    The **partner notice** after an import ships untested and isn't in the
    listing's features (Rick, 2026-11-27: testing it needs more people). It

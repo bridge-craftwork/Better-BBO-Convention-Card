@@ -106,12 +106,17 @@ function injectToolbar() {
     bar.appendChild(openBtn)
   }
 
+  // Export, the PDFs and the hand-offs read the card's ACBL elements, so they
+  // are offered only on the ACBL card's page; BBO's other card types get the
+  // print fix and Open in tab.
+  const acbl = /\/acblcc\.html$/i.test(window.location.pathname)
+
   const exportBtn = document.createElement('button')
   exportBtn.type = 'button'
   exportBtn.textContent = 'Export JSON'
   exportBtn.title = 'Download this card as portable JSON'
   exportBtn.addEventListener('click', () => handleExport(exportBtn))
-  bar.appendChild(exportBtn)
+  if (acbl) bar.appendChild(exportBtn)
 
   const printBtn = document.createElement('button')
   printBtn.type = 'button'
@@ -120,19 +125,21 @@ function injectToolbar() {
   printBtn.addEventListener('click', () => window.print())
   bar.appendChild(printBtn)
 
-  for (const [template, name] of Object.entries(TEMPLATES)) {
-    addCardButton(bar, `PDF: ${name}`, `Download the last saved version as the ACBL ${name} card`, 'Rendering…', async (record) => {
-      const { downloadAcblPdf } = await import('../lib/card-pdf.js')
-      await downloadAcblPdf(record, template)
-    })
-  }
+  if (acbl) {
+    for (const [template, name] of Object.entries(TEMPLATES)) {
+      addCardButton(bar, `PDF: ${name}`, `Download the last saved version as the ACBL ${name} card`, 'Rendering…', async (record) => {
+        const { downloadAcblPdf } = await import('../lib/card-pdf.js')
+        await downloadAcblPdf(record, template)
+      })
+    }
 
-  addCardButton(bar, 'Edit on Bridge Craftwork', 'Open the last saved version in the card editor at bridge-craftwork.com', 'Opening…', (record) =>
-    openLink(cardEditorUrl(record))
-  )
-  addCardButton(bar, 'Save to Bridge Classroom', 'Open the last saved version in Bridge Classroom, which saves it to your account', 'Opening…', (record) =>
-    openLink(bridgeClassroomUrl(record))
-  )
+    addCardButton(bar, 'Edit on Bridge Craftwork', 'Open the last saved version in the card editor at bridge-craftwork.com', 'Opening…', (record) =>
+      openLink(cardEditorUrl(record))
+    )
+    addCardButton(bar, 'Save to Bridge Classroom', 'Open the last saved version in Bridge Classroom, which saves it to your account', 'Opening…', (record) =>
+      openLink(bridgeClassroomUrl(record))
+    )
+  }
 
   document.body.appendChild(bar)
 
