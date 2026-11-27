@@ -72,7 +72,8 @@
     "storage"
   ],
   "host_permissions": [
-    "https://webutil.bridgebase.com/v2/*"
+    "https://webutil.bridgebase.com/v2/*",
+    "https://www.bridgebase.com/v3/*"
   ],
   "web_accessible_resources": [
     {
