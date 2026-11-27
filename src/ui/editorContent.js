@@ -26,6 +26,7 @@ import {
   cardEditorUrl,
   bridgeClassroomUrl,
 } from '../lib/card-output.js'
+import { PREFERRED_TLD_KEY } from '../lib/classroom.js'
 
 const LOG_PREFIX = '[better-bbo-cc/editor]'
 
@@ -137,7 +138,12 @@ function injectToolbar() {
       openLink(cardEditorUrl(record))
     )
     addCardButton(bar, 'Save to Bridge Classroom', 'Open the last saved version in Bridge Classroom, which saves it to your account', 'Opening…', (record) =>
-      openLink(bridgeClassroomUrl(record))
+      openLink(
+        browser.storage.local
+          .get(PREFERRED_TLD_KEY)
+          .catch(() => ({}))
+          .then((stored) => bridgeClassroomUrl(record, stored?.[PREFERRED_TLD_KEY]))
+      )
     )
   }
 

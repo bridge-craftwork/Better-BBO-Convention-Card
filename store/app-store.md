@@ -68,6 +68,8 @@ session per account, so a shared login would sign reviewers out of one another.
 
 The extension asks for no permissions beyond access to webutil.bridgebase.com
 and, so its toolbar button shows as active in BBO's lobby, www.bridgebase.com/v3/
-(nothing runs there).
+(nothing runs there). On bridge-classroom.org and bridge-classroom.com it only
+notes which of the two the user visits, so Save to Bridge Classroom opens that
+one (each keeps its own sign-in).
 Its requests go only to BBO's own card pages, with the session the page already
 has.

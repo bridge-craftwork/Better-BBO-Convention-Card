@@ -113,13 +113,15 @@ with an ordinary download link, and the hand-off links are opened with
 **storage**:
 
 ```
-Remembers the user's last choices in the Print and Export PDF dialogs (ACBL Classic or New, the second page, green or black entries, fillable or flat), so the next PDF starts from them. Kept in storage.local on the device; nothing else is stored and nothing is sent anywhere.
+Remembers the user's last choices in the Print and Export PDF dialogs (ACBL Classic or New, the second page, green or black entries, fillable or flat), so the next PDF starts from them, and whether the user visits Bridge Classroom at bridge-classroom.org or bridge-classroom.com, so "Save to Bridge Classroom" opens the one they're signed in on. Kept in storage.local on the device; nothing else is stored and nothing is sent anywhere.
 ```
 
-**Host permissions**: one host, one path.
+**Host permissions**: BBO's card pages, and Bridge Classroom's two addresses.
 
 ```
-webutil.bridgebase.com/v2/ — Bridge Base Online's convention card manager and card pages, where the extension's buttons are added. Its requests go to the same BBO pages the card manager itself uses, with the session the page already has: to list, read and save the user's cards, and to tell BBO a card has changed after an import, as BBO's own editor does. No other host is requested.
+webutil.bridgebase.com/v2/ — Bridge Base Online's convention card manager and card pages, where the extension's buttons are added. Its requests go to the same BBO pages the card manager itself uses, with the session the page already has: to list, read and save the user's cards, and to tell BBO a card has changed after an import, as BBO's own editor does.
+
+bridge-classroom.org and bridge-classroom.com — a content script on Bridge Classroom's own pages stores which of the two addresses the user visits ("org" or "com", nothing else), so "Save to Bridge Classroom" opens the one they are signed in on: the two keep separate sign-ins. It reads nothing from the page and sends nothing. No other host is requested.
 ```
 
 **Content scripts in the page's world** (two, declared in the manifest with

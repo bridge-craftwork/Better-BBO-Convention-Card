@@ -37,7 +37,9 @@ It does not read anything else on the page or in your browser.
 
 Only your last choices in the Print and Export PDF dialogs (which ACBL card,
 the second page, green or black, fillable or not), so the next PDF starts from
-them. They stay in the extension's own storage on this device, and go nowhere.
+them, and whether you use Bridge Classroom at bridge-classroom.org or .com, so
+Save to Bridge Classroom opens the one you're signed in on. They stay in the
+extension's own storage on this device, and go nowhere.
 Exports and PDFs are made in your browser and saved where your browser saves
 downloads. A save date is kept
 inside each card you save in Bridge Base's editor, on Bridge Base, so that an
@@ -51,7 +53,7 @@ import can tell which copy is newer.
   as Bridge Base's editor does after a save, so your partners see the new version.
 - **Edit on Bridge Craftwork**, when you click it, opens that one card in the
   card editor at bridge-craftwork.com. **Save to Bridge Classroom** opens it in
-  Bridge Classroom (bridge-classroom.org), which saves it to your account there
+  Bridge Classroom (bridge-classroom.org, or .com if that's where you use it), which saves it to your account there
   if you are signed in; the
   [Bridge Classroom privacy policy](https://bridge-classroom.org/privacy#extension)
   covers it from there. Either way the card travels in the part of the link
@@ -67,7 +69,8 @@ nothing is sold or shared.
 |---|---|
 | Site access to `webutil.bridgebase.com/v2/*` | Bridge Base Online's convention card pages, the only pages it works on |
 | Safari only: site access to `www.bridgebase.com/v3/*` | BBO's lobby, which holds the card pages. Nothing runs there; Safari greys out the extension's toolbar button on any site it can't reach |
-| Storage | Remembers your Print and Export PDF choices on this device |
+| Site access to `bridge-classroom.org` and `bridge-classroom.com` | Notes which of the two you visit Bridge Classroom at, so Save to Bridge Classroom opens that one. Nothing is read from those pages |
+| Storage | Remembers your Print and Export PDF choices, and that Bridge Classroom address, on this device |
 
 It asks for no other permissions.
 
