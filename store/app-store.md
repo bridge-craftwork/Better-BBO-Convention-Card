@@ -20,7 +20,7 @@ web lobby in Safari.
 
 On a card (Print works on every card; the rest on ACBL cards, BBO's usual kind):
 • Print that fits. BBO's Print clips the right-hand column; this prints the whole card across a landscape page.
-• ACBL PDFs. Download the card as the ACBL Classic or the ACBL New convention card, filled in and ready to print or email, with what the card says in green as BBO shows it (or in black).
+• ACBL PDFs. Print or download the card as the ACBL Classic or the ACBL New convention card, filled in, with its notes or the ACBL scoresheet on the back if you like, what it says in green as BBO shows it (or in black), flat or fillable. Your choices are remembered.
 • Open in a tab. See and edit the card at full size instead of in BBO's narrow panel.
 • Export JSON. Save a copy of the card in a portable format.
 • Edit on Bridge Craftwork, or Save to Bridge Classroom. Open the card in the bridge-craftwork.com card editor, or in Bridge Classroom, which saves it to your account there.
@@ -62,7 +62,7 @@ https://www.bridgebase.com (Sign up). We don't supply ours: BBO allows only one
 session per account, so a shared login would sign reviewers out of one another.
 
 1. Sign in at https://www.bridgebase.com/v3/ (the web lobby). On the right, open Account, then Convention cards. Above the list of cards a toolbar appears: "Export my cards as JSON" and "Import from JSON or PDF". Each card row has a ↗ button that opens it in a new tab.
-2. Click any card, then View (one of BBO's stock cards is fine). The card page gets a toolbar at the top right: Print (fixed) fits the whole card across a landscape page; PDF: Classic and PDF: New download the card as the ACBL convention cards; Export JSON downloads it; Edit on Bridge Craftwork and Save to Bridge Classroom open it on those sites.
+2. Click any card, then View (one of BBO's stock cards is fine). The card page gets a toolbar at the top right: Print… prints the card as an ACBL card, or this page fitted to one landscape page; Export PDF… downloads it as the ACBL Classic or New card; Export JSON downloads it; Edit on Bridge Craftwork and Save to Bridge Classroom open it on those sites.
 3. Back on the list, "Import from JSON or PDF" with the file from step 2 adds the card to the account. Importing a card that already exists with different settings asks whether to keep, replace or keep both.
 
 The extension asks for no permissions beyond access to webutil.bridgebase.com.

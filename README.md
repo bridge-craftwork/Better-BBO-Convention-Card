@@ -13,11 +13,13 @@ tracks each store and what still blocks it.
 On a card's page (Print and Open in tab on every card type; the rest on ACBL
 cards, BBO's usual kind):
 
-- **Print (fixed)**: BBO's Print is a bare `window.print()` that clips the
-  right-hand column. This prints the whole card across a landscape page.
-- **ACBL PDFs**: download the card as the ACBL Classic or New convention card,
-  what it says in green as BBO shows it (untick **Green ink** for black),
-  rendered in the browser by the
+- **Print…** and **Export PDF…** ask first, as the bridge-craftwork.com editor
+  does: ACBL Classic or New, what goes on the second page (notes, or the ACBL
+  scoresheet), green or black entries, and, for Export, fillable or flat. The
+  answers are remembered on this device. Print can also print the page itself:
+  BBO's Print is a bare `window.print()` that clips the right-hand column, and
+  this fits the whole card on one landscape page. The PDFs are rendered in the
+  browser by the
   [convention-card](https://github.com/bridge-craftwork/convention-card) library.
 - **Open in tab**: view or edit the card at full size instead of in BBO's
   narrow iframe.
@@ -43,8 +45,9 @@ On the list of cards:
   (`www_notify.php`), so partners pick up the change.
 - **↗** on each row opens that card in a new tab.
 
-It asks for no API permissions, only access to `webutil.bridgebase.com/v2/`,
-where BBO's card pages live. No analytics, no storage, no servers of its own.
+It asks for access to `webutil.bridgebase.com/v2/`, where BBO's card pages
+live, and for `storage`, to remember the PDF dialog's answers on your device.
+No analytics, no servers of its own.
 See the [privacy policy](store/privacy.md).
 
 ## Development

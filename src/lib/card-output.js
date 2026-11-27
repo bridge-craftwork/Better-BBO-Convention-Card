@@ -6,8 +6,6 @@ import { parseCardFetch } from '../parsers/cc-xml.js'
 import { SAVED_FIELD } from './import-plan.js'
 import { ownBytes } from './bytes.js'
 
-export const TEMPLATES = { classic: 'Classic', new: 'New' }
-
 // The fragment of these links never reaches a server (the library's DECISIONS.md, 20).
 export const CARD_EDITOR = 'https://bridge-craftwork.com/card/'
 

@@ -50,7 +50,7 @@ Better BBO Convention Card adds the things Bridge Base Online's convention card 
 
 On a card (Print works on every card; the rest on ACBL cards, BBO's usual kind):
 • Print that fits. BBO's Print clips the right-hand column; this prints the whole card across a landscape page.
-• ACBL PDFs. Download the card as the ACBL Classic or the ACBL New convention card, filled in and ready to print or email, with what the card says in green as BBO shows it (or in black).
+• ACBL PDFs. Print or download the card as the ACBL Classic or the ACBL New convention card, filled in, with its notes or the ACBL scoresheet on the back if you like, what it says in green as BBO shows it (or in black), flat or fillable. Your choices are remembered.
 • Open in a tab. See and edit the card at full size instead of in BBO's narrow panel.
 • Export JSON. Save a copy of the card in a portable format.
 • Edit on Bridge Craftwork, or Save to Bridge Classroom. Open the card in the bridge-craftwork.com card editor, or in Bridge Classroom, which saves it to your account there. No file to download and upload again.
@@ -104,11 +104,17 @@ Adds printing, PDF downloads, import and export, and full-size viewing to the co
 
 ## Permission justifications
 
-The manifest asks for **no API permissions** at all: no `storage`, `tabs`,
-`downloads` or `scripting`. (1.0.0 dropped `storage` and `downloads`, which
-earlier builds declared and never used, and the `www.bridgebase.com` host.)
-Files are saved with an ordinary download link, and the hand-off links are
-opened with `tabs.create`, which needs no permission.
+The manifest asks for one API permission, `storage`, and no `tabs`,
+`downloads` or `scripting`. (1.0.0 dropped `downloads`, which earlier builds
+declared and never used, and the `www.bridgebase.com` host.) Files are saved
+with an ordinary download link, and the hand-off links are opened with
+`tabs.create`, which needs no permission.
+
+**storage**:
+
+```
+Remembers the user's last choices in the Print and Export PDF dialogs (ACBL Classic or New, the second page, green or black entries, fillable or flat), so the next PDF starts from them. Kept in storage.local on the device; nothing else is stored and nothing is sent anywhere.
+```
 
 **Host permissions**: one host, one path.
 
@@ -180,7 +186,7 @@ Paste for Firefox and Apple. Chrome's test instructions field takes 500
 characters, so use the short version there:
 
 ```
-Needs a Bridge Base Online account; a free one works (bridgebase.com, Sign up). In BBO's web lobby open Account (right) > Convention cards. A toolbar appears above the list (Export my cards, Import). Open any card, a stock card is fine: its toolbar has Open in tab, Export JSON, Print (fixed), PDF: Classic, PDF: New, Edit on Bridge Craftwork, Save to Bridge Classroom. Import the exported JSON to see the replace/keep question.
+Needs a Bridge Base Online account; a free one works (bridgebase.com, Sign up). In BBO's web lobby open Account (right) > Convention cards. A toolbar appears above the list (Export my cards, Import). Open any card, a stock card is fine: its toolbar has Open in tab, Export JSON, Print…, Export PDF…, Edit on Bridge Craftwork, Save to Bridge Classroom. Import the exported JSON to see the replace/keep question.
 ```
 
 The full version:
@@ -190,13 +196,13 @@ This extension works inside Bridge Base Online's convention card manager, which 
 
 1. Sign in at https://www.bridgebase.com/v3/ (the web lobby). On the right, open Account, then Convention cards. Above the list of cards a toolbar appears: "Export my cards as JSON" and "Import from JSON or PDF". Each card row has a ↗ button that opens it in a new tab.
 2. Click any card, then View (one of BBO's stock cards is fine). The card page gets a toolbar at the top right:
-   - Print (fixed): the print preview fits the whole card across a landscape page. BBO's own print cuts off the right-hand column.
-   - PDF: Classic and PDF: New download the card filled into the ACBL Classic or New convention card.
+   - Print…: asks which card to print (ACBL Classic, ACBL New, or this page as BBO shows it, fitted to one landscape page; BBO's own print cuts off the right-hand column), the second page, and green or black entries.
+   - Export PDF…: asks the same, plus fillable or flat, then downloads the card filled into the ACBL Classic or New convention card. The answers are remembered for next time.
    - Export JSON downloads the card.
    - Edit on Bridge Craftwork opens the card in the editor at bridge-craftwork.com; Save to Bridge Classroom opens it in Bridge Classroom. The card travels in the link's fragment.
-3. Back on the list, "Import from JSON or PDF" with the file from step 2 (or a PDF from PDF: Classic) adds the card to the account. Importing a file whose card already exists on the account, with different settings, asks whether to keep, replace or keep both. A new account starts with no cards of its own, so the first import adds one.
+3. Back on the list, "Import from JSON or PDF" with the file from step 2 (or a PDF from Export PDF…) adds the card to the account. Importing a file whose card already exists on the account, with different settings, asks whether to keep, replace or keep both. A new account starts with no cards of its own, so the first import adds one.
 
-The extension asks for no API permissions. Its requests go only to BBO's own card pages on webutil.bridgebase.com, with the session the page already has.
+The extension's one API permission, storage, remembers the PDF dialog's answers on the device. Its requests go only to BBO's own card pages on webutil.bridgebase.com, with the session the page already has.
 ```
 
 **Apple: add this.** As with Fetch and DD, a reviewer who skips it sees

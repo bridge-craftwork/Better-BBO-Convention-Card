@@ -4,7 +4,8 @@
 import browser from 'webextension-polyfill'
 import { ownBytes } from './bytes.js'
 import { setAssetLoader } from '@bridge-craftwork/convention-card/js/assets.js'
-import { downloadAcblPdf } from '@bridge-craftwork/convention-card/js/acblClassicFillPdf.js'
+import { downloadAcblPdf, renderAcblPdfBytes } from '@bridge-craftwork/convention-card/js/acblClassicFillPdf.js'
+import { notesPageContent } from '@bridge-craftwork/convention-card/js/notesPage.js'
 import classicUrl from '@bridge-craftwork/convention-card/assets/templates/acbl-classic-2023.pdf?url'
 import newUrl from '@bridge-craftwork/convention-card/assets/templates/acbl-new.pdf?url'
 import fontUrl from '@bridge-craftwork/convention-card/assets/fonts/BarlowCondensed-Regular.ttf?url'
@@ -22,4 +23,9 @@ setAssetLoader({
   boldFont: () => load(boldFontUrl),
 })
 
-export { downloadAcblPdf }
+/** Whether the card has anything for a notes page. */
+export function cardHasNotes(record) {
+  return notesPageContent(record).blocks.length > 0
+}
+
+export { downloadAcblPdf, renderAcblPdfBytes }

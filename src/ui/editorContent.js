@@ -19,8 +19,9 @@ import { applyPrintFix } from './print-fix.js'
 import { parseCardFetch } from '../parsers/cc-xml.js'
 import { cardsToJson } from '../parsers/cc-json.js'
 import { ENDPOINTS, cardPageParams } from '../lib/auth.js'
+import { askPdfOptions } from './pdf-dialog.js'
+import { openPrintTab, printBytes } from './print-pdf.js'
 import {
-  TEMPLATES,
   recordFromFetch,
   cardEditorUrl,
   bridgeClassroomUrl,
@@ -118,31 +119,19 @@ function injectToolbar() {
   exportBtn.addEventListener('click', () => handleExport(exportBtn))
   if (acbl) bar.appendChild(exportBtn)
 
-  const printBtn = document.createElement('button')
-  printBtn.type = 'button'
-  printBtn.textContent = 'Print (fixed)'
-  printBtn.title = 'Print this card using the landscape fit-to-page layout'
-  printBtn.addEventListener('click', () => window.print())
-  bar.appendChild(printBtn)
-
-  if (acbl) {
-    // The PDFs print what the card says in green, as BBO's card shows it,
-    // unless this is unticked.
-    const ink = document.createElement('label')
-    ink.title = 'Print what the card says in green, as BBO shows it; untick for black'
-    ink.style.cssText = 'display:inline-flex;align-items:center;gap:3px;cursor:pointer'
-    const inkBox = document.createElement('input')
-    inkBox.type = 'checkbox'
-    inkBox.checked = true
-    ink.append(inkBox, 'Green ink')
-    bar.appendChild(ink)
-
-    for (const [template, name] of Object.entries(TEMPLATES)) {
-      addCardButton(bar, `PDF: ${name}`, `Download the last saved version as the ACBL ${name} card`, 'Rendering…', async (record) => {
-        const { downloadAcblPdf } = await import('../lib/card-pdf.js')
-        await downloadAcblPdf(record, template, { ink: inkBox.checked ? 'green' : 'black' })
-      })
-    }
+  if (!acbl) {
+    const printBtn = document.createElement('button')
+    printBtn.type = 'button'
+    printBtn.textContent = 'Print (fixed)'
+    printBtn.title = 'Print this card using the landscape fit-to-page layout'
+    printBtn.addEventListener('click', () => window.print())
+    bar.appendChild(printBtn)
+  } else {
+    // Print and Export PDF ask first, as the bridge-craftwork.com editor does:
+    // which card, the second page, green or black, and (Export) fillable.
+    // Print can also print this page, BBO's own layout, with the print fix.
+    addDialogButton(bar, 'Print…', 'Print the card: an ACBL card, or this page as BBO shows it', 'print')
+    addDialogButton(bar, 'Export PDF…', 'Download the last saved version as an ACBL card', 'export')
 
     addCardButton(bar, 'Edit on Bridge Craftwork', 'Open the last saved version in the card editor at bridge-craftwork.com', 'Opening…', (record) =>
       openLink(cardEditorUrl(record))
@@ -159,6 +148,49 @@ function injectToolbar() {
   new ResizeObserver(() => {
     document.documentElement.style.setProperty('--better-bbo-cc-toolbar-height', `${bar.offsetHeight + 14}px`)
   }).observe(bar)
+}
+
+// A button that asks how to make the PDF, then prints or downloads it. The
+// card is fetched while the question is open, for the notes hint.
+function addDialogButton(bar, label, title, action) {
+  const button = document.createElement('button')
+  button.type = 'button'
+  button.textContent = label
+  button.title = title
+  button.addEventListener('click', async () => {
+    const record = fetchThisCard().then(({ xml }) => recordFromFetch(xml))
+    record.catch(() => {})
+    const pdf = import('../lib/card-pdf.js')
+    const options = await askPdfOptions({
+      action,
+      cardName: record.then((r) => r.name),
+      hasNotes: Promise.all([pdf, record]).then(([lib, r]) => lib.cardHasNotes(r)),
+    })
+    if (!options) return
+    if (options.template === 'page') {
+      window.print()
+      return
+    }
+    // In the click still: Safari prints from a tab, which must open now.
+    const tab = action === 'print' ? openPrintTab() : null
+    button.disabled = true
+    button.textContent = action === 'print' ? 'Preparing…' : 'Rendering…'
+    try {
+      const { downloadAcblPdf, renderAcblPdfBytes } = await pdf
+      const settings = { secondPage: options.secondPage, ink: options.green ? 'green' : 'black', flatten: !options.fillable }
+      if (action === 'print') printBytes(await renderAcblPdfBytes(await record, options.template, settings), tab)
+      else await downloadAcblPdf(await record, options.template, settings)
+    } catch (err) {
+      tab?.close()
+      // eslint-disable-next-line no-console
+      console.error(LOG_PREFIX, label, err)
+      alert(`${label.replace('…', '')} failed: ${err.message}`)
+    } finally {
+      button.disabled = false
+      button.textContent = label
+    }
+  })
+  bar.appendChild(button)
 }
 
 function addCardButton(bar, label, title, busy, action) {

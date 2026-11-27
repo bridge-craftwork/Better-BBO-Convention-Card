@@ -1,6 +1,6 @@
 # Privacy Policy — Better BBO Convention Card
 
-**Last updated:** 25 November 2026
+**Last updated:** 27 November 2026
 
 > The published policy is **<https://bridge-craftwork.com/bbo-cc/privacy/>**, the
 > URL the store listings point at, served from `site/bbo-cc/privacy/index.html`
@@ -35,8 +35,11 @@ It does not read anything else on the page or in your browser.
 
 ## What it keeps
 
-Nothing. The extension stores no data at all. Exports and PDFs are made in
-your browser and saved where your browser saves downloads. A save date is kept
+Only your last choices in the Print and Export PDF dialogs (which ACBL card,
+the second page, green or black, fillable or not), so the next PDF starts from
+them. They stay in the extension's own storage on this device, and go nowhere.
+Exports and PDFs are made in your browser and saved where your browser saves
+downloads. A save date is kept
 inside each card you save in Bridge Base's editor, on Bridge Base, so that an
 import can tell which copy is newer.
 
@@ -63,6 +66,7 @@ nothing is sold or shared.
 | Permission | Why |
 |---|---|
 | Site access to `webutil.bridgebase.com/v2/*` | Bridge Base Online's convention card pages, the only pages it works on |
+| Storage | Remembers your Print and Export PDF choices on this device |
 
 It asks for no other permissions.
 

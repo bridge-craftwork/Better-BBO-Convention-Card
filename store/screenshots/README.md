@@ -12,7 +12,7 @@ refuses a competitor's browser in a screenshot).
 |---|---|
 | `1-card-list.png` | BBO's convention card list with the extension's toolbar (Export my cards, Import) and the ↗ on each row. **Lead with this one.** |
 | `2-card-page.png` | A card opened full size in its own tab, with the extension's toolbar at top right |
-| `3-print.png` | What Print (fixed) prints: the whole card on one landscape page |
+| `3-print.png` | What Print prints for "This page, as BBO shows it": the whole card on one landscape page |
 | `4-acbl-pdf.png` | The card as the ACBL Classic PDF |
 | `5-import.png` | The import question for a card that differs from one on BBO: keep, replace or keep both, with which copy is newer |
 

@@ -68,6 +68,7 @@
       "world": "MAIN"
     }
   ],
+  "permissions": ["storage"],
   "host_permissions": [
     "https://webutil.bridgebase.com/v2/*"
   ]
