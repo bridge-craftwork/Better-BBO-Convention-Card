@@ -35,7 +35,7 @@ becomes the template.
 | Upload the build: `scripts/upload-apple.sh` (fresh build number each run). Apple takes 15–30 minutes to process it | Claude | done 27 Nov, build 202611271833 |
 | Set the version page to the manifest's version: a new record starts at **1.0**, and the listing script only attaches a build whose version matches. One API call: PATCH `/v1/appStoreVersions/<id>` `versionString` | Claude | done 27 Nov (1.0 → 1.0.0) |
 | Listing: `scripts/app-store-listing.mjs` (try `--dry-run` first) from `store/app-store.md`: text, URLs, review notes, screenshots, category, age rating, free price, China mainland off | Claude | done 27 Nov |
-| Attach the build once processed: `scripts/app-store-listing.mjs --only build` | Claude | |
+| Attach the build once processed: `scripts/app-store-listing.mjs --only build` | Claude | done 27 Nov |
 | App Privacy ("Data Not Collected"): the API can't set it | Rick | |
 | Add for Review ▸ Submit | Rick | |
 
