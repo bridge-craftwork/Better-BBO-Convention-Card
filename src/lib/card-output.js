@@ -4,8 +4,8 @@
 
 import { parseCardFetch } from '../parsers/cc-xml.js'
 import { SAVED_FIELD } from './import-plan.js'
-
-export const TEMPLATES = { classic: 'Classic', new: 'New' }
+import { ownBytes } from './bytes.js'
+import { bridgeClassroomBase } from './classroom.js'
 
 // The fragment of these links never reaches a server (the library's DECISIONS.md, 20).
 export const CARD_EDITOR = 'https://bridge-craftwork.com/card/'
@@ -22,14 +22,21 @@ export async function recordFromFetch(xml) {
 
 /** The URL that opens `record` in the card editor at bridge-craftwork.com. */
 export async function cardEditorUrl(record) {
-  const { encodeCardForUrl } = await import('@bridge-craftwork/convention-card/js/handoff.js')
-  return `${CARD_EDITOR}#import=${await encodeCardForUrl(record)}`
+  const { encodeCardForUrl } = await import('./handoff.js')
+  return `${CARD_EDITOR}#import=${encodeCardForUrl(record)}`
 }
 
 /** The URL that hands `record` to Bridge Classroom, which saves it once signed in. */
-export async function bridgeClassroomUrl(record) {
-  const lib = await import('@bridge-craftwork/convention-card/web/src/handoffToBridgeClassroom.js')
-  return lib.bridgeClassroomUrl(record)
+// As convention-card's web/src/handoffToBridgeClassroom.js builds it, with our
+// encoder, at the Bridge Classroom address the user visits (lib/classroom.js).
+export async function bridgeClassroomUrl(record, tld = 'org') {
+  const { encodeCardForUrl } = await import('./handoff.js')
+  const payload = encodeCardForUrl({
+    name: record.name || null,
+    description: record.description || null,
+    card_data: record.card_data || {},
+  })
+  return `${bridgeClassroomBase(tld)}#/convention-card?import=${payload}`
 }
 
 const isPdf = (bytes) => String.fromCharCode(...bytes.subarray(0, 4)) === '%PDF'
@@ -58,7 +65,7 @@ export async function cardFromPdf(bytes) {
 
 /** What an import file holds: `{ cards, exported_at?, notes }`, from our JSON or a PDF. */
 export async function readImportFile(file) {
-  const bytes = new Uint8Array(await file.arrayBuffer())
+  const bytes = ownBytes(await file.arrayBuffer())
   if (isPdf(bytes)) {
     const { card, notes } = await cardFromPdf(bytes)
     return { cards: [card], notes }

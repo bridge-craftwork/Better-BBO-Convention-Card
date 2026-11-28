@@ -1,0 +1,1 @@
+import{b as r}from"./browser-polyfill-CZ_dLIqp.js";import{P as s}from"./classroom-BFFu9rzf.js";const o=window.location.hostname;(o==="bridge-classroom.org"||o==="bridge-classroom.com")&&r.storage.local.set({[s]:o.endsWith(".org")?"org":"com"}).catch(()=>{});

@@ -56,8 +56,15 @@ describe('links', () => {
     const record = await recordFromFetch(xml)
     const url = await bridgeClassroomUrl(record)
     const [base, data] = url.split('#/convention-card?import=')
-    expect(base).toBe('https://bridge-classroom.com/solo-practice-app/')
+    expect(base).toBe('https://bridge-classroom.org/solo-practice-app/')
     expect((await decodeCardFromUrl(data)).card_data.metadata.partner_names).toBe('Rick and Art')
+  })
+
+  it('opens Bridge Classroom at the address the user visits', async () => {
+    const record = await recordFromFetch(xml)
+    expect(await bridgeClassroomUrl(record, 'com')).toMatch(/^https:\/\/bridge-classroom\.com\/solo-practice-app\/#/)
+    expect(await bridgeClassroomUrl(record, 'org')).toMatch(/^https:\/\/bridge-classroom\.org\/solo-practice-app\/#/)
+    expect(await bridgeClassroomUrl(record, 'evil.example')).toMatch(/^https:\/\/bridge-classroom\.org\//)
   })
 })
 

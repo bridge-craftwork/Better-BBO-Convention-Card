@@ -43,14 +43,27 @@ export function parseCardList(xmlString, { parser = DEFAULT_PARSER } = {}) {
 }
 
 /**
- * The keys of the cards "Export all" takes: the user's own and those shared
- * with them, not BBO's stock cards (those can still be exported one at a time
- * from the card's page). De-duplicated: BBO lists a card once per partner.
+ * The keys of the cards "Export all" takes: the user's own ACBL cards and those
+ * shared with them, not BBO's stock cards (those can still be exported one at
+ * a time from the card's page). De-duplicated: BBO lists a card once per
+ * partner. Other styles are left out: the parser reads only the ACBL card's
+ * elements, so they would export as a title with nothing in it.
  */
 export function exportAllKeys(listItems) {
   return Array.from(
-    new Set(listItems.filter((i) => !i.stock).map((i) => i.cc_key))
+    new Set(listItems.filter((i) => !i.stock && isAcbl(i)).map((i) => i.cc_key))
   )
+}
+
+/** Titles of the user's own cards that "Export all" leaves out for their style, once each. */
+export function nonAcblTitles(listItems) {
+  const seen = new Map()
+  for (const i of listItems) if (!i.stock && !isAcbl(i)) seen.set(i.cc_key, i.title)
+  return [...new Set(seen.values())]
+}
+
+function isAcbl(item) {
+  return (item.style || 'ACBL') === 'ACBL'
 }
 
 /**

@@ -1,0 +1,11 @@
+{
+  "bundle_id": "org.bridge-classroom.better-bbo-convention-card",
+  "tagline": "Print, back up and share BBO convention cards",
+  "priority": "high",
+  "extension_manifest": "manifest.json",
+  "next_step": "All four stores submitted 27 Nov; waiting on reviews",
+  "stores": {
+    "chrome": "ebngdpiafphdhbhcbljafpdanemhofgf",
+    "firefox": "better-bbo-convention-card"
+  }
+}

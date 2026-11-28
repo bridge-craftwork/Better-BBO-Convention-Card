@@ -3,8 +3,10 @@
 // lobby embeds in Account → Convention cards.
 //
 // Adds:
-//   - "↗" open-in-tab button on each card row
-//   - Top toolbar with "Export my cards as JSON" and "Import from JSON or PDF"
+//   - Print, Save PDF and View icons on each card row (as Bridge Classroom's
+//     card table has); View opens the card in a new tab
+//   - "Import from PDF or JSON" and "Export my cards as JSON", next to BBO's
+//     New ACBL Convention Card button
 //     (the rules for cards already on BBO are in ../lib/import-plan.js)
 //
 // Per-row card metadata lives in jQuery `$(row).data('cc_data')` in the
@@ -16,19 +18,46 @@
 // because BBO's iframe has a CSP `script-src 'self'` that forbids us
 // from inlining a <script> tag into the document ourselves.
 
-import { parseCardList, parseCardFetch, parseSaveStatus, exportAllKeys } from '../parsers/cc-xml.js'
+import { parseCardList, parseCardFetch, parseSaveStatus, exportAllKeys, nonAcblTitles } from '../parsers/cc-xml.js'
 import { cardsToJson, buildCcCudBody } from '../parsers/cc-json.js'
 import { planImport, planWrites, savedAt } from '../lib/import-plan.js'
-import { readImportFile } from '../lib/card-output.js'
+import { readImportFile, recordFromFetch } from '../lib/card-output.js'
+import { runPdfAction } from './pdf-flow.js'
+import { installListOrder } from './list-order.js'
 import { askAboutCard } from './import-dialog.js'
 import { ENDPOINTS } from '../lib/auth.js'
 import { readAuthFromLocation } from '../lib/auth.js'
 import { openCardInTab } from './open-in-tab.js'
+import { notifyUrl, buildSavedNoticeBody, partnersToNotify } from '../lib/notify.js'
 
 const LOG_PREFIX = '[better-bbo-cc/list]'
 
 const TOOLBAR_ID = 'better-bbo-cc-list-toolbar'
-const OPEN_BUTTON_CLASS = 'better-bbo-cc-open-btn'
+const BUTTON_COLUMN_CLASS = 'better-bbo-cc-button-column'
+const STANDALONE_CLASS = 'better-bbo-cc-standalone'
+const ROW_ACTIONS_CLASS = 'better-bbo-cc-row-actions'
+const ROW_BUTTON_CLASS = 'better-bbo-cc-row-btn'
+
+// Lucide's shapes, as the convention-card library's card table draws them
+const ROW_ACTIONS = [
+  {
+    id: 'print',
+    pdf: true,
+    title: (name) => `Print ${name}`,
+    icon: '<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+  },
+  {
+    id: 'export',
+    pdf: true,
+    title: (name) => `Save ${name} as a PDF`,
+    icon: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
+  },
+  {
+    id: 'view',
+    title: (name) => `View ${name} in a new tab`,
+    icon: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  },
+]
 const ROW_DATA_ATTR = 'data-bbcc-card'
 const STYLE_ID = 'better-bbo-cc-list-styles'
 
@@ -40,12 +69,13 @@ function main() {
   decorateExistingRows()
   observeListMutations()
   installOpenButtonCaptureGuard()
+  installListOrder()
   // eslint-disable-next-line no-console
   console.log(LOG_PREFIX, 'initialized')
 }
 
 /**
- * Intercept clicks on our ↗ button in capture phase, before any
+ * Intercept clicks on our row icons in capture phase, before any
  * bubble-phase handler can fire. The row anchor (`a.card-item`) has
  * Bootstrap's `data-toggle="modal"` attribute, which triggers a
  * delegated bubble-phase click handler on `document` that opens the
@@ -57,7 +87,7 @@ function installOpenButtonCaptureGuard() {
   document.addEventListener(
     'click',
     (ev) => {
-      const btn = ev.target.closest?.(`.${OPEN_BUTTON_CLASS}`)
+      const btn = ev.target.closest?.(`.${ROW_BUTTON_CLASS}`)
       if (!btn) return
       ev.preventDefault()
       ev.stopPropagation()
@@ -70,15 +100,32 @@ function installOpenButtonCaptureGuard() {
         console.warn(LOG_PREFIX, 'no cc_data yet on row', row)
         return
       }
-      openCardInTab({
-        style: card.type,
-        cc_key: card.cc_key,
-        partner: card.partner ?? '',
-        edit: false,
-      })
+      const action = btn.dataset.action
+      if (action === 'view') {
+        openCardInTab({ style: card.type, cc_key: card.cc_key, partner: card.partner ?? '', edit: false })
+        return
+      }
+      rowPdf(btn, card, action)
     },
     true // capture
   )
+}
+
+// Print or Save PDF from a row, as the card page's Print… and Export PDF… do.
+async function rowPdf(btn, card, action) {
+  if (btn.getAttribute('aria-busy') === 'true') return
+  const label = action === 'print' ? 'Print' : 'Save PDF'
+  try {
+    await runPdfAction({
+      action,
+      record: postForm(ENDPOINTS.fetch, { key: card.cc_key, request_id: String(Date.now()), v3u: 'BBO1' }).then(recordFromFetch),
+      onBusy: (busy) => btn.setAttribute('aria-busy', String(busy)),
+    })
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(LOG_PREFIX, label, err)
+    alert(`${label} failed: ${err.message}`)
+  }
 }
 
 function installStyles() {
@@ -86,75 +133,88 @@ function installStyles() {
   const style = document.createElement('style')
   style.id = STYLE_ID
   style.textContent = `
-    #${TOOLBAR_ID} {
+    /* BBO's New card column, widened to the row, with our group after it */
+    .${BUTTON_COLUMN_CLASS} {
+      flex: 1 1 auto;
+      max-width: none;
       display: flex;
+      flex-wrap: wrap;
+      align-items: center;
       gap: 8px;
+    }
+    #${TOOLBAR_ID} { display: inline-flex; flex-wrap: wrap; gap: 8px; }
+    #${TOOLBAR_ID} button:disabled { opacity: 0.5; cursor: progress; }
+    #${TOOLBAR_ID}.${STANDALONE_CLASS} {
+      display: flex;
       padding: 8px 12px;
       background: #f4f4f4;
       border-bottom: 1px solid #ccc;
-      font: 13px/1.4 system-ui, sans-serif;
-    }
-    #${TOOLBAR_ID} button {
-      cursor: pointer;
-      padding: 4px 10px;
-      border: 1px solid #888;
-      background: #fff;
-      border-radius: 3px;
-    }
-    #${TOOLBAR_ID} button:disabled {
-      opacity: 0.5;
-      cursor: progress;
     }
     a.card-item { position: relative; }
-    .${OPEN_BUTTON_CLASS} {
+    .${ROW_ACTIONS_CLASS} {
       position: absolute;
       top: 50%;
       right: 12px;
       transform: translateY(-50%);
-      padding: 2px 8px;
-      border: 1px solid #888;
-      background: #fff;
-      color: #333;
-      text-decoration: none;
-      border-radius: 3px;
-      font: 14px/1.4 system-ui, sans-serif;
-      cursor: pointer;
+      display: inline-flex;
+      gap: 4px;
       z-index: 2;
     }
-    .${OPEN_BUTTON_CLASS}:hover { background: #eef; }
+    .${ROW_BUTTON_CLASS} {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 6px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #fff;
+      color: #6b7280;
+      cursor: pointer;
+      line-height: 0;
+    }
+    .${ROW_BUTTON_CLASS}:hover { color: #2d6a4f; border-color: #40916c; }
+    .${ROW_BUTTON_CLASS}[aria-busy="true"] { opacity: .5; cursor: progress; }
+    /* PDFs are ACBL cards only; until the row's details arrive, View alone. */
+    a.card-item:not([${ROW_DATA_ATTR}*='"type":"ACBL"']) .${ROW_BUTTON_CLASS}[data-pdf] { display: none; }
   `
   document.head.appendChild(style)
 }
 
+// Our buttons go on BBO's own button row, after New ACBL Convention Card, as
+// a group that wraps onto its own line when the panel is too narrow. Without
+// that row (BBO changed its page), a bar of their own at the top.
 function ensureToolbar() {
   if (document.getElementById(TOOLBAR_ID)) return
 
-  const toolbar = document.createElement('div')
+  const toolbar = document.createElement('span')
   toolbar.id = TOOLBAR_ID
-
-  const label = document.createElement('span')
-  label.textContent = 'Better BBO CC:'
-  label.style.alignSelf = 'center'
-  label.style.fontWeight = 'bold'
-  toolbar.appendChild(label)
-
-  const exportAll = document.createElement('button')
-  exportAll.type = 'button'
-  exportAll.textContent = 'Export my cards as JSON'
-  exportAll.title =
-    'Download your own cards and cards shared with you. Stock cards are left out: export one from its own page.'
-  exportAll.addEventListener('click', () => handleExportAll(exportAll))
-  toolbar.appendChild(exportAll)
 
   const importBtn = document.createElement('button')
   importBtn.type = 'button'
-  importBtn.textContent = 'Import from JSON or PDF'
+  importBtn.className = 'btn btn-secondary'
+  importBtn.textContent = 'Import from PDF or JSON'
   importBtn.title =
-    'Add cards from a previously-exported JSON file or an ACBL card PDF. You are asked before a card of yours is replaced; a card you don\'t own becomes a private copy.'
+    'Better BBO CC: add cards from an ACBL card PDF or an exported JSON file. You are asked before a card of yours is replaced; a card you don\'t own becomes a private copy.'
   importBtn.addEventListener('click', () => handleImport(importBtn))
   toolbar.appendChild(importBtn)
 
-  document.body.insertBefore(toolbar, document.body.firstChild)
+  const exportAll = document.createElement('button')
+  exportAll.type = 'button'
+  exportAll.className = 'btn btn-secondary'
+  exportAll.textContent = 'Export my cards as JSON'
+  exportAll.title =
+    'Better BBO CC: download your own cards and cards shared with you. Stock cards are left out: export one from its own page.'
+  exportAll.addEventListener('click', () => handleExportAll(exportAll))
+  toolbar.appendChild(exportAll)
+
+  const newCard = document.getElementById('NewCard')
+  const column = newCard?.parentElement
+  if (column) {
+    column.classList.add(BUTTON_COLUMN_CLASS)
+    column.appendChild(toolbar)
+  } else {
+    toolbar.classList.add(STANDALONE_CLASS)
+    document.body.insertBefore(toolbar, document.body.firstChild)
+  }
 }
 
 function decorateExistingRows() {
@@ -175,18 +235,33 @@ function observeListMutations() {
 }
 
 function decorateRow(row) {
-  if (row.querySelector(`.${OPEN_BUTTON_CLASS}`)) return
+  if (row.querySelector(`.${ROW_ACTIONS_CLASS}`)) return
+  const name = 'this card'
 
-  // <span> instead of <a>: nesting an <a> inside `a.card-item` is invalid
-  // HTML and triggers some browsers' parser-correction. A span styled like
-  // a button avoids the issue. The click is handled centrally by
-  // installOpenButtonCaptureGuard() to dodge Bootstrap's modal trigger.
-  const btn = document.createElement('span')
-  btn.className = OPEN_BUTTON_CLASS
-  btn.textContent = '↗'
-  btn.title = 'Open this card in a new tab'
-  btn.setAttribute('role', 'button')
-  row.appendChild(btn)
+  // <span>s instead of <button>s or <a>s: nesting interactive content inside
+  // `a.card-item` is invalid HTML and triggers some browsers' parser
+  // correction. Clicks are handled centrally by installOpenButtonCaptureGuard()
+  // to dodge Bootstrap's modal trigger.
+  const group = document.createElement('span')
+  group.className = ROW_ACTIONS_CLASS
+  for (const a of ROW_ACTIONS) {
+    const btn = document.createElement('span')
+    btn.className = ROW_BUTTON_CLASS
+    btn.dataset.action = a.id
+    if (a.pdf) btn.dataset.pdf = ''
+    btn.title = a.title(name)
+    btn.setAttribute('role', 'button')
+    btn.setAttribute('aria-label', a.title(name))
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${a.icon}</svg>`
+    group.appendChild(btn)
+  }
+  row.appendChild(group)
+}
+
+// A busy label ("Checking…") is shorter than the button's own: keep the
+// width, so BBO's button row doesn't reflow under the dialog.
+function holdWidth(button) {
+  button.style.minWidth = `${button.offsetWidth}px`
 }
 
 function readRowCardData(row) {
@@ -205,6 +280,7 @@ async function handleExportAll(button) {
     alert('Could not read BBO auth from this page. Try reopening Account → Convention cards in the BBO lobby.')
     return
   }
+  holdWidth(button)
   button.disabled = true
   const originalLabel = button.textContent
   button.textContent = 'Exporting…'
@@ -217,8 +293,12 @@ async function handleExportAll(button) {
     const listItems = parseCardList(listXml)
 
     const uniqueKeys = exportAllKeys(listItems)
+    const leftOut = nonAcblTitles(listItems)
+    const leftOutNote = leftOut.length
+      ? `Only ACBL cards can be exported. Left out: ${leftOut.map((t) => `“${t}”`).join(', ')}.`
+      : ''
     if (uniqueKeys.length === 0) {
-      alert('You have no cards of your own to export. To export a stock card, open it and use Export JSON.')
+      alert(leftOutNote || 'You have no cards of your own to export. To export a stock card, open it and use Export JSON.')
       return
     }
 
@@ -239,6 +319,7 @@ async function handleExportAll(button) {
 
     const envelope = cardsToJson(cards)
     downloadJson(envelope, `bbo-cards-${auth.user}-${todayString()}.json`)
+    if (leftOutNote) alert(`Exported ${cards.length} card${cards.length === 1 ? '' : 's'}.\n\n${leftOutNote}`)
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(LOG_PREFIX, 'export failed', err)
@@ -246,6 +327,7 @@ async function handleExportAll(button) {
   } finally {
     button.disabled = false
     button.textContent = originalLabel
+    button.style.minWidth = ''
   }
 }
 
@@ -273,6 +355,7 @@ async function handleImport(button) {
     return
   }
 
+  holdWidth(button)
   button.disabled = true
   const originalLabel = button.textContent
   button.textContent = 'Checking…'
@@ -291,7 +374,8 @@ async function handleImport(button) {
           v3u: 'BBO1',
         })
       )
-    const plan = await planImport(cards, parseCardList(listXml), auth.user, fetchCard, {
+    const listItems = parseCardList(listXml)
+    const plan = await planImport(cards, listItems, auth.user, fetchCard, {
       exportedAt: envelope.exported_at,
     })
 
@@ -318,8 +402,9 @@ async function handleImport(button) {
     for (const [index, { cmd, card }] of writes.entries()) {
       button.textContent = `Importing… (${index + 1}/${writes.length})`
       try {
-        parseSaveStatus(await postBody(ENDPOINTS.cud, buildCcCudBody(cmd, card, auth).toString()))
+        const savedKey = parseSaveStatus(await postBody(ENDPOINTS.cud, buildCcCudBody(cmd, card, auth).toString()))
         changed += 1
+        await notifySaved({ ...card, cc_key: savedKey || card.cc_key }, listItems, auth)
       } catch (err) {
         failures.push(`${card.title || card.cc_key}: ${err.message}`)
       }
@@ -335,6 +420,7 @@ async function handleImport(button) {
   } finally {
     button.disabled = false
     button.textContent = originalLabel
+    button.style.minWidth = ''
   }
   // The list on this page doesn't know about the new cards until it reloads.
   if (changed > 0) window.location.reload()
@@ -347,11 +433,13 @@ function describePlan(plan, writes) {
     [writes.filter((w) => w.cmd === 'replace').length, 'replaced with the file\'s copy'],
     [count('add') + plan.filter((e) => e.choice === 'both').length, 'added as new cards'],
     [count('copy'), 'added as private copies of cards you don\'t own'],
-    [count('same'), 'already the same on BBO'],
     [kept, 'kept as they are on BBO'],
   ]
     .filter(([n]) => n > 0)
     .map(([n, what]) => `${n} ${what}`)
+  for (const e of plan.filter((e) => e.action === 'same')) {
+    lines.push(`Identical card “${e.target?.title || e.card.title || 'Untitled'}” exists - not importing`)
+  }
   const skipped = plan.filter((e) => e.action === 'skip')
   if (skipped.length > 0) {
     lines.push(`${skipped.length} skipped: ${[...new Set(skipped.map((e) => e.reason))].join('; ')}`)
@@ -359,17 +447,41 @@ function describePlan(plan, writes) {
   return lines.join('\n')
 }
 
+// The input goes into the page, hidden, while it's in use: Firefox under
+// automation doesn't report a choice made in a detached file input, so the
+// live tests couldn't reach the import otherwise. Browsers don't mind either way.
 function pickImportFile() {
   return new Promise((resolve) => {
     const input = document.createElement('input')
     input.type = 'file'
     input.accept = 'application/json,.json,application/pdf,.pdf'
-    input.addEventListener('change', () => {
-      resolve(input.files?.[0] ?? null)
-    })
-    input.addEventListener('cancel', () => resolve(null))
+    input.style.display = 'none'
+    const finish = (file) => {
+      input.remove()
+      resolve(file)
+    }
+    input.addEventListener('change', () => finish(input.files?.[0] ?? null))
+    input.addEventListener('cancel', () => finish(null))
+    document.body.appendChild(input)
     input.click()
   })
+}
+
+/**
+ * Tell BBO about a save, as its editor does after each one, so the lobby picks
+ * up the new card for the user and each partner it is used with. BBO's own
+ * pages don't wait on the answer or report a failure, and nor do we: the card
+ * is saved either way.
+ */
+async function notifySaved(card, listItems, auth) {
+  for (const partner of partnersToNotify(card.cc_key, listItems, card.partner)) {
+    try {
+      await postBody(notifyUrl(), buildSavedNoticeBody({ ...card, partner }, auth).toString())
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.warn(LOG_PREFIX, 'could not tell BBO about the save of', card.cc_key, err)
+    }
+  }
 }
 
 async function postForm(url, fields) {

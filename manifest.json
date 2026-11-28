@@ -1,8 +1,22 @@
 {
   "manifest_version": 3,
   "name": "Better BBO Convention Card",
-  "version": "0.1.0",
-  "description": "Better printing, ACBL PDFs, JSON import/export, and open-in-tab for BBO convention cards.",
+  "version": "1.0.0",
+  "description": "Print, back up and share your Bridge Base Online convention cards: ACBL PDFs, JSON and PDF import and export, full-size tabs.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "action": {
+    "default_title": "Better BBO Convention Card",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "24": "icons/icon-24.png",
+      "32": "icons/icon-32.png"
+    }
+  },
   "background": {
     "service_worker": "src/background.js",
     "type": "module"
@@ -52,14 +66,20 @@
       "run_at": "document_idle",
       "all_frames": true,
       "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://bridge-classroom.org/*",
+        "https://bridge-classroom.com/*"
+      ],
+      "js": [
+        "src/ui/classroomContent.js"
+      ],
+      "run_at": "document_idle"
     }
   ],
-  "permissions": [
-    "storage",
-    "downloads"
-  ],
+  "permissions": ["storage"],
   "host_permissions": [
-    "https://webutil.bridgebase.com/*",
-    "https://www.bridgebase.com/*"
+    "https://webutil.bridgebase.com/v2/*"
   ]
 }

@@ -6,7 +6,7 @@
 
 import browser from 'webextension-polyfill'
 
-const OPENABLE = ['https://bridge-craftwork.com/card/', 'https://bridge-classroom.com/solo-practice-app/']
+const OPENABLE = ['https://bridge-craftwork.com/card/', 'https://bridge-classroom.org/solo-practice-app/', 'https://bridge-classroom.com/solo-practice-app/']
 
 browser.runtime.onInstalled.addListener(() => {
   // eslint-disable-next-line no-console

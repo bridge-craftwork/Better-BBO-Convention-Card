@@ -19,12 +19,13 @@ import { applyPrintFix } from './print-fix.js'
 import { parseCardFetch } from '../parsers/cc-xml.js'
 import { cardsToJson } from '../parsers/cc-json.js'
 import { ENDPOINTS, cardPageParams } from '../lib/auth.js'
+import { runPdfAction } from './pdf-flow.js'
 import {
-  TEMPLATES,
   recordFromFetch,
   cardEditorUrl,
   bridgeClassroomUrl,
 } from '../lib/card-output.js'
+import { PREFERRED_TLD_KEY } from '../lib/classroom.js'
 
 const LOG_PREFIX = '[better-bbo-cc/editor]'
 
@@ -106,33 +107,44 @@ function injectToolbar() {
     bar.appendChild(openBtn)
   }
 
+  // Export, the PDFs and the hand-offs read the card's ACBL elements, so they
+  // are offered only on the ACBL card's page; BBO's other card types get the
+  // print fix and Open in tab.
+  const acbl = /\/acblcc\.html$/i.test(window.location.pathname)
+
   const exportBtn = document.createElement('button')
   exportBtn.type = 'button'
   exportBtn.textContent = 'Export JSON'
   exportBtn.title = 'Download this card as portable JSON'
   exportBtn.addEventListener('click', () => handleExport(exportBtn))
-  bar.appendChild(exportBtn)
+  if (acbl) bar.appendChild(exportBtn)
 
-  const printBtn = document.createElement('button')
-  printBtn.type = 'button'
-  printBtn.textContent = 'Print (fixed)'
-  printBtn.title = 'Print this card using the landscape fit-to-page layout'
-  printBtn.addEventListener('click', () => window.print())
-  bar.appendChild(printBtn)
+  if (!acbl) {
+    const printBtn = document.createElement('button')
+    printBtn.type = 'button'
+    printBtn.textContent = 'Print (fixed)'
+    printBtn.title = 'Print this card using the landscape fit-to-page layout'
+    printBtn.addEventListener('click', () => window.print())
+    bar.appendChild(printBtn)
+  } else {
+    // Print and Export PDF ask first, as the bridge-craftwork.com editor does:
+    // which card, the second page, green or black, and (Export) fillable.
+    // Print can also print this page, BBO's own layout, with the print fix.
+    addDialogButton(bar, 'Print…', 'Print the card: an ACBL card, or this page as BBO shows it', 'print')
+    addDialogButton(bar, 'Export PDF…', 'Download the last saved version as an ACBL card', 'export')
 
-  for (const [template, name] of Object.entries(TEMPLATES)) {
-    addCardButton(bar, `PDF: ${name}`, `Download the last saved version as the ACBL ${name} card`, 'Rendering…', async (record) => {
-      const { downloadAcblPdf } = await import('../lib/card-pdf.js')
-      await downloadAcblPdf(record, template)
-    })
+    addCardButton(bar, 'Edit on Bridge Craftwork', 'Open the last saved version in the card editor at bridge-craftwork.com', 'Opening…', (record) =>
+      openLink(cardEditorUrl(record))
+    )
+    addCardButton(bar, 'Save to Bridge Classroom', 'Open the last saved version in Bridge Classroom, which saves it to your account', 'Opening…', (record) =>
+      openLink(
+        browser.storage.local
+          .get(PREFERRED_TLD_KEY)
+          .catch(() => ({}))
+          .then((stored) => bridgeClassroomUrl(record, stored?.[PREFERRED_TLD_KEY]))
+      )
+    )
   }
-
-  addCardButton(bar, 'Edit on Bridge Craftwork', 'Open the last saved version in the card editor at bridge-craftwork.com', 'Opening…', (record) =>
-    openLink(cardEditorUrl(record))
-  )
-  addCardButton(bar, 'Save to Bridge Classroom', 'Open the last saved version in Bridge Classroom, which saves it to your account', 'Opening…', (record) =>
-    openLink(bridgeClassroomUrl(record))
-  )
 
   document.body.appendChild(bar)
 
@@ -141,6 +153,32 @@ function injectToolbar() {
   new ResizeObserver(() => {
     document.documentElement.style.setProperty('--better-bbo-cc-toolbar-height', `${bar.offsetHeight + 14}px`)
   }).observe(bar)
+}
+
+// A button that asks how to make the PDF, then prints or downloads it.
+function addDialogButton(bar, label, title, action) {
+  const button = document.createElement('button')
+  button.type = 'button'
+  button.textContent = label
+  button.title = title
+  button.addEventListener('click', async () => {
+    try {
+      await runPdfAction({
+        action,
+        allowPage: true,
+        record: fetchThisCard().then(({ xml }) => recordFromFetch(xml)),
+        onBusy: (busy) => {
+          button.disabled = busy
+          button.textContent = busy ? (action === 'print' ? 'Preparing…' : 'Rendering…') : label
+        },
+      })
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(LOG_PREFIX, label, err)
+      alert(`${label.replace('…', '')} failed: ${err.message}`)
+    }
+  })
+  bar.appendChild(button)
 }
 
 function addCardButton(bar, label, title, busy, action) {
