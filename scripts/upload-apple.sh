@@ -51,7 +51,8 @@ if grep -qE 'localhost|127\.0\.0\.1|github\.io' "$RESOURCES/manifest.json"; then
   exit 1
 fi
 MANIFEST_VERSION=$(python3 -c "import json;print(json.load(open('manifest.json'))['version'])")
-if ! grep -q "MARKETING_VERSION = $MANIFEST_VERSION;" "$PROJECT/project.xcproj"; then
+# project.xcproj is Xcode's newer JSON-like format: "MARKETING_VERSION": "1.0.0".
+if [ "$(grep -cE "\"?MARKETING_VERSION\"? *[=:] *\"?$MANIFEST_VERSION\"?" "$PROJECT/project.xcproj")" -lt 2 ]; then
   echo "The Xcode project's MARKETING_VERSION is not $MANIFEST_VERSION (manifest.json). Bump it in project.xcproj (both targets)." >&2
   exit 1
 fi
