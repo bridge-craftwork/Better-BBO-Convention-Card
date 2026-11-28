@@ -22,9 +22,12 @@
 // Screenshots are added only past those the listing has, so a rerun cannot
 // duplicate them. Edge's API has no listing fields at all.
 //
-// A FIRST listing can't be made here, on either store: create it on the
-// website (AMO's Developer Hub, Edge's Partner Center), then use this for
-// updates. Edge also needs its product id below.
+// A FIRST Firefox listing is made here too: with --submit, when AMO has no
+// add-on with this guid, it is created with the listing (name, summary,
+// description, homepage, support URL, category, license) from the doc, then
+// the source archive is attached. Run --images after it. (Done for 1.0.0,
+// 27 Nov 2026.) A first Edge listing can't be: create it in Partner Center,
+// publish it there, and put its product id below; updates go through here.
 //
 // Run scripts/package-stores.sh first; this reads
 // dist/packages/better-bbo-convention-card-<version>-{firefox,edge,source}.zip.
@@ -63,6 +66,17 @@ const app = {
   notes: { heading: '## Notes for reviewers', block: 1 },
   amoExtra: { heading: '**For addons.mozilla.org, add**', block: 0 },
   releaseNotes: { heading: '## Release notes', block: 0 },
+  // A first AMO listing only. License slugs are AMO's (SPDX-style: 'Unlicense', 'MIT').
+  amoListing: {
+    slug: 'better-bbo-convention-card',
+    name: { heading: '**Name**', block: 0 },
+    summary: { heading: '**Short summary', block: 0 },
+    description: { heading: '**Description**', block: 0 },
+    homepage: { heading: '**Homepage URL**', block: 0 },
+    support: { heading: '**Support URL**', block: 0 },
+    categories: ['other'],
+    license: 'Unlicense',
+  },
 }
 
 const [storeArg, ...flags] = process.argv.slice(2)
@@ -164,11 +178,12 @@ async function firefox() {
     fail(`reviewer notes are ${amoNotes.length} characters; AMO takes ${AMO_NOTES_MAX}`)
   console.log(`==> Firefox: ${app.guid} ${version}`)
   const existing = await fetch(`${AMO}/addons/addon/${encodeURIComponent(app.guid)}/`, { headers: amoAuth() })
-  if (existing.status === 404)
-    fail(`${app.guid} is not on addons.mozilla.org yet. A first listing needs its description, categories and screenshots: create it in the Developer Hub.`)
-  const listed = (await existing.json()).current_version?.version
-  console.log(`    listed now: ${listed ?? 'none'}`)
-  if (listed === version) fail(`${version} is already the listed version`)
+  const isNew = existing.status === 404
+  if (!isNew) {
+    const listed = (await existing.json()).current_version?.version
+    console.log(`    listed now: ${listed ?? 'none'}`)
+    if (listed === version) fail(`${version} is already the listed version`)
+  } else console.log('    not on addons.mozilla.org yet: --submit creates the listing')
 
   const form = new FormData()
   form.append('upload', await openAsBlob(pkg('firefox')), basename(pkg('firefox')))
@@ -193,6 +208,7 @@ async function firefox() {
     console.log('    valid; not submitted (rerun with --submit)')
     return
   }
+  if (isNew) return createAmoListing(upload.uuid, amoNotes)
   const create = new FormData()
   create.append('upload', upload.uuid)
   create.append('approval_notes', amoNotes)
@@ -207,6 +223,28 @@ async function firefox() {
     console.log(`    release notes set (${text.length} characters)`)
   }
   console.log('    submitted for review')
+}
+
+async function createAmoListing(uploadUuid, amoNotes) {
+  const l = app.amoListing
+  const en = (spec) => ({ 'en-US': fenced(spec) })
+  const addon = await amo('POST', '/addons/addon/', {
+    slug: l.slug,
+    categories: l.categories,
+    name: en(l.name),
+    summary: en(l.summary),
+    description: en(l.description),
+    homepage: en(l.homepage),
+    support_url: en(l.support),
+    version: { upload: uploadUuid, license: l.license, approval_notes: amoNotes, release_notes: en(app.releaseNotes) },
+  })
+  console.log(`    listing created: ${addon.slug} (id ${addon.id}), status ${addon.status}`)
+  const versions = await amo('GET', `/addons/addon/${addon.id}/versions/?filter=all_with_unlisted`)
+  const created = versions.results.find((v) => v.version === version)
+  const src = new FormData()
+  src.append('source', await openAsBlob(pkg('source')), basename(pkg('source')))
+  await amo('PATCH', `/addons/addon/${addon.id}/versions/${created.id}/`, src)
+  console.log('    source archive attached; submitted for review. Next: --images')
 }
 
 // ── Edge Add-ons ────────────────────────────────────────────────────────────

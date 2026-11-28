@@ -58,9 +58,15 @@ Lessons:
 
 | Step | Who | Better BBO CC |
 |---|---|---|
-| Create the listing. DD's was made in the Developer Hub; it asked for a license | Rick (or Claude through the API, untried) | |
-| Upload version, source archive, reviewer notes (3,000-character cap), release notes: `scripts/upload-browsers.mjs firefox --submit` (Fetch's repo adds the extension: `fetch|dd`) | Claude | |
-| Listing icon and screenshots: `--images` | Claude | |
+| Rick says go: creating the listing submits it for review at once | Rick | done 27 Nov |
+| Create the listing **and** submit 1.0.0 in one run, no Developer Hub: `scripts/upload-browsers.mjs firefox --submit`. When AMO has no add-on with the manifest's gecko id, it validates the zip, creates the add-on with the listing from `store/submission.md` (name, summary, description, homepage, support URL, category, license), the reviewer notes (3,000-character cap) and release notes, then attaches the source archive. Updates use the same command | Claude | done 27 Nov: add-on 3144782, `better-bbo-convention-card`, nominated |
+| Listing icon and screenshots: `scripts/upload-browsers.mjs firefox --images` | Claude | |
+
+Lessons:
+- AMO's license slugs are SPDX-style and case-sensitive: `Unlicense`, not
+  `unlicense` (a wrong one is refused with nothing created). Fetch and DD use
+  the same. Check `package.json`'s license before choosing.
+- DD's first listing was made in the Developer Hub; the API does it as well.
 
 ---
 
