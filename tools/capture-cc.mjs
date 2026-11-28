@@ -181,9 +181,11 @@ const [exported] = await Promise.all([
 ])
 const envelope = JSON.parse(fs.readFileSync(await exported.path(), 'utf8'))
 fs.writeFileSync(path.join(WORK, 'export.json'), JSON.stringify(envelope, null, 2))
-const card = envelope.cards.find((c) => c.title === IMPORT_CARD && !c.partner && !c.stock)
-if (!card) throw new Error(`no personal "${IMPORT_CARD}" card without a partner in the export`)
-const changed = structuredClone(card)
+// The export lists a card once, with a partner it's shared with if any; the
+// copy imported here drops the partner, so the question names nobody.
+const card = envelope.cards.find((c) => c.title === IMPORT_CARD && !c.stock)
+if (!card) throw new Error(`no personal "${IMPORT_CARD}" card in the export`)
+const changed = { ...structuredClone(card), partner: '' }
 mutate(changed)
 const file = path.join(WORK, 'import.json')
 fs.writeFileSync(file, JSON.stringify({ ...envelope, cards: [changed] }))

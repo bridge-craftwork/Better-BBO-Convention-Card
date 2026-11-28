@@ -291,9 +291,8 @@ Things only Rick can do, in the order they block:
    carry no date. Everything else works. Check ↗ in Safari; if it's dead, the
    list's ↗ needs a fallback that matches rows to `cc_list.php` by title and
    partner.
-5. **Screenshots: retake 1 and 5 (the list).** They show the old ↗ on each row; the rows
-   now have Print, Save PDF and View icons (2026-11-27). `tools/capture-cc.mjs`
-   is updated; needs Rick off BBO.
+5. ~~**Screenshots**~~: retaken 2026-11-27 for the list's buttons, row icons
+   and Hide.
    First taken 2026-11-25 (`store/screenshots/`). Taking them
    found Print (fixed) put the lower half of an ACBL card on a second page
    (it scaled with a transform, which doesn't shrink the layout); it now

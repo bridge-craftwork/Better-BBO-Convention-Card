@@ -1,6 +1,6 @@
 # Better BBO Convention Card — store screenshots
 
-Taken 2026-11-25, retaken 2026-11-27 for the PDF dialog, from the live BBO lobby with the 1.0.0 Chrome build, by
+Taken 2026-11-25, retaken 2026-11-27 for the PDF dialog and the list's new buttons, row icons and Hide, from the live BBO lobby with the 1.0.0 Chrome build, by
 `tools/capture-cc.mjs`.
 
 2560×1600 (1280×800 at 2×) here, for the Mac App Store, and `listing-1280/`
@@ -10,7 +10,7 @@ refuses a competitor's browser in a screenshot).
 
 | File | Shows |
 |---|---|
-| `1-card-list.png` | BBO's convention card list with the extension's toolbar (Export my cards, Import) and the ↗ on each row. **Lead with this one.** |
+| `1-card-list.png` | BBO's convention card list: Import and Export beside BBO's New card button, Hide on Stock Cards, and Print, Save PDF and View icons on each row. **Lead with this one.** |
 | `2-card-page.png` | A card open full size in its own tab, the extension's toolbar at top right, with the Export PDF dialog open |
 | `3-print.png` | What Print prints for "This page, as BBO shows it": the whole card on one landscape page |
 | `4-acbl-pdf.png` | The card as the ACBL Classic PDF, with the dialog's defaults: entries in green, flat |

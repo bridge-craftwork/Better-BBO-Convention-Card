@@ -258,6 +258,12 @@ function decorateRow(row) {
   row.appendChild(group)
 }
 
+// A busy label ("Checking…") is shorter than the button's own: keep the
+// width, so BBO's button row doesn't reflow under the dialog.
+function holdWidth(button) {
+  button.style.minWidth = `${button.offsetWidth}px`
+}
+
 function readRowCardData(row) {
   const raw = row.getAttribute(ROW_DATA_ATTR)
   if (!raw) return null
@@ -274,6 +280,7 @@ async function handleExportAll(button) {
     alert('Could not read BBO auth from this page. Try reopening Account → Convention cards in the BBO lobby.')
     return
   }
+  holdWidth(button)
   button.disabled = true
   const originalLabel = button.textContent
   button.textContent = 'Exporting…'
@@ -320,6 +327,7 @@ async function handleExportAll(button) {
   } finally {
     button.disabled = false
     button.textContent = originalLabel
+    button.style.minWidth = ''
   }
 }
 
@@ -347,6 +355,7 @@ async function handleImport(button) {
     return
   }
 
+  holdWidth(button)
   button.disabled = true
   const originalLabel = button.textContent
   button.textContent = 'Checking…'
@@ -411,6 +420,7 @@ async function handleImport(button) {
   } finally {
     button.disabled = false
     button.textContent = originalLabel
+    button.style.minWidth = ''
   }
   // The list on this page doesn't know about the new cards until it reloads.
   if (changed > 0) window.location.reload()
