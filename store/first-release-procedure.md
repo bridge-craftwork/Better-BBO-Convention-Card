@@ -94,7 +94,7 @@ shows the Markdown.
 
 | Step | Who | Better BBO CC |
 |---|---|---|
-| New item, upload the zip, listing, Privacy practices tab, permission reasons, reviewer notes ("Additional instructions" is dashboard-only), submit | Rick, pasting from `store/submission.md`; Claude opens the files | |
+| New item, upload the zip, listing, Privacy practices tab, permission reasons, reviewer notes ("Additional instructions" is dashboard-only), submit | Rick, pasting from `store/submission.md`; Claude opens the files | done 27 Nov |
 
 Chrome often publishes without an email: check the dashboard.
 
@@ -104,7 +104,8 @@ Chrome often publishes without an email: check the dashboard.
 
 | Step | Who | Better BBO CC |
 |---|---|---|
-| Record each store's status and link in `store/submission.md` | Claude | |
+| Record each store's status and link in `store/submission.md` | Claude | submissions recorded 27 Nov; links once approved |
+| Add each store's id to `.dashboard-app.json` `stores` (`chrome`: item id, `edge`: store or crx id, `firefox`: slug) so the Vibe Dashboard tracks them; the Mac app is found from the Xcode project once it's on `main` | Claude | firefox added 27 Nov; chrome, edge to come |
 | Install links on the product page (bridge-craftwork-site) | Claude PR, Rick merges | |
 
 ---

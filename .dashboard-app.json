@@ -3,5 +3,8 @@
   "tagline": "Print, back up and share BBO convention cards",
   "priority": "high",
   "extension_manifest": "manifest.json",
-  "next_step": "Mac App Store 1.0.0 in review; Firefox, Edge and Chrome first listings next"
+  "next_step": "All four stores submitted 27 Nov; waiting on reviews",
+  "stores": {
+    "firefox": "better-bbo-convention-card"
+  }
 }
