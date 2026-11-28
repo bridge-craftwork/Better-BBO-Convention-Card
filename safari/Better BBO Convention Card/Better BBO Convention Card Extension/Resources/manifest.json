@@ -24,7 +24,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/listContent.js-loader-Dt1QDwJ-.js"
+        "assets/listContent.js-loader-DdqtV2lY.js"
       ],
       "matches": [
         "https://webutil.bridgebase.com/v2/acblCCFM/*"
@@ -110,7 +110,7 @@
         "assets/acblPdfImport-Db0usl-u.js",
         "assets/PDFButton-BFAvT4C-.js",
         "assets/acblClassicFillPdf-RJi9Fm94.js",
-        "assets/listContent.js-C5NAMTYF.js",
+        "assets/listContent.js-D1Z_IYep.js",
         "assets/listPageWorld.js-56-zsnoR.js",
         "assets/editorPageWorld.js-C1hVLvtI.js"
       ],
