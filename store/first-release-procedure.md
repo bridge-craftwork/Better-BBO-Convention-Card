@@ -60,7 +60,7 @@ Lessons:
 |---|---|---|
 | Rick says go: creating the listing submits it for review at once | Rick | done 27 Nov |
 | Create the listing **and** submit 1.0.0 in one run, no Developer Hub: `scripts/upload-browsers.mjs firefox --submit`. When AMO has no add-on with the manifest's gecko id, it validates the zip, creates the add-on with the listing from `store/submission.md` (name, summary, description, homepage, support URL, category, license), the reviewer notes (3,000-character cap) and release notes, then attaches the source archive. Updates use the same command | Claude | done 27 Nov: add-on 3144782, `better-bbo-convention-card`, nominated |
-| Listing icon and screenshots: `scripts/upload-browsers.mjs firefox --images` | Claude | |
+| Listing icon and screenshots: `scripts/upload-browsers.mjs firefox --images`. AMO throttles uploads hard (one wait was 58 minutes); run it in the background | Claude | done 27 Nov |
 
 Lessons:
 - AMO's license slugs are SPDX-style and case-sensitive: `Unlicense`, not
