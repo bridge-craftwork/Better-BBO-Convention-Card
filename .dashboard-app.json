@@ -1,0 +1,7 @@
+{
+  "bundle_id": "org.bridge-classroom.better-bbo-convention-card",
+  "tagline": "Print, back up and share BBO convention cards",
+  "priority": "high",
+  "extension_manifest": "manifest.json",
+  "next_step": "Mac App Store 1.0.0 in review; Firefox, Edge and Chrome first listings next"
+}
