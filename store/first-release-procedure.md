@@ -74,9 +74,10 @@ Lessons:
 
 | Step | Who | Better BBO CC |
 |---|---|---|
-| Create the extension, fill in the listing and images (the API has no listing fields) | Rick | |
-| Send Claude the **Product ID** (Overview page; not secret) | Rick | |
-| Put it in `scripts/upload-browsers.mjs`; upload the zip to the draft | Claude | |
+| Create the extension, fill in the listing and images (the API has no listing fields) | Rick | done 27 Nov |
+| Send Claude the **Product ID** (Overview page; not secret) | Rick | done 27 Nov: 1753b319-4417-422a-9378-b542e61eb2f5 |
+| Put it in `scripts/upload-browsers.mjs`; upload the zip to the draft: `scripts/upload-browsers.mjs edge` (no `--submit`) | Claude | done 27 Nov |
+| Paste the notes for certification into Partner Center (Claude writes them to a text file to copy; only `--submit` sends them, and a first listing can't use it) | Rick | |
 | **Publish**: the first one only from Partner Center (the API says "Can't create new extension"). Updates after that go through the API | Rick | |
 
 The API has no status call: check Overview for "In review".

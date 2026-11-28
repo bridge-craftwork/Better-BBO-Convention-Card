@@ -60,7 +60,7 @@ const app = {
   icon: 'icons/icon-128.png',
   screenshots: 'store/screenshots/listing-1280',
   guid: 'better-bbo-convention-card@bridge-classroom.org',
-  edgeProduct: '',
+  edgeProduct: '1753b319-4417-422a-9378-b542e61eb2f5',
   doc: 'store/submission.md',
   // The section's first block is Chrome's 500-character version.
   notes: { heading: '## Notes for reviewers', block: 1 },
