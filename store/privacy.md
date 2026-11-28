@@ -37,7 +37,7 @@ It does not read anything else on the page or in your browser.
 
 Only your last choices in the Print and Export PDF dialogs (which ACBL card,
 the second page, green or black, fillable or not), so the next PDF starts from
-them, and whether you use Bridge Classroom at bridge-classroom.org or .com, so
+them, how you sort the card list and whether you hide its stock cards, and whether you use Bridge Classroom at bridge-classroom.org or .com, so
 Save to Bridge Classroom opens the one you're signed in on. They stay in the
 extension's own storage on this device, and go nowhere.
 Exports and PDFs are made in your browser and saved where your browser saves
@@ -70,7 +70,7 @@ nothing is sold or shared.
 | Site access to `webutil.bridgebase.com/v2/*` | Bridge Base Online's convention card pages, the only pages it works on |
 | Safari only: site access to `www.bridgebase.com/v3/*` | BBO's lobby, which holds the card pages. Nothing runs there; Safari greys out the extension's toolbar button on any site it can't reach |
 | Site access to `bridge-classroom.org` and `bridge-classroom.com` | Notes which of the two you visit Bridge Classroom at, so Save to Bridge Classroom opens that one. Nothing is read from those pages |
-| Storage | Remembers your Print and Export PDF choices, and that Bridge Classroom address, on this device |
+| Storage | Remembers your Print and Export PDF choices, the card list's sort, and that Bridge Classroom address, on this device |
 
 It asks for no other permissions.
 

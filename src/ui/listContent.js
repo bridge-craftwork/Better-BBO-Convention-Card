@@ -23,6 +23,7 @@ import { cardsToJson, buildCcCudBody } from '../parsers/cc-json.js'
 import { planImport, planWrites, savedAt } from '../lib/import-plan.js'
 import { readImportFile, recordFromFetch } from '../lib/card-output.js'
 import { runPdfAction } from './pdf-flow.js'
+import { installListOrder } from './list-order.js'
 import { askAboutCard } from './import-dialog.js'
 import { ENDPOINTS } from '../lib/auth.js'
 import { readAuthFromLocation } from '../lib/auth.js'
@@ -68,6 +69,7 @@ function main() {
   decorateExistingRows()
   observeListMutations()
   installOpenButtonCaptureGuard()
+  installListOrder()
   // eslint-disable-next-line no-console
   console.log(LOG_PREFIX, 'initialized')
 }

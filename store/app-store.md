@@ -27,6 +27,7 @@ On a card (Print works on every card; the rest on ACBL cards, BBO's usual kind):
 
 On your list of cards:
 • Print, save as a PDF, or view any card from its row, without opening it first.
+• Sort the list by Title or Partner, and hide BBO's stock cards. Remembered.
 • Export all your ACBL cards, and the ACBL cards partners have shared with you, in one JSON file.
 • Import cards from a JSON file, from the bridge-craftwork.com editor's "Export for BBO" file, or from a PDF: one this extension or the bridge-craftwork.com editor made, or any filled-in ACBL convention card or Bridgodex PDF. A card that differs from one already on BBO is never replaced without asking.
 

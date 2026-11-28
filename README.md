@@ -43,6 +43,9 @@ On the list of cards:
   you (stock cards one at a time, from their pages). BBO's other card types
   (basic, V2BASIC) are left out, and the export names them: only the ACBL
   card's elements are read.
+- **Title** and **Partner** headings sort the list (click again to reverse, a
+  third time for BBO's own order), and **Hide** on Stock Cards folds them away.
+  Both are remembered.
 - **Print**, **Save PDF** and **View** icons on each row: the first two ask what
   the card page's Print… and Export PDF… ask (ACBL cards only); View opens the
   card in a new tab.
