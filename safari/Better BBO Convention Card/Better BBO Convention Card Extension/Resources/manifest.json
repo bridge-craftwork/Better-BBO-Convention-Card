@@ -24,7 +24,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/listContent.js-loader-CYbQfa64.js"
+        "assets/listContent.js-loader-Bn-hgUEP.js"
       ],
       "matches": [
         "https://webutil.bridgebase.com/v2/acblCCFM/*"
@@ -96,8 +96,8 @@
         "assets/BarlowCondensed-Regular-u9oSiJc6.ttf",
         "assets/BarlowCondensed-SemiBold-B7YG4rBL.ttf",
         "assets/auth-DamYbgfF.js",
-        "assets/classroom-BFFu9rzf.js",
         "assets/browser-polyfill-CZ_dLIqp.js",
+        "assets/classroom-BFFu9rzf.js",
         "assets/bbo-DHHu8kPQ.js",
         "assets/handoff-BMgaJZhX.js",
         "assets/importCard-7x_M0XVo.js",
@@ -110,7 +110,7 @@
         "assets/acblPdfImport-C0pNfjgI.js",
         "assets/PDFButton-BFAvT4C-.js",
         "assets/acblClassicFillPdf-D0ljg6o4.js",
-        "assets/listContent.js-KFdHa7HM.js",
+        "assets/listContent.js-cf7miZzb.js",
         "assets/listPageWorld.js-56-zsnoR.js",
         "assets/editorPageWorld.js-C1hVLvtI.js"
       ],
