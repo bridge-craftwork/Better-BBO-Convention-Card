@@ -31,9 +31,11 @@ becomes the template.
 | Step | Who | Better BBO CC |
 |---|---|---|
 | Bundle ID registered. Nothing to do by hand: the first signed archive registers it ("XC …" in developer.apple.com ▸ Identifiers). Run `scripts/upload-apple.sh --no-upload`. The extension target needs no ID of its own | Claude | done 27 Nov |
-| Create the app record: Apps ▸ **+** ▸ New App, macOS, name, bundle ID, SKU = the bundle ID's last part, Full Access. The API can't create records | Rick | |
-| Upload the build: `scripts/upload-apple.sh` (fresh build number each run) | Claude | |
-| Listing: `scripts/app-store-listing.mjs` from `store/app-store.md`: text, URLs, review notes, screenshots, category, age rating, free price, China mainland off, the build | Claude | |
+| Create the app record: Apps ▸ **+** ▸ New App, macOS, name, bundle ID, SKU = the bundle ID's last part, Full Access (Limited only matters with other team members). The API can't create records | Rick | done 27 Nov (app id 6840230386) |
+| Upload the build: `scripts/upload-apple.sh` (fresh build number each run). Apple takes 15–30 minutes to process it | Claude | done 27 Nov, build 202611271833 |
+| Set the version page to the manifest's version: a new record starts at **1.0**, and the listing script only attaches a build whose version matches. One API call: PATCH `/v1/appStoreVersions/<id>` `versionString` | Claude | done 27 Nov (1.0 → 1.0.0) |
+| Listing: `scripts/app-store-listing.mjs` (try `--dry-run` first) from `store/app-store.md`: text, URLs, review notes, screenshots, category, age rating, free price, China mainland off | Claude | done 27 Nov |
+| Attach the build once processed: `scripts/app-store-listing.mjs --only build` | Claude | |
 | App Privacy ("Data Not Collected"): the API can't set it | Rick | |
 | Add for Review ▸ Submit | Rick | |
 
