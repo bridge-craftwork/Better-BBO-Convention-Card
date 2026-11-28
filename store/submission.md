@@ -15,7 +15,7 @@ differs, it says why.
 | Store | Status |
 |---|---|
 | Chrome Web Store | not submitted |
-| Edge | not submitted; a first listing is made in Partner Center (the API refuses a first submission) |
+| Edge | **1.0.0 submitted 27 Nov**, a first listing, from Partner Center (the API refuses a first submission); product id 1753b319-4417-422a-9378-b542e61eb2f5 |
 | Firefox | **1.0.0 submitted 27 Nov**, a first listing created through the API (`upload-browsers.mjs firefox --submit`): add-on 3144782, slug `better-bbo-convention-card`, awaiting review, source archive attached |
 | Mac App Store | **1.0.0 build 202611271833 submitted 27 Nov**, Waiting for Review; app id 6840230386 |
 
