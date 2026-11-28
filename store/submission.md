@@ -17,7 +17,7 @@ differs, it says why.
 | Chrome Web Store | not submitted |
 | Edge | not submitted; a first listing is made in Partner Center (the API refuses a first submission) |
 | Firefox | not submitted; a first listing is made in the Developer Hub, with the source archive |
-| Mac App Store | not submitted; the app record is made in App Store Connect first |
+| Mac App Store | **1.0.0 build 202611271833 submitted 27 Nov**, Waiting for Review; app id 6840230386 |
 
 ---
 

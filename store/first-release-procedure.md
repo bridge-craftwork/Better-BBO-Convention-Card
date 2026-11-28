@@ -37,7 +37,7 @@ becomes the template.
 | Listing: `scripts/app-store-listing.mjs` (try `--dry-run` first) from `store/app-store.md`: text, URLs, review notes, screenshots, category, age rating, free price, China mainland off | Claude | done 27 Nov |
 | Attach the build once processed: `scripts/app-store-listing.mjs --only build` | Claude | done 27 Nov |
 | App Privacy ("Data Not Collected"): the API can't set it | Rick | |
-| Add for Review ▸ Submit | Rick | |
+| Add for Review ▸ Submit | Rick | done 27 Nov: Waiting for Review |
 
 Lessons:
 - **Never delete an app record to fix it.** Deleting takes the bundle ID with
