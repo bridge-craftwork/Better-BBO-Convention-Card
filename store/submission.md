@@ -96,6 +96,28 @@ declares no `gecko_android`.
 
 ---
 
+## Search terms (Edge)
+
+Up to 7 terms, 30 characters each, 21 words in total across all of them. These
+use 17 words; the longest is 20 characters.
+
+```
+convention card
+ACBL convention card
+BBO
+Bridge Base Online
+bridge bidding system
+convention card PDF
+bridge partnership
+```
+
+"BBO" and its long form, as in Fetch's: players type the acronym. "Convention
+card" is what the extension is about, alone and with ACBL and PDF, the two
+things people look for. `bridge` alone is left out, as in Fetch's: ambiguous,
+and already in two terms.
+
+---
+
 ## Single purpose
 
 ```
