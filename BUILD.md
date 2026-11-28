@@ -43,7 +43,7 @@ BROWSER=firefox npx vite build  # output in dist/firefox/
 directory and you have the submitted file.
 
 One dependency, `@bridge-craftwork/convention-card`, is installed from a
-tagged GitHub release (`github:bridge-craftwork/convention-card#v0.55.0` in
+tagged GitHub release (`github:bridge-craftwork/convention-card#v0.55.1` in
 `package.json`, pinned to a commit in `package-lock.json`). It is our own
 open-source library (MIT OR Apache-2.0), from the same organisation, and npm
 fetches it like any other package. Nothing else is fetched at build time.

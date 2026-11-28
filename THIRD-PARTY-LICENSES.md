@@ -10,7 +10,7 @@ by Vite, so their licence terms travel with every store submission.
 
 The convention-card library: BBO conversion, the ACBL PDF renderer, PDF import and the hand-off links. Ours, from the same organisation.
 
-- Version: 0.55.0
+- Version: 0.55.1
 - Source: https://github.com/bridge-craftwork/convention-card
 - Licence: MIT OR Apache-2.0
 
